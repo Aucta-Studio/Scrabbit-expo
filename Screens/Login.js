@@ -28,7 +28,7 @@ export default () => {
   return (
     <SafeAreaView style={{flex:1, backgroundColor: '#EC6319'}}>
       {/* The photo */}
-      <View className="pt-20 h-1/3 w-4/6 self-center items-center">
+      <View>
         <Image source={login} style={styles.images} resizeMode="contain" />
       </View>
       <ScrollView>
@@ -37,14 +37,14 @@ export default () => {
           {/* a title */}
           <Text style={styles.title}>Login</Text>
           {/* the username part */}
-          <Text className="text-white">Username</Text>
+          <Text>Username</Text>
           <TextInput
             value={username}
             style={styles.input}
             onChangeText={text => setUsername(text)}
             placeholder="Enter your username..."></TextInput>
           {/* the password part */}
-          <Text className="text-white">Password</Text>
+          <Text>Password</Text>
           <TextInput
             value={password}
             style={styles.input}
@@ -52,13 +52,12 @@ export default () => {
             placeholder="Enter your password..."></TextInput>
           {/* The login button */}
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text className="text-orange-500">Login</Text>
+            <Text>Login</Text>
           </TouchableOpacity>
           {/* in case of a new user with no account */}
           <TouchableOpacity
-            className="pt-10 self-center"
             onPress={navigateToRegister}>
-            <Text className="text-white">
+            <Text>
               Dont have an account? Create an account
             </Text>
           </TouchableOpacity>

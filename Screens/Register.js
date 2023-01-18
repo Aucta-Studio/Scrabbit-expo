@@ -37,7 +37,7 @@ export default () => {
           {/* a title */}
           <Text style={styles.title}>Register</Text>
           {/* first name */}
-          <Text className="text-white">First Name</Text>
+          <Text>First Name</Text>
           <TextInput
             value={firstName}
             style={styles.input}
@@ -45,7 +45,7 @@ export default () => {
             placeholder="Enter your first name"
           />
           {/* middle name */}
-          <Text className="text-white">Middle Name</Text>
+          <Text>Middle Name</Text>
           <TextInput
             value={middleName}
             style={styles.input}
@@ -53,7 +53,7 @@ export default () => {
             placeholder="Enter your middle name"
           />
           {/* lastname */}
-          <Text className="text-white">Last Name</Text>
+          <Text>Last Name</Text>
           <TextInput
             value={lastName}
             style={styles.input}
@@ -61,7 +61,7 @@ export default () => {
             placeholder="Enter your last name"
           />
           {/* phone number */}
-          <Text className="text-white">Phone Number</Text>
+          <Text>Phone Number</Text>
           <TextInput
             value={phoneNumber}
             style={styles.input}
@@ -69,7 +69,7 @@ export default () => {
             placeholder="Enter your phone number"
           />
           {/* email address */}
-          <Text className="text-white">Email Address</Text>
+          <Text>Email Address</Text>
           <TextInput
             value={email}
             style={styles.input}
@@ -77,7 +77,7 @@ export default () => {
             placeholder="Enter your email address "
           />
           {/* DOB */}
-          <Text className="text-white">Date Of Birth</Text>
+          <Text >Date Of Birth</Text>
           <TextInput
             value={DOB}
             style={styles.input}
@@ -85,14 +85,14 @@ export default () => {
             placeholder="Enter your date of birth"
           />
           {/* username */}
-          <Text className="text-white">Username</Text>
+          <Text >Username</Text>
           <TextInput
             value={username}
             style={styles.input}
             onChangeText={text => setUsername(text)}
             placeholder="Enter your username..."></TextInput>
           {/* password */}
-          <Text className="text-white">Password</Text>
+          <Text>Password</Text>
           <TextInput
             value={password}
             style={styles.input}
@@ -100,11 +100,11 @@ export default () => {
             placeholder="Enter your password..."></TextInput>
           {/* register button */}
           <TouchableOpacity style={styles.button} onPress={handleRegister}>
-            <Text className="text-orange-500">Register</Text>
+            <Text>Register</Text>
           </TouchableOpacity>
           {/* in case of a new user with no account */}
-          <TouchableOpacity className="pt-10 self-center" onPress={navigateToLogin}>
-            <Text className="text-white">Have an account? Login</Text>
+          <TouchableOpacity onPress={navigateToLogin}>
+            <Text >Have an account? Login</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

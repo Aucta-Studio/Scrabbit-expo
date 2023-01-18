@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { ScrollView, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Post from "../Components/Post";
-import { TailwindProvider } from "tailwindcss-react-native";
 
 function getPosts() {}
 
 export default () => {
   return (
-    <TailwindProvider>
       <SafeAreaView className="bg-zinc-900 h-full p-4">
         <ScrollView>
           {/* <Text className="text-white">This is the feed page</Text> */}
@@ -20,6 +18,5 @@ export default () => {
             />
         </ScrollView>
       </SafeAreaView>
-    </TailwindProvider>
   );
 };
