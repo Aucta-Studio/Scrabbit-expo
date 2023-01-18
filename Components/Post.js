@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import { TailwindProvider } from "tailwindcss-react-native";
 
 export default ({ pfp, user, caption, state, image }) => {
   return (
-    <TailwindProvider>
       <View className=" bg-black rounded-xl content-center">
         {/* username display */}
         <View className="p-1 flex-row items-center">
@@ -31,6 +29,5 @@ export default ({ pfp, user, caption, state, image }) => {
           <Text className="text-white">{caption}</Text>
         </View>
       </View>
-    </TailwindProvider>
   );
 };
