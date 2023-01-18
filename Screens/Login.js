@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
   images: {
     width: 100,
     height: 250,
-    marginLeft: 123
+    alignSelf: 'center'
+  
   },
 });
