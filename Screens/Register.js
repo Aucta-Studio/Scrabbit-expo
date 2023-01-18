@@ -30,7 +30,7 @@ export default () => {
   }
 
   return (
-    <SafeAreaView className="bg-orange-500 h-full">
+    <SafeAreaView style={{flex:1, backgroundColor: '#EC6319'}}>
       <ScrollView>
         {/* beginning of the form */}
         <View style={styles.formContainer}>

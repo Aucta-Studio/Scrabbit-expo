@@ -26,7 +26,7 @@ export default () => {
   }
 
   return (
-    <SafeAreaView className="bg-orange-500 h-full">
+    <SafeAreaView style={{flex:1, backgroundColor: '#EC6319'}}>
       {/* The photo */}
       <View className="pt-20 h-1/3 w-4/6 self-center items-center">
         <Image source={login} style={styles.images} resizeMode="contain" />
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginHorizontal: 25,
     paddingHorizontal: 50,
-    // backgroundColor: '#000',
+    backgroundColor: '#EC6319',
     borderRadius: 50,
     // opacity: 0.75,
   },
@@ -106,7 +106,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   images: {
-    width: 200,
-    height: 270,
+    width: 100,
+    height: 250,
+    marginLeft: 123
   },
 });
