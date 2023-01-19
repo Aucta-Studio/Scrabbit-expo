@@ -3,6 +3,8 @@ import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { store } from "./store";
+import { Provider } from "react-redux";
 import Login from "./Screens/Login";
 import Register from "./Screens/Register";
 import Camera from "./Screens/Camera";
@@ -18,8 +20,8 @@ function ProfileStack() {
   return (
     <Stack.Navigator initialRouteName="Profile">
       <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="Edit Profile" component={EditProfile}/>
-      <Stack.Screen name="FFF" component={FFF}/>
+      <Stack.Screen name="Edit Profile" component={EditProfile} />
+      <Stack.Screen name="FFF" component={FFF} />
     </Stack.Navigator>
   );
 }
@@ -48,14 +50,16 @@ export default function App() {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="login"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="login" component={Login} />
-        <Stack.Screen name="register" component={Register} />
-        <Stack.Screen name="app" component={Base} />
-      </Stack.Navigator>
+      <Provider store={store}>
+        <Stack.Navigator
+          initialRouteName="login"
+          screenOptions={{ headerShown: false }}
+        >
+          <Stack.Screen name="login" component={Login} />
+          <Stack.Screen name="register" component={Register} />
+          <Stack.Screen name="app" component={Base} />
+        </Stack.Navigator>
+      </Provider>
     </NavigationContainer>
   );
 }
