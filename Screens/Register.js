@@ -30,7 +30,7 @@ export default () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const upload = async (uid, data) => {
-          await setDoc(doc(db, "Profiles", `${uid}`), data);
+          await setDoc(doc(db, "Profiles", `${uid}`), data).catch((error) => {console.log(error)});
         };
         console.log("Signed up");
         const user = userCredential.user.uid;
@@ -45,7 +45,7 @@ export default () => {
         upload(user, data);
         navigateToLogin();
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }
 
   function navigateToLogin() {
