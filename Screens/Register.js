@@ -17,9 +17,9 @@ export default () => {
   const [firstName, setfirstName] = useState("");
   // const [middleName, setmiddleName] = useState("");
   const [lastName, setlastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  // const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
-  const [DOB, setDOB] = useState("");
+  // const [DOB, setDOB] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
@@ -29,20 +29,20 @@ export default () => {
   function handleRegister() {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        const upload = async (uid, data) => {
+          await setDoc(doc(db, "Profiles", `${uid}`), data);
+        };
         console.log("Signed up");
         const user = userCredential.user.uid;
-        console.log(user);
-        // const account = doc(db, `Profiles/${user}`);
-        // const data = {
-        //   UserName: username,
-        //   Bio: "",
-        //   DOB: DOB,
-        //   Email: email,
-        //   FirstName: firstName,
-        //   LastName: lastName,
-        //   Private: true,
-        // };
-        // setDoc(account, data).then().catch();
+        const data = {
+          Bio: "",
+          Email: email,
+          FirstName: firstName,
+          LastName: lastName,
+          Pfp: "/Pfps/Default.jpg",
+          UserName: username,
+        };
+        upload(user, data);
         navigateToLogin();
       })
       .catch((error) => {});
@@ -75,14 +75,14 @@ export default () => {
             onChangeText={setlastName}
             placeholder="Enter your last name"
           />
-          {/* phone number */}
+          {/* phone number
           <Text>Phone Number</Text>
           <TextInput
             value={phoneNumber}
             style={styles.input}
             onChangeText={setPhoneNumber}
             placeholder="Enter your phone number"
-          />
+          /> */}
           {/* email address */}
           <Text>Email Address</Text>
           <TextInput
@@ -91,14 +91,14 @@ export default () => {
             onChangeText={setEmail}
             placeholder="Enter your email address "
           />
-          {/* DOB */}
+          {/* DOB
           <Text>Date Of Birth</Text>
           <TextInput
             value={DOB}
             style={styles.input}
             onChangeText={setDOB}
             placeholder="Enter your date of birth"
-          />
+          /> */}
           {/* username */}
           <Text>Username</Text>
           <TextInput
