@@ -32,7 +32,7 @@ export default () => {
         console.log("Signed up");
         const user = userCredential.user.uid;
         console.log(user);
-        // const account = doc(db, `Accounts/${user}`);
+        // const account = doc(db, `Profiles/${user}`);
         // const data = {
         //   UserName: username,
         //   Bio: "",
