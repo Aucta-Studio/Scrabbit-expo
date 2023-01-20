@@ -51,7 +51,7 @@ export default () => {
           {/* a title */}
           <Text style={styles.title}>Login</Text>
           {/* the username part */}
-          <Text>Username</Text>
+          <Text>Email</Text>
           <TextInput
             value={email}
             style={styles.input}
@@ -67,6 +67,7 @@ export default () => {
             onChangeText={(text) => setPassword(text)}
             placeholder="Enter your password..."
             placeholderTextColor="#FFF"
+            secureTextEntry={true}
           ></TextInput>
           {/* The login button */}
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
