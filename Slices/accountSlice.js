@@ -1,10 +1,14 @@
-// import { CreateSlice } from "@reduxjs/toolkit";
+import { CreateSlice } from "@reduxjs/toolkit";
 
-// const intialState = {
-//   emailAddress: "",
-//   userName: "",
-//   uid: "",
-// };
+const intialState = {
+  emailAddress: "",
+  firstName: "",
+  lastName: "",
+  bio: "",
+  userName: "",
+  pfp: "",
+  uid: "",
+};
 
 // export const accountSlice = CreateSlice({
 //   name: "account",
