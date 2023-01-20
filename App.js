@@ -14,7 +14,7 @@ import Feed from "./Screens/Feed";
 import Profile from "./Screens/Profile";
 import EditProfile from "./Screens/EditProfile";
 import FFF from "./Screens/FFF";
-
+import Icon from 'react-native-vector-icons/Ionicons';
 function ProfileStack() {
   const Stack = createNativeStackNavigator();
   return (
@@ -37,11 +37,28 @@ function Base() {
       }}
       initialRouteName="Scrabbit"
     >
-      <Tab.Screen name="World" component={World} />
-      <Tab.Screen name="Chat" component={Chat} />
+      <Tab.Screen name="World" component={World} 
+  options={{
+    tabBarIcon: ({ focused, color, size }) => (
+        <Icon name='earth-outline' size={32} color={focused ? "#808080" :"white"} />
+    ),
+}}
+/>
+      <Tab.Screen name="Chat" component={Chat}
+       options={{
+        tabBarIcon: ({ focused, color, size }) => (
+            <Icon name='chatbubbles-outline' size={32} color={focused ? "#808080" :"white"} />
+        ),
+}}
+/>
       <Tab.Screen name="Scrabbit" component={Camera} />
       <Tab.Screen name="Feed" component={Feed} />
-      <Tab.Screen name="ProfileStack" component={ProfileStack} />
+      <Tab.Screen name="ProfileStack" component={ProfileStack}
+       options={{
+        tabBarIcon: ({ focused, color, size }) => (
+            <Icon name='person-circle-outline' size={32} color={focused ? "#808080" :"white"} />
+        ),
+    }} />
     </Tab.Navigator>
   );
 }
