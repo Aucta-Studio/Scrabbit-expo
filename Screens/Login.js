@@ -68,6 +68,7 @@ export default () => {
             placeholder="Enter your password..."
             placeholderTextColor="#FFF"
             secureTextEntry={true}
+            
           ></TextInput>
           {/* The login button */}
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
