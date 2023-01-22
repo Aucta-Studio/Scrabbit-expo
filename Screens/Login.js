@@ -10,23 +10,36 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+} from "firebase/firestore";
 import login from "../assets/images/login.png";
 import { useNavigation } from "@react-navigation/native";
 import { myFireBase } from "../fireBaseConfig";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useSelector, useDispatch } from "react-redux";
+import { setUsername, setEmail, setFirstName, setLastName, setBio, setPfp } from "../Slices/account/accountSlice";
 
 export default () => {
-  const [email, setEmail] = useState("");
+  const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
   const auth = getAuth(myFireBase);
+  const db = getFirestore(myFireBase);
+  const account = useSelector((state) => state.account);
+  const dispatch = useDispatch();
 
   function handleLogin() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log("Logged in");
         const user = userCredential.user.uid;
+        console.log("Logged in");
         console.log(user);
+        getMyProfile(user);
         navigation.navigate("app");
       })
       .catch((error) => {
@@ -38,6 +51,18 @@ export default () => {
   function navigateToRegister() {
     navigation.navigate("register");
   }
+
+  const getMyProfile = async (uid) => {
+    const temp = await getDoc(doc(db, "Profiles", `${uid}`));   
+    console.log(temp.data());
+    dispatch(setUsername(temp.data().UserName));
+    dispatch(setEmail(temp.data().EmailAddress));
+    dispatch(setFirstName(temp.data().FirstName));
+    dispatch(setLastName(temp.data().LastName));
+    dispatch(setBio(temp.data().Bio));
+    dispatch(setPfp(temp.data().Pfp));
+ 
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#EC6319" }}>
@@ -55,7 +80,7 @@ export default () => {
           <TextInput
             value={email}
             style={styles.input}
-            onChangeText={(text) => setEmail(text)}
+            onChangeText={(text) => setemail(text)}
             placeholder="Enter your email..."
             placeholderTextColor="#FFF"
           ></TextInput>
