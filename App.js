@@ -15,6 +15,7 @@ import Profile from "./Screens/Profile";
 import EditProfile from "./Screens/EditProfile";
 import FFF from "./Screens/FFF";
 import Icon from "react-native-vector-icons/Ionicons";
+
 function ProfileStack() {
   const Stack = createNativeStackNavigator();
   return (
