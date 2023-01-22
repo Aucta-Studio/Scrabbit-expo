@@ -15,23 +15,29 @@ import { getAuth } from "firebase/auth";
 import { useSelector } from "react-redux";
 
 export default () => {
-  const [img, setimg] = useState('');
-  const account = useSelector(state => state.account);
+  const [img, setimg] = useState(null);
+  const account = useSelector((state) => state.account);
   const storage = getStorage();
-  
+
   const navigation = useNavigation();
 
-  const download = async() => {
+  const download = async () => {
     const temp = await getDownloadURL(ref(storage, `${account.pfp}`));
     setimg(temp);
-  } 
+  };
 
   download();
   console.log(img);
   return (
     <SafeAreaView>
       <ScrollView>
-        <Image source={{uri:img}} style={styles.pfp} resizeMode="contain"/>
+        {img && (
+          <Image
+            source={{ uri: img }}
+            style={styles.pfp}
+            resizeMode="contain"
+          />
+        )}
         <Text>This is the Profile page of {account.username}</Text>
         <Button
           title="Edit"
@@ -43,11 +49,9 @@ export default () => {
   );
 };
 
-const styles = StyleSheet.create(
-  {
-    pfp: {
-      width: "20%",
-      height: "20%",
-    }
-  }
-);
+const styles = StyleSheet.create({
+  pfp: {
+    width: "20%",
+    height: "20%",
+  },
+});
