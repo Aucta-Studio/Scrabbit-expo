@@ -15,12 +15,14 @@ import Profile from "./Screens/Profile";
 import EditProfile from "./Screens/EditProfile";
 import FFF from "./Screens/FFF";
 import Icon from "react-native-vector-icons/Ionicons";
+import { useSelector } from "react-redux";
 
 function ProfileStack() {
   const Stack = createNativeStackNavigator();
+  const account = useSelector(state => state.account);
   return (
     <Stack.Navigator initialRouteName="Profile">
-      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Profile" component={Profile} options={{ title: `${account.username}` }}/>
       <Stack.Screen name="Edit Profile" component={EditProfile} />
       <Stack.Screen name="FFF" component={FFF} />
     </Stack.Navigator>

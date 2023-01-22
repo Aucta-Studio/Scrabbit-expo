@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, ScrollView, Text } from "react-native";
+import { Button, ScrollView, Text, Image, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { myFireBase } from "../fireBaseConfig";
@@ -10,26 +10,29 @@ import {
   getDoc,
   doc,
 } from "firebase/firestore";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
+import { useSelector } from "react-redux";
 
 export default () => {
-  const auth = getAuth(myFireBase);
-  const email = auth.currentUser.email;
-  const uid = auth.currentUser.uid;
-  const db = getFirestore(myFireBase);
-  var myProfile; 
+  const [img, setimg] = useState('');
+  const account = useSelector(state => state.account);
+  const storage = getStorage();
+  
+  const navigation = useNavigation();
 
-  const getMyProfile = async() => {
-    myProfile = await getDoc(doc(db, "Profiles", `${uid}`));
-    console.log(myProfile.data());
+  const download = async() => {
+    const temp = await getDownloadURL(ref(storage, `${account.pfp}`));
+    setimg(temp);
   } 
 
-  getMyProfile();
-  const navigation = useNavigation();
+  download();
+  console.log(img);
   return (
     <SafeAreaView>
       <ScrollView>
-        <Text>This is the Profile page of {uid}</Text>
+        <Image source={{uri:img}} style={styles.pfp} resizeMode="contain"/>
+        <Text>This is the Profile page of {account.username}</Text>
         <Button
           title="Edit"
           onPress={() => navigation.navigate("Edit Profile")}
@@ -39,3 +42,12 @@ export default () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create(
+  {
+    pfp: {
+      width: "20%",
+      height: "20%",
+    }
+  }
+);

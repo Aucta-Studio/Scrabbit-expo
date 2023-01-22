@@ -1,30 +1,40 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const init = {
-  value: 0,
+  email: "",
+  username: "",
+  firstname: "",
+  lastname: "",
+  pfp: "",
+  bio: ""
 }
 
 export const accountSlice = createSlice({
   name: 'account',
   initialState: init,
   reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1
+    setEmail: (state, action) =>{
+      state.email = action.payload;
     },
-    decrement: (state) => {
-      state.value -= 1
+    setUsername: (state, action) =>{
+      state.username = action.payload;
     },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload
+    setFirstName: (state,action) => {
+      state.firstname = action.payload;
     },
+    setLastName: (state,action) => {
+      state.lastname = action.payload;
+    },
+    setPfp: (state,action) => {
+      state.pfp = action.payload;
+    },
+    setBio: (state,action) => {
+      state.bio = action.payload;
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = accountSlice.actions
+export const { setEmail, setUsername, setFirstName, setLastName, setPfp, setBio } = accountSlice.actions
 
 export default accountSlice.reducer
