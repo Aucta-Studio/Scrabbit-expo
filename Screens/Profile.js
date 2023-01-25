@@ -1,5 +1,13 @@
+import 'react-native-gesture-handler';
 import React, { useState } from "react";
-import { Button, ScrollView, Text, Image, StyleSheet } from "react-native";
+import {
+  Button,
+  ScrollView,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { myFireBase } from "../fireBaseConfig";
@@ -13,6 +21,17 @@ import {
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { useSelector } from "react-redux";
+import MyScrapbooks from "./MyScrapbooks";
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+function Tab(){
+  const Tab = createMaterialTopTabNavigator();
+  return(
+    <Tab.Navigator initialRouteName="my">
+      <Tab.Screen name="my" component={MyScrapbooks}/>
+    </Tab.Navigator>
+  );
+}
 
 export default () => {
   const [img, setimg] = useState(null);
@@ -27,24 +46,25 @@ export default () => {
   };
 
   download();
-  console.log(img);
+  // console.log(img);
   return (
     <SafeAreaView>
-      <ScrollView>
-        {img && (
-          <Image
-            source={{ uri: img }}
-            style={styles.pfp}
-            resizeMode="contain"
-          />
-        )}
-        <Text>This is the Profile page of {account.username}</Text>
-        <Button
-          title="Edit"
-          onPress={() => navigation.navigate("Edit Profile")}
-        ></Button>
-        <Button title="FFF" onPress={() => navigation.navigate("FFF")}></Button>
-      </ScrollView>
+      {/* <ScrollView> */}
+      {img && (
+        <Image source={{ uri: img }} style={styles.pfp} resizeMode="contain" />
+      )}
+      <Text>
+        {account.firstname} {account.lastname}
+      </Text>
+      <Text>{account.bio}</Text>
+      <TouchableOpacity>
+        <Text></Text>
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <Text>Edit Profile</Text>
+      </TouchableOpacity>
+      <Tab/>
+      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };

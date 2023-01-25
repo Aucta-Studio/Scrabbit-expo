@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default () => {
   return (
       <SafeAreaView>
-          <Text>This is the edit Profile page</Text>
+          <Text>This is My scrapbooks page</Text>
       </SafeAreaView>
   );
 };
