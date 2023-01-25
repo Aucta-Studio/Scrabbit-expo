@@ -16,6 +16,7 @@ import EditProfile from "./Screens/EditProfile";
 import FFF from "./Screens/FFF";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useSelector } from "react-redux";
+import { Image } from 'react-native';
 
 function ProfileStack() {
   const Stack = createNativeStackNavigator();
@@ -47,7 +48,11 @@ function Base() {
           tabBarIcon: ({ focused, color, size }) => (
             <Icon
               name="earth-outline"
-              size={32}
+              style={{
+                width: size,
+                height: size,
+                borderRadius: size,
+              }}
               color={focused ? "#808080" : "white"}
             />
           ),
@@ -60,14 +65,54 @@ function Base() {
           tabBarIcon: ({ focused, color, size }) => (
             <Icon
               name="chatbubbles-outline"
-              size={32}
+              style={{
+                width: size,
+                height: size,
+                borderRadius: size,
+              }}
               color={focused ? "#808080" : "white"}
             />
           ),
         }}
       />
-      <Tab.Screen name="Scrabbit" component={Camera} />
-      <Tab.Screen name="Feed" component={Feed} />
+      <Tab.Screen
+        name="Scrabbit"
+        component={Camera}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            <Image
+              source={
+                focused
+                  ? require('./assets/images/Scrabbit_Logo_Focused.png')
+                  : require('./assets/images/Scrabbit_Logo.png')
+              }
+              style={{
+                width: size,
+                height: size,
+                borderRadius: size,
+              }}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen name="Feed" component={Feed}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            <Image
+              source={
+                focused
+                  ? require('./assets/images/feed_button_f.png')
+                  : require('./assets/images/feed_button.png')
+              }
+              style={{
+                width: size,
+                height: size,
+                borderRadius: size,
+              }}
+            />
+          ),
+        }}
+      />
       <Tab.Screen
         name="ProfileStack"
         component={ProfileStack}
@@ -75,7 +120,11 @@ function Base() {
           tabBarIcon: ({ focused, color, size }) => (
             <Icon
               name="person-circle-outline"
-              size={32}
+              style={{
+                width: size,
+                height: size,
+                borderRadius: size,
+              }}
               color={focused ? "#808080" : "white"}
             />
           ),
