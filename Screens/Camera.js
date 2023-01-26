@@ -71,7 +71,7 @@ export default function App({navigation}) {
           </TouchableOpacity>
         </View>
       </Camera>
-//       {image && <Image source={{ uri: image }} style={{ width: "100%", height: "50%", position: 'absolute', bottom: 0, right: 0 }} />}
+       {image && <Image source={{ uri: image }} style={{ width: "100%", height: "50%", position: 'absolute', bottom: 0, right: 0 }} />}
     </View>
   );
 }
