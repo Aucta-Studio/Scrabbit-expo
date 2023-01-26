@@ -1,91 +1,85 @@
-// import React, { useState,useCallback, useEffect } from "react";
-// import { Button, ScrollView, Text, Image, StyleSheet } from "react-native";
-// import { useNavigation } from "@react-navigation/native";
-// import { SafeAreaView } from "react-native-safe-area-context";
-// import { myFireBase } from "../fireBaseConfig";
-// import {
-//   getFirestore,
-//   collection,
-//   getDocs,
-//   getDoc,
-//   doc,
-// } from "firebase/firestore";
-// import { getStorage, ref, getDownloadURL } from "firebase/storage";
-// import { getAuth } from "firebase/auth";
-// import { useSelector } from "react-redux";
-// import { GiftedChat } from 'react-native-gifted-chat'
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback
+} from 'react';
+import { TouchableOpacity, Text } from 'react-native';
+import { GiftedChat } from 'react-native-gifted-chat';
+import {
+  collection,
+  addDoc,
+  orderBy,
+  query,
+  onSnapshot
+} from 'firebase/firestore';
+import { signOut } from 'firebase/auth';
+import { auth, db } from '../fireBaseConfig';
 
-// export function Example() {
-//   const [messages, setMessages] = useState([]);
-
-//   useEffect(() => {
-//     setMessages([
-//       {
-//         _id: 1,
-//         text: 'Hello developer',
-//         createdAt: new Date(),
-//         user: {
-//           _id: 2,
-//           name: 'React Native',
-//           avatar: 'https://placeimg.com/140/140/any',
-//         },
-//       },
-//     ])
-//   }, [])
-
-//   const onSend = useCallback((messages = []) => {
-//     setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-//   }, [])
-
-//   return (
-//     <GiftedChat
-//       messages={messages}
-//       onSend={messages => onSend(messages)}
-//       user={{
-//         _id: 1,
-//       }}
-//     />
-//   )
-// }
-
-import React, { useState,useCallback, useEffect } from "react";
-import { ScrollView, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { myFireBase } from "../fireBaseConfig";
-import { getAuth } from "firebase/auth";
-import { GiftedChat } from 'react-native-gifted-chat'
-
-export default () => {
+export default function Chat({ navigation }) {
   const [messages, setMessages] = useState([]);
 
+  const onSignOut = () => {
+    signOut(auth).catch(error => console.log('Error logging out: ', error));
+  };
+
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ])
-  }, [])
+    const collectionRef = collection(db, 'chats');
+    const q = query(collectionRef, orderBy('createdAt', 'desc'));
 
-  const onSend = useCallback((messages = []) => {
-    setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-  }, [])
+    const unsubscribe = onSnapshot(q, querySnapshot => {
+      setMessages(
+        querySnapshot.docs.map(doc => ({
+          _id: doc.data()._id,
+          createdAt: doc.data().createdAt.toDate(),
+          text: doc.data().text,
+          user: doc.data().user
+        }))
+      );
+    });
 
+    return () => unsubscribe();
+  }, []);
+
+
+const onSend = useCallback((messages = []) => {
+    setMessages(previousMessages =>
+      GiftedChat.append(previousMessages, messages)
+    );
+    const { _id, createdAt, text, user } = messages[0];    
+    addDoc(collection(db, 'chats'), {
+      _id,
+      createdAt,
+      text,
+      user
+    });
+  }, []);
+
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          style={{
+            marginRight: 10
+          }}
+          onPress={onSignOut}
+        >
+          <Text>Logout</Text>
+        </TouchableOpacity>
+      )
+    });
+  }, [navigation]);
+  
   return (
     <GiftedChat
       messages={messages}
+      showAvatarForEveryMessage={true}
       onSend={messages => onSend(messages)}
       user={{
-        _id: 1,
+        _id: auth?.currentUser?.email,
+        avatar: 'https://i.pravatar.cc/300'
       }}
     />
-  )
+  );
 };
-
-
