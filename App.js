@@ -46,7 +46,7 @@ function Base() {
         component={World}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
-            <Icon name='earth-outline' size={"32%"} color={focused ? "#808080" :"white"} />
+            <Icon name='earth-outline' size={32} color={focused ? "#808080" :"white"} />
           ),
         }}
       />
@@ -55,7 +55,7 @@ function Base() {
         component={Chat}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
-            <Icon name='chatbubbles-outline' size={"32%"} color={focused ? "#808080" :"white"} />
+            <Icon name='chatbubbles-outline' size={32} color={focused ? "#808080" :"white"} />
           ),
         }}
       />
@@ -102,7 +102,7 @@ function Base() {
         component={ProfileStack}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
-            <Icon name='person-circle-outline' size={"32%"} color={focused ? "#808080" :"white"} />
+            <Icon name='person-circle-outline' size={32} color={focused ? "#808080" :"white"} />
           ),
         }}
       />
