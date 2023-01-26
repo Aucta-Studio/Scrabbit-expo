@@ -1,4 +1,4 @@
-import 'react-native-gesture-handler';
+import "react-native-gesture-handler";
 import React, { useState } from "react";
 import {
   Button,
@@ -7,6 +7,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -22,7 +23,7 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { useSelector } from "react-redux";
 import MyScrapbooks from "./MyScrapbooks";
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 function Tab(){
   const Tab = createMaterialTopTabNavigator();
@@ -50,17 +51,24 @@ export default () => {
   return (
     <SafeAreaView>
       {/* <ScrollView> */}
-      {img && (
-        <Image source={{ uri: img }} style={styles.pfp} resizeMode="contain" />
-      )}
+      <View>
+        {img && (
+          <Image
+            source={{ uri: img }}
+            style={styles.pfp}
+            resizeMode="contain"
+          />
+        )}
+        <TouchableOpacity onPress={() => {navigation.navigate('FFF')}}>
+          <Text>FFF</Text>
+        </TouchableOpacity>
+      </View>
       <Text>
         {account.firstname} {account.lastname}
       </Text>
       <Text>{account.bio}</Text>
-      <TouchableOpacity>
-        <Text></Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
+
+      <TouchableOpacity onPress={() => {navigation.navigate('Edit Profile')}}>
         <Text>Edit Profile</Text>
       </TouchableOpacity>
       <Tab/>
