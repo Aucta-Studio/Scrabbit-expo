@@ -18,8 +18,10 @@ export default function App() {
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
-      </View>
+        <TouchableOpacity onPress={requestPermission}>
+      <Text>Grant Permission</Text>
+    </TouchableOpacity>
+  </View>
     );
   }
 
