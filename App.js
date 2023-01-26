@@ -18,6 +18,7 @@ import FFF from "./Screens/FFF";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useSelector } from "react-redux";
 import { Image } from "react-native";
+import Save from "./Screens/Save";
 
 function ProfileDrawer() {
   const Drawer = createDrawerNavigator();
@@ -158,6 +159,7 @@ export default function App() {
           <Stack.Screen name="login" component={Login} />
           <Stack.Screen name="register" component={Register} />
           <Stack.Screen name="app" component={Base} />
+          <Stack.Screen name="Save" component={Save}/>
         </Stack.Navigator>
       </Provider>
     </NavigationContainer>
