@@ -7,6 +7,7 @@ export default function App() {
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [image, setImage] = useState(null);
+  const [camera, setCamera] =useState(null);
 
   if (!permission) {
     // Camera permissions are still loading
@@ -28,12 +29,13 @@ export default function App() {
   function toggleCameraType() {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   }
+  
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [1, 1],
       quality: 1,
     });
 
@@ -42,9 +44,17 @@ export default function App() {
     }
   };
 
+  const takePicture = async () => {
+    if (camera){
+      const data = await camera.takePictureAsync(null);
+      setImage(data.uri);
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} type={type}>
+      <Camera 
+      ref = {ref => setCamera(ref)} style={styles.fixedRatio} type={type} ratio = {'1:1'}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
             <Text style={styles.text}>Flip Camera</Text>
@@ -52,9 +62,13 @@ export default function App() {
           <TouchableOpacity style={styles.button} onPress={pickImage}>
             <Text style={styles.text}>Pick Image</Text>
           </TouchableOpacity>
+          <TouchableOpacity style = {styles.button} onPress={takePicture}>
+          <Text style={styles.text}>Take Picture</Text>
+          
+          </TouchableOpacity>
         </View>
       </Camera>
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, position: 'absolute', bottom: 0, right: 0 }} />}
+      {image && <Image source={{ uri: image }} style={{ width: "100%", height: "50%", position: 'absolute', bottom: 0, right: 0 }} />}
     </View>
   );
 }
@@ -63,9 +77,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    flexDirection: 'row',
   },
   camera: {
     flex: 1,
+  },
+  fixedRatio: {
+    flex: 1,
+    aspectRatio:1,
   },
   buttonContainer: {
     flex: 1,
@@ -79,8 +98,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontWeight: 'italics',
     color: 'white',
   },
 });
