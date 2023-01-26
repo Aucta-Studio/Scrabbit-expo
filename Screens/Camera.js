@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 
-export default function App() {
+export default function App({navigation}) {
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [image, setImage] = useState(null);
@@ -66,9 +66,12 @@ export default function App() {
           <Text style={styles.text}>Take Picture</Text>
           
           </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Save', {image})}>
+            <Text style={styles.text}>Save</Text>
+          </TouchableOpacity>
         </View>
       </Camera>
-      {image && <Image source={{ uri: image }} style={{ width: "100%", height: "50%", position: 'absolute', bottom: 0, right: 0 }} />}
+//       {image && <Image source={{ uri: image }} style={{ width: "100%", height: "50%", position: 'absolute', bottom: 0, right: 0 }} />}
     </View>
   );
 }
