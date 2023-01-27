@@ -40,7 +40,7 @@ export default () => {
           Email: email,
           FirstName: firstName,
           LastName: lastName,
-          Pfp: "Pfps/Default.jpg",
+          Pfp: "Pfps/default.jpg",
           UserName: username,
         };
         upload(user, data);
