@@ -99,8 +99,9 @@ export default () => {
             <Text>Login</Text>
           </TouchableOpacity>
           {/* in case of a new user with no account */}
-          <TouchableOpacity onPress={navigateToRegister}>
-            <Text>Dont have an account? Create an account</Text>
+          <TouchableOpacity style = {{marginTop: 10, alignSelf: 'center'}} onPress={navigateToRegister}>
+            <Text>Dont have an account?</Text>
+            <Text style = {{fontWeight: 'bold', marginLeft: 10}}>Create an account</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

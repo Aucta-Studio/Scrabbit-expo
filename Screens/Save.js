@@ -1,7 +1,7 @@
 import React, {
     useState,
   } from 'react';
-import {View, TextInput, Image, Button} from 'react-native'
+import {View, TextInput, Image, Button, StyleSheet} from 'react-native'
 import { db, auth, myFireBase } from "../fireBaseConfig";
 import {
     collection,
@@ -33,12 +33,48 @@ export default function Save(props) {
         const uploadTask = uploadBytes(storageRef, blob, metadata);
     }
     return(
-        <View stylre={{flex: 1}}>
+        <View style={styles.view}>
             <Image source={{uri:props.route.params.image}}/>
-            <TextInput
-            placeholder="caption here"
+            <TextInput style={styles.input}
+            placeholder="Enter Caption"
             onChangeText={(caption)=> setCaption(caption)}/>
             <Button title="Save" onPress={() => uploadImage()}/>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+  view: {
+    flex: 1,
+  },
+  input: {
+    marginTop: 100,
+    backgroundColor: "#000",
+    borderRadius: 40,
+    padding: 30,
+    marginBottom: 20,
+    marginLeft: 10,
+    marginRight: 10,
+    color: "#FFF",
+  },
+  button: {
+    marginTop: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'black',
+    //color: "#FFF",
+    //width: 30,
+    //height: 50,
+    // color : "#F97316",
+    // borderColor: "#000",
+    // borderWidth: 2,
+    //borderRadius: 50,
+    //padding: 15,
+    //marginTop: 20,
+    //alignItems: "center",
+  }
+});
