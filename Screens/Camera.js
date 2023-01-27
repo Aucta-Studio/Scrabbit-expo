@@ -56,22 +56,29 @@ export default function App({navigation}) {
       <Camera 
       ref = {ref => setCamera(ref)} style={styles.fixedRatio} type={type} ratio = {'1:1'}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-            <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={pickImage}>
-            <Text style={styles.text}>Pick Image</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style = {styles.button} onPress={takePicture}>
-          <Text style={styles.text}>Take Picture</Text>
-          
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Save', {image})}>
-            <Text style={styles.text}>Save</Text>
+          <TouchableOpacity style={styles.button_save} onPress={() => navigation.navigate('Save', {image})}>
+            <Text style={styles.text}>Next</Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
+            {/*<Text style={styles.text}>Flip Camera</Text>*/}
+            <Image source={require('../assets/camera_flip_icon_nobg.png')} style={styles.ImageIconStyle}/>
+          </TouchableOpacity>
+          <TouchableOpacity style = {styles.button} onPress={takePicture}>
+            {/*<Text style={styles.text}>Take Picture</Text>*/}
+            <Image source={require('../assets/take_pic_nobg.png')} style={styles.ImageIconStyle2}/>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={pickImage}>
+            {/*<Text style={styles.text}>Pick Image</Text>*/}
+            <Image source={require('../assets/pick_image_icon.png')} style={styles.ImageIconStyle}/>
+          </TouchableOpacity>
+          {/* <TouchableOpacity style={styles.button_save} onPress={() => navigation.navigate('Save', {image})}>
+            <Text style={styles.text}>Save</Text>
+          </TouchableOpacity> */}
+        </View>
       </Camera>
-//       {image && <Image source={{ uri: image }} style={{ width: "100%", height: "50%", position: 'absolute', bottom: 0, right: 0 }} />}
+       {image && <Image source={{ uri: image }} style={{ width: "100%", height: "92%", position: 'absolute', bottom: 0, right: 0 }} />}
     </View>
   );
 }
@@ -80,29 +87,47 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    flexDirection: 'row',
+    //flexDirection: 'row',
   },
   camera: {
     flex: 1,
   },
   fixedRatio: {
     flex: 1,
-    aspectRatio:1,
+    aspectRatio:0.75,
   },
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'transparent',
-    margin: 64,
+    alignItems: 'stretch',
+    margin: 30,
+    marginRight: 170,
   },
   button: {
     flex: 1,
     alignSelf: 'flex-end',
-    alignItems: 'center',
+  },
+  button_save: {
+    flex: 1,
+    left: 200,
+    marginTop: 10,
+    marginLeft: 100,
+    marginRight:150,
   },
   text: {
     fontSize: 15,
-    fontWeight: 'italics',
+    fontWeight: 'bold',
     color: 'white',
   },
+  ImageIconStyle: {
+    height: 40,
+    width: 40,
+    margin: 20,
+  },
+  ImageIconStyle2: {
+    height: 50,
+    width: 50,
+    margin: 20,
+  }
 });
