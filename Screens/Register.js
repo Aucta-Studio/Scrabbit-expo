@@ -22,6 +22,7 @@ export default () => {
   // const [DOB, setDOB] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [repassword, setRePassword] = useState("");
   const navigation = useNavigation();
   const auth = getAuth(myFireBase);
   const db = getFirestore(myFireBase);
@@ -115,13 +116,22 @@ export default () => {
             onChangeText={(text) => setPassword(text)}
             placeholder="Enter your password..."
           ></TextInput>
+          {/* retype password */}
+          <Text>Retype Password</Text>
+          <TextInput
+            value={repassword}
+            style={styles.input}
+            onChangeText={(text) => setRePassword(text)}
+            placeholder="Retype your password..."
+          ></TextInput>
           {/* register button */}
           <TouchableOpacity style={styles.button} onPress={handleRegister}>
             <Text>Register</Text>
           </TouchableOpacity>
           {/* in case of a new user with no account */}
-          <TouchableOpacity onPress={navigateToLogin}>
-            <Text>Have an account? Login</Text>
+          <TouchableOpacity style = {{marginTop: 10, alignSelf: 'center'}} onPress={navigateToLogin}>
+            <Text>Have an account?</Text>
+            <Text style = {{fontWeight: 'bold', marginLeft: 35}}>Login</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
