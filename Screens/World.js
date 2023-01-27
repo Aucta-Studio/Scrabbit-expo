@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import { ScrollView, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
 export default () => {
@@ -23,8 +23,8 @@ export default () => {
     setLocation({
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
-      latitudeDelta: 0.009,
-      longitudeDelta: 0.009,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
     });
   };
 
@@ -39,7 +39,15 @@ export default () => {
           style={styles.map}
           region={myLocation}
           customMapStyle={darkStyle}
-        />
+        >
+          <Marker
+            coordinate={{
+              latitude: myLocation.latitude,
+              longitude: myLocation.longitude,
+            }}
+            title="Me"
+          />
+        </MapView>
       </ScrollView>
     </SafeAreaView>
   );
