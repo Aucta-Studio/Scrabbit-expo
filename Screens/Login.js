@@ -61,7 +61,6 @@ export default () => {
     dispatch(setLastName(temp.data().LastName));
     dispatch(setBio(temp.data().Bio));
     dispatch(setPfp(temp.data().Pfp));
- 
   };
 
   return (

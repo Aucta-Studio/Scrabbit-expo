@@ -21,15 +21,15 @@ import {
 } from "firebase/firestore";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import MyScrapbooks from "./MyScrapbooks";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
-function Tab(){
+function Tab() {
   const Tab = createMaterialTopTabNavigator();
-  return(
+  return (
     <Tab.Navigator initialRouteName="my">
-      <Tab.Screen name="my" component={MyScrapbooks}/>
+      <Tab.Screen name="my" component={MyScrapbooks} />
     </Tab.Navigator>
   );
 }
@@ -37,6 +37,7 @@ function Tab(){
 export default () => {
   const [img, setimg] = useState(null);
   const account = useSelector((state) => state.account);
+  const dispatch = useDispatch();
   const storage = getStorage();
 
   const navigation = useNavigation();
@@ -45,9 +46,8 @@ export default () => {
     const temp = await getDownloadURL(ref(storage, `${account.pfp}`));
     setimg(temp);
   };
-
   download();
-  // console.log(img);
+  // console.log(account.pfpFile);
   return (
     <SafeAreaView>
       {/* <ScrollView> */}
@@ -59,7 +59,11 @@ export default () => {
             resizeMode="contain"
           />
         )}
-        <TouchableOpacity onPress={() => {navigation.navigate('FFF')}}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("FFF");
+          }}
+        >
           <Text>FFF</Text>
         </TouchableOpacity>
       </View>
@@ -68,10 +72,14 @@ export default () => {
       </Text>
       <Text>{account.bio}</Text>
 
-      <TouchableOpacity onPress={() => {navigation.navigate('Edit Profile')}}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Edit Profile");
+        }}
+      >
         <Text>Edit Profile</Text>
       </TouchableOpacity>
-      <Tab/>
+      <Tab />
       {/* </ScrollView> */}
     </SafeAreaView>
   );
