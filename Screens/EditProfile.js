@@ -15,8 +15,7 @@ import {
   setFirstName,
   setLastName,
   setPfp,
-  setPfpFile,
-  setBio,
+  setBio
 } from "../Slices/account/accountSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
