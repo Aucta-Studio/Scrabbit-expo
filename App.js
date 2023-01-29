@@ -14,11 +14,26 @@ import Chat from "./Screens/Chat";
 import Feed from "./Screens/Feed";
 import Profile from "./Screens/Profile";
 import EditProfile from "./Screens/EditProfile";
-import FFF from "./Screens/FFF";
+// import FFF from "./Screens/FFF";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useSelector } from "react-redux";
 import { Image } from "react-native";
 import Save from "./Screens/Save";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import Followers from "./Screens/Followers";
+import Following from "./Screens/Following";
+import MakeFriends from "./Screens/MakeFriends";
+
+function FFF(){
+  const Tab = createMaterialTopTabNavigator();
+  return(
+    <Tab.Navigator>
+      <Tab.Screen name="Followers" component={Followers}/>
+      <Tab.Screen name="Following" component={Following}/>
+      <Tab.Screen name="Make Friends" component={MakeFriends}/>
+    </Tab.Navigator>
+  );
+}
 
 function ProfileDrawer() {
   const Drawer = createDrawerNavigator();
