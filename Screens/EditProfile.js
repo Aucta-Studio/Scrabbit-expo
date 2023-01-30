@@ -46,65 +46,133 @@ export default () => {
   download();
 
   return (
-    <SafeAreaView>
+    <View style={styles.container}>
       {/* where the avatar gets changed */}
       <View>
         {img && (
           <Image
             source={{ uri: img }}
-            style={styles.pfp}
+            style={styles.avatar}
             resizeMode="contain"
           />
         )}
-        <TouchableOpacity><Text>change avatar</Text></TouchableOpacity>
+        <TouchableOpacity><Text style={styles.changeText}>Change Avatar</Text></TouchableOpacity>
       </View>
       {/* where the other fields get changed */}
       <View>
-        <Text>Username</Text>
+      <Text style={styles.usernameText}>Username</Text>
         <TextInput
           type="text"
           value={localusername}
+          style={styles.nameText}
           onChange={() => {
             setLocalUsername(localusername);
           }}
         />
         <View>
-          <Text>Firstname</Text>
+        <Text style={styles.usernameText}>Firstname</Text>
           <TextInput
             type="text"
             value={localFirstname}
+            style={styles.nameText}
             onChange={() => {
               setLocalFirstname(localFirstname);
             }}
           />
-          <Text>Lastname</Text>
+          <Text style={styles.usernameText}>Lastname</Text>
           <TextInput
             type="text"
             value={localLastname}
+            style={styles.nameText}
             onChange={() => {
               setLocalLastname(localLastname);
             }}
           />
         </View>
-        <Text>Bio</Text>
+        <Text style={styles.usernameText}>Bio</Text>
         <TextInput
           type="text"
           value={localBio}
+          style={styles.nameText}
           onChange={() => {
             setLocalBio(localBio);
           }}
         />
       </View>
       <TouchableOpacity>
-        <Text>Save</Text>
+        <Text style={styles.button}>Save</Text>
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  pfp: {
-    width: "20%",
-    height: "20%",
+const styles = {
+  container: {
+    flex: 1,
+    backgroundColor: '#100'
   },
-});
+    saveButton: {
+    fontSize: 30,
+    color: '#210',
+    marginTop: 0
+  },
+  button: {
+    // backgroundColor: '#4CAF50',
+    backgroundColor: "#FFF",
+    // color : "#F97316",
+    // borderColor: "#000",
+    // borderWidth: 2,
+    borderRadius: 50,
+    padding: 15,
+    marginTop: 20,
+    textAlign: 'center',
+  },
+  profileContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 14,
+    backgroundColor: '#100'
+  },
+  avatarContainer: {
+    shadowColor: '#000',
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    marginRight: 10,
+    backgroundColor: '#100'
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    marginTop: 20,
+    borderRadius: 50,
+    alignSelf: 'center',
+  },
+  infoContainer: {
+    flex: 1,
+    marginLeft: 16,
+    padding: 16,
+    backgroundColor: '#100'
+  },
+  nameText: {
+    fontSize: 16,
+    color: '#ccc'
+  },
+  usernameText: {
+    marginTop: 16,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff'
+  },
+  changeText: {
+    marginTop: 0,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#aaa',
+    textAlign: 'center'
+  },
+  bioText: {
+    fontSize: 16,
+    color: '#aaa',
+    marginTop: 8
+  }
+};
