@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { ScrollView, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Post from "../Components/Post";
 
-function getPosts() {}
-
-export default () => {
+const Feed = () => {
   return (
-      <SafeAreaView className="bg-zinc-900 h-full p-4">
+    <SafeAreaView className="bg-zinc-900 h-full p-4">
         <ScrollView>
           {/* <Text className="text-white">This is the feed page</Text> */}
             <Post
@@ -17,6 +15,12 @@ export default () => {
               caption="good day at le louvre"
             />
         </ScrollView>
-      </SafeAreaView>
-  );
-};
+    </SafeAreaView>
+  )
+}
+
+
+
+function getPosts() {}
+
+export default Feed
