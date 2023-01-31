@@ -18,9 +18,9 @@ export default function App({navigation}) {
     // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
+        <Text style={{ textAlign: 'center' }}>We need your permission to use the Camera.</Text>
         <TouchableOpacity onPress={requestPermission}>
-      <Text>Grant Permission</Text>
+      <Text style={styles.permissionbutton}>Grant Permission</Text>
     </TouchableOpacity>
   </View>
     );
@@ -88,6 +88,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     //flexDirection: 'row',
+  },
+  permissionbutton: {
+    textAlign: 'center',
+    color: "white",
+    fontWeight: "bold",
+    backgroundColor: "#FFF",
+    borderRadius: 50,
+    padding: 15,
+    marginTop: 15,
   },
   camera: {
     flex: 1,
