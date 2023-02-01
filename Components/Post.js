@@ -1,33 +1,88 @@
 import React, { useState } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
 export default ({ pfp, user, caption, state, image }) => {
+  const [liked, setLiked] = useState(false);
   return (
-      <View className=" bg-black rounded-xl content-center">
-        {/* username display */}
-        <View className="p-1 flex-row items-center">
-          <Image source={{ uri: pfp }} className="h-10 w-10" />
-          <Text className="text-white pl-2">{user}</Text>
+    <View style={styles.container}>
+      {/* username display */}
+      <TouchableOpacity>
+        <View style={styles.margin}>
+          <Image source={{ uri: pfp }} />
+          <Text style={styles.user}>{user}</Text>
         </View>
-        {/* thumbnail photo/location */}
-        <View className="flex flex-col">
+      </TouchableOpacity>
+      {/* thumbnail photo/location */}
+      <View>
+        <TouchableOpacity>
           <Image
-            // style={styles.image}
-            className="w-full h-[30vh]"
+            style={styles.image}
             // resizeMode="contain"
             source={{ uri: image }}
           />
-        </View>
-        {/* Like comment and save buttons */}
-        <View className="bg-black flex-row w-full justify-evenly">
-          <Text className="text-white">Like</Text>
-          <Text className="text-white">Comment</Text>
-          <Text className="text-white">Bookmark</Text>
-        </View>
-        {/* Caption and comments link */}
-        <View className="p-2">
-          <Text className="text-white">{caption}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
+      {/* Like comment and save buttons */}
+      <View style={{ flexDirection: "row", margin: "5%" }}>
+        <TouchableOpacity
+          onPress={() => {
+            setLiked(!liked);
+          }}
+        >
+          <Image
+            source={
+              liked
+                ? require("../assets/heart-active.png")
+                : require("../assets/heart.png")
+            }
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Image
+            source={require("../assets/comment.png")}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Image
+            source={require("../assets/bookmark.png")}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+      </View>
+      {/* Caption and comments link */}
+      <View style={styles.margin}>
+        <Text>{caption}</Text>
+      </View>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  margin: {
+    margin: "5%",
+  },
+  container: {
+    backgroundColor: "#000",
+  },
+  user: {
+    fontWeight: "bold",
+    fontSize: 20,
+    padding: 30,
+    marginLeft: 30,
+  },
+  icon: {
+    width: 35,
+    height: 35,
+    marginLeft: 10,
+    marginTop: 10,
+    margin: 5,
+  },
+  image: {
+    width: 250,
+    height: 250,
+  },
+});
