@@ -5,6 +5,7 @@ import React, {
   useCallback
 } from 'react';
 import { TouchableOpacity, Text } from 'react-native';
+// Used React Native Gifted Chat Library
 import { GiftedChat } from 'react-native-gifted-chat';
 import {
   collection,
