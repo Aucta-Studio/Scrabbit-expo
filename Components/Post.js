@@ -1,26 +1,27 @@
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+
 
 export default ({ pfp, user, caption, state, image }) => {
   const [liked, setLiked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
   return (
     <View style={styles.container}>
       {/* username display */}
       <TouchableOpacity>
         <View style={styles.margin}>
-          <Image source={{ uri: pfp }} />
+          <Image source={{ uri: pfp }} style={styles.avatar} />
           <Text style={styles.user}>{user}</Text>
         </View>
       </TouchableOpacity>
       {/* thumbnail photo/location */}
-      <View>
-        <TouchableOpacity>
+      <View style={styles.imgContainer}>
           <Image
             style={styles.image}
             // resizeMode="contain"
             source={{ uri: image }}
           />
-        </TouchableOpacity>
       </View>
       {/* Like comment and save buttons */}
       <View style={{ flexDirection: "row", margin: "5%" }}>
@@ -29,33 +30,39 @@ export default ({ pfp, user, caption, state, image }) => {
             setLiked(!liked);
           }}
         >
-          <Image
-            source={
-              liked
-                ? require("../assets/heart-active.png")
-                : require("../assets/heart.png")
-            }
-            style={styles.icon}
+          <Icon
+              name={liked ? "heart-sharp" : "heart-outline"}
+              size={34}
+              color={liked ? "#E98E3E" : "white"}
+              style={styles.icon}
           />
         </TouchableOpacity>
 
         <TouchableOpacity>
-          <Image
-            source={require("../assets/comment.png")}
-            style={styles.icon}
-          />
+          <Icon
+                name={"chatbubble-outline"}
+                size={32}
+                color={"#FFFFFF"}
+                style={styles.icon}
+            />
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          <Image
-            source={require("../assets/bookmark.png")}
-            style={styles.icon}
+        <TouchableOpacity
+          onPress={() => {
+              setBookmarked(!bookmarked);
+            }}
+        >
+          <Icon
+              name={bookmarked ? "bookmark" : "bookmark-outline"}
+              size={32}
+              color={bookmarked ? "#FFFFFF" : "white"}
+              style={styles.icon}
           />
         </TouchableOpacity>
       </View>
       {/* Caption and comments link */}
       <View style={styles.margin}>
-        <Text>{caption}</Text>
+        <Text style={styles.usernameText}>{caption}</Text>
       </View>
     </View>
   );
@@ -71,18 +78,46 @@ const styles = StyleSheet.create({
   user: {
     fontWeight: "bold",
     fontSize: 20,
-    padding: 30,
+    padding: 0,
     marginLeft: 30,
+    color: "#fff"
   },
   icon: {
-    width: 35,
-    height: 35,
-    marginLeft: 10,
-    marginTop: 10,
-    margin: 5,
+    width: 32,
+    height: 32,
+    marginLeft: 0,
+    marginTop: 0,
+    margin: 10,
+  },
+  imgContainer: {
+    flexDirection: 'row'
   },
   image: {
-    width: 250,
-    height: 250,
+    resizeMode: 'contain',
+    flex: 1,
+    aspectRatio: 1,
+    marginLeft: 15 // Your aspect ratio
+},
+  avatarContainer: {
+    shadowColor: "#000",
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    marginRight: 10,
+    backgroundColor: "#000",
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+  },
+  nameText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  usernameText: {
+    marginBottom: 16,
+    fontSize: 12,
+    color: "#fff",
   },
 });
