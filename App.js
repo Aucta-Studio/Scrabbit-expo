@@ -27,7 +27,13 @@ import MakeFriends from "./Screens/MakeFriends";
 function FFF(){
   const Tab = createMaterialTopTabNavigator();
   return(
-    <Tab.Navigator>
+    <Tab.Navigator tabBarOptions={{
+      activeTintColor: 'white',
+      inactiveTintColor: 'white',
+      labelStyle: { fontWeight: 'bold' },
+      style: { backgroundColor: 'black' },
+      indicatorStyle: { backgroundColor: 'white' },
+    }}>
       <Tab.Screen name="Followers" component={Followers}/>
       <Tab.Screen name="Following" component={Following}/>
       <Tab.Screen name="Make Friends" component={MakeFriends}/>
@@ -60,6 +66,15 @@ function ProfileStack() {
   return (
     <Stack.Navigator
       initialRouteName="Profile Screen"
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#000',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
     >
       <Stack.Screen name="Profile Screen" component={Profile} options={{ title: `${account.username}` }} />
       <Stack.Screen name="Edit Profile" component={EditProfile} />

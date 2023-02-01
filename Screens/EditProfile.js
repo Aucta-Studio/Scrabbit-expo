@@ -46,7 +46,7 @@ export default () => {
   download();
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {/* where the avatar gets changed */}
       <View>
         {img && (
@@ -102,14 +102,15 @@ export default () => {
       <TouchableOpacity>
         <Text style={styles.button}>Save</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: '#100'
+    backgroundColor: '#000',
+    padding: "4%",
   },
     saveButton: {
     fontSize: 30,
@@ -131,14 +132,14 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 14,
-    backgroundColor: '#100'
+    backgroundColor: '#000'
   },
   avatarContainer: {
     shadowColor: '#000',
     shadowOpacity: 0.8,
     shadowRadius: 2,
     marginRight: 10,
-    backgroundColor: '#100'
+    backgroundColor: '#000'
   },
   avatar: {
     width: 100,
@@ -151,7 +152,7 @@ const styles = {
     flex: 1,
     marginLeft: 16,
     padding: 16,
-    backgroundColor: '#100'
+    backgroundColor: '#000'
   },
   nameText: {
     fontSize: 16,
