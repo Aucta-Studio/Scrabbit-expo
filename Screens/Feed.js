@@ -14,6 +14,12 @@ const Feed = () => {
               image="https://th.bing.com/th/id/OIP.eKF2blXCrUp4s_xCE6ncgwHaD3?pid=ImgDet&rs=1"
               caption="good day at le louvre"
             />
+            <Post
+              user="jdm324xd"
+              pfp="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png"
+              image="https://firebasestorage.googleapis.com/v0/b/scrabbit-app-test-1.appspot.com/o/posts%2F7He64dcM47bc6Pn4PyZmLowIOyk2%2F0.3ufycyx9ne4.jpeg?alt=media&token=5a7a8239-abb5-4c3a-9dec-47973cda4d15"
+              caption="good night at le house"
+            />
         </ScrollView>
     </SafeAreaView>
   )
