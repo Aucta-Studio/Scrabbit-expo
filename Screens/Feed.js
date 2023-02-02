@@ -4,7 +4,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Post from "../Components/Post";
 
 // The post retrieval from database is in progress. 
-// For now, posts are hardcoded to show how the feed will look like. 
+// For now, posts are hardcoded to show how the feed will look like.
+// Like & Comment 
 const Feed = () => {
   return (
     <SafeAreaView className="bg-zinc-900 h-full p-4">
