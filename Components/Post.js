@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { color } from "react-native-reanimated";
 import Icon from "react-native-vector-icons/Ionicons";
 
-
+// Frontend & Styling of the post completed
 export default ({ pfp, user, caption, state, image }) => {
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
