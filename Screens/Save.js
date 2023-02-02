@@ -19,14 +19,14 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL} from "firebase/s
 
 export default function Save(props, {navigation}) {
     const [caption, setCaption] = useState("")
-
+    // created this method to show any message onto the screen like "Posted!"
     const showMessage = (title, message) => {
         Alert.alert(
           title,
           message
         );
     };
-
+    // this method is used to upload image to firbase storage.
     const uploadImage = async () => {
         const uri = props.route.params.image;
         const response = await fetch(uri);
@@ -47,7 +47,7 @@ export default function Save(props, {navigation}) {
         const taskProgress = snapshot => {
             console.log(`transferred: ${snapshot.bytesTransferred}`)
         }
-
+        // get a download link of the picture once uploaded into storage
         const taskCompleted = () => {
             getDownloadURL(task.snapshot.ref).then((snapshot) => {
                 savePostData(snapshot);
@@ -61,7 +61,7 @@ export default function Save(props, {navigation}) {
 
         task.on("state_changed", taskProgress, taskError, taskCompleted);
     }
-
+    // saves the post data like caption, time, download URL of the image, etc. in Firebase's firestore
     const savePostData = (downloadURL) => {
         addDoc(collection(db, "Posts", auth.currentUser.uid, "userPosts"), {
             downloadURL,
@@ -71,7 +71,7 @@ export default function Save(props, {navigation}) {
             showMessage("Posted!", "Your picture has been posted.");
         }))
     }
-
+    // styling and frontend of save page
     return (
         <View style={styles.view}>
             <Image source={{uri: props.route.params.image}}/>

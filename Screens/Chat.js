@@ -23,7 +23,8 @@ export default function Chat({ navigation }) {
   const onSignOut = () => {
     signOut(auth).catch(error => console.log('Error logging out: ', error));
   };
-
+  // Imported the Firebase firestore database, wrote queries and saved them in database.
+  // Shows previously sent messages too.
   useEffect(() => {
     const collectionRef = collection(db, 'chats');
     const q = query(collectionRef, orderBy('createdAt', 'desc'));
@@ -42,7 +43,7 @@ export default function Chat({ navigation }) {
     return () => unsubscribe();
   }, []);
 
-
+  // Click on send and new message is stored with the previous messages send.
   const onSend = useCallback((messages = []) => {
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, messages)
