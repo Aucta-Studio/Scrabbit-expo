@@ -1,13 +1,11 @@
-import { View, Text, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native";
 import React, { useEffect } from "react";
 import { myFireBase } from "../fireBaseConfig";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 import {
   getFirestore,
   collection,
   getDocs,
-  getDoc,
-  doc,
   query,
   where,
 } from "firebase/firestore";

@@ -27,6 +27,7 @@
     "firebase": "^9.16.0",
     "ngrok": "^4.3.3",
     "react": "^18.1.0",
+    "react-firebase-hooks": "^5.1.1",
     "react-native": "^0.70.5",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-gifted-chat": "^1.1.1",
