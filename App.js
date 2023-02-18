@@ -23,9 +23,14 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import Followers from "./Screens/Followers";
 import Following from "./Screens/Following";
 import MakeFriends from "./Screens/MakeFriends";
+import ForeignProfile from "./Screens/ForeignProfile";
+import { myFireBase } from "./fireBaseConfig";
+import { getAuth } from "firebase/auth";
 
 function FFF(){
   const Tab = createMaterialTopTabNavigator();
+  const auth = getAuth(myFireBase);
+  const user = {uid:auth.currentUser.uid};
   return(
     <Tab.Navigator tabBarOptions={{
       activeTintColor: 'white',
@@ -34,8 +39,8 @@ function FFF(){
       style: { backgroundColor: 'black' },
       indicatorStyle: { backgroundColor: 'white' },
     }}>
-      <Tab.Screen name="Followers" component={Followers}/>
-      <Tab.Screen name="Following" component={Following}/>
+      <Tab.Screen name="Followers" component={Followers} initialParams={{user}}/>
+      <Tab.Screen name="Following" component={Following} initialParams={{user}}/>
       <Tab.Screen name="Make Friends" component={MakeFriends}/>
     </Tab.Navigator>
   );
@@ -79,6 +84,7 @@ function ProfileStack() {
       <Stack.Screen name="Profile Screen" component={Profile} options={{ title: `${account.username}` }} />
       <Stack.Screen name="Edit Profile" component={EditProfile} />
       <Stack.Screen name="FFF" component={FFF} />
+      <Stack.Screen name="Foreign" component={ForeignProfile}/>
     </Stack.Navigator>
   );
 }

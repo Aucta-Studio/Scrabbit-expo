@@ -13,7 +13,8 @@ import { getAuth } from "firebase/auth";
 import { useState } from "react";
 import User from "../Components/User";
 
-export default function Following() {
+export default function Following({route}) {
+  const {user} = route.params;
   const [followed, setFolowed] = useState(null);
   const db = getFirestore(myFireBase);
   const auth = getAuth(myFireBase);
@@ -21,7 +22,7 @@ export default function Following() {
   const relations = collection(db, "Relations");
   const q = query(
     relations,
-    where("Follower", "==", `${auth.currentUser.uid}`)
+    where("Follower", "==", `${user.uid}`)
   );
   const getFollowed = async () => {
     const temp = await getDocs(q);
