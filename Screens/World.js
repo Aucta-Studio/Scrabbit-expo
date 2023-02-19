@@ -3,6 +3,8 @@ import { Dimensions, StyleSheet } from "react-native";
 import { ScrollView, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Marker } from "react-native-maps";
+import { SearchBar } from "react-native-elements";
+import Carrot from "../Components/Carrot";
 import * as Location from "expo-location";
 
 export default () => {
@@ -12,6 +14,7 @@ export default () => {
     latitudeDelta: 0.009,
     longitudeDelta: 0.009,
   });
+  const [searchText, setSearchText] = useState("");
   const userLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -34,6 +37,13 @@ export default () => {
 
   return (
     <SafeAreaView>
+      <SearchBar
+        placeholder="Search for location or title"
+        value={searchText}
+        onChangeText={(text) => {
+          setSearchText(text);
+        }}
+      />
       <ScrollView>
         <MapView
           style={styles.map}
@@ -46,6 +56,13 @@ export default () => {
               longitude: myLocation.longitude,
             }}
             title="Me"
+          />
+          <Carrot
+            coordinate={{
+              latitude: 25.101969,
+              longitude: 55.162172,
+            }}
+            name="node"
           />
         </MapView>
       </ScrollView>
