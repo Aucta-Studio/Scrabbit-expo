@@ -20,13 +20,18 @@ function Tab() {
   return (
     <Tab.Navigator
       initialRouteName="my"
-      screenOptions={{ tabBarStyle: { backgroundColor: "#000" } }}
-      tabBarOptions={{
-        activeTintColor: "white",
-        inactiveTintColor: "white",
-        labelStyle: { fontWeight: "bold" },
-        style: { backgroundColor: "blue" },
-        indicatorStyle: { backgroundColor: "white" },
+      screenOptions={{
+        tabBarActiveTintColor: "white",
+        tabBarInactiveTintColor: "white",
+        tabBarLabelStyle: {
+          fontWeight: "bold"
+        },
+        tabBarIndicatorStyle: {
+          backgroundColor: "white"
+        },
+        tabBarStyle: {
+          backgroundColor: "black"
+        }
       }}
     >
       <Tab.Screen name="my" component={MyScrapbooks} />
@@ -38,7 +43,6 @@ export default () => {
   const account = useSelector((state) => state.account);
   const dispatch = useDispatch();
   const storage = getStorage();
-
   const navigation = useNavigation();
 
   const download = async () => {
