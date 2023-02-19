@@ -9,8 +9,8 @@ export default function Firemage({ path, style }) {
   const [value, loading, error] = useDownloadURL(ref(storage, `${path}`));
   return (
     <View>
-      {error && <Text>Error: {error}</Text>}
-      {loading && <Text>Download URL: Loading...</Text>}
+      {/* {error && <Text>Error: {error}</Text>}
+      {loading && <Text>Download URL: Loading...</Text>} */}
       {!loading && value && <Image style={style} source={{ uri: value }}/>}
     </View>
   );
