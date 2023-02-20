@@ -69,7 +69,7 @@ export default () => {
                 navigation.navigate("FFF");
               }}
             >
-              <Text style={styles.friendsText}>Followers</Text>
+              <Text style={styles.friendsText}>Followers </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
