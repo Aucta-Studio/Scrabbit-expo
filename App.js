@@ -26,10 +26,12 @@ import ForeignProfile from "./Screens/ForeignProfile";
 import MutualFriends from "./Screens/MutualFriends";
 import { myFireBase } from "./fireBaseConfig";
 import { getAuth } from "firebase/auth";
+import Notifications from "./Screens/Notifications";
 
 // a Followers following and mutual friends grouped in a material top tab
-function FFM() {
+function FFM({route}) {
   const Tab = createMaterialTopTabNavigator();
+  const { fuid } = route.params;
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -40,16 +42,17 @@ function FFM() {
         indicatorStyle: { backgroundColor: "white" },
       }}
     >
-      <Tab.Screen name="ForeignFollowers" component={Followers} />
-      <Tab.Screen name="ForeignFollowing" component={Following} />
+      <Tab.Screen name="Followers" component={Followers} initialParams={{ uid: fuid }}/>
+      <Tab.Screen name="Following" component={Following} initialParams={{ uid: fuid }}/>
       <Tab.Screen name="MutualFriends" component={MutualFriends} />
     </Tab.Navigator>
   );
 }
 
 //the stack of the foreign profile holds foreign profile and FFM
-function ForeignProfileStack() {
+function ForeignProfileStack({route}) {
   const Stack = createNativeStackNavigator();
+  const { fuid } = route.params;
   return (
     <Stack.Navigator
       initialRouteName="ForeignProfile"
@@ -64,8 +67,9 @@ function ForeignProfileStack() {
         name="ForeignProfile"
         component={ForeignProfile}
         // options={{ headerShown: false}}
+        initialParams={{ fuid: fuid }}
       />
-      <Stack.Screen name="FFM" component={FFM} />
+      <Stack.Screen name="FFM" component={FFM} initialParams={{ fuid: fuid }}/>
     </Stack.Navigator>
   );
 }
@@ -74,7 +78,6 @@ function ForeignProfileStack() {
 function FFF() {
   const Tab = createMaterialTopTabNavigator();
   const auth = getAuth(myFireBase);
-  const user = { uid: auth.currentUser.uid };
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -88,12 +91,12 @@ function FFF() {
       <Tab.Screen
         name="Followers"
         component={Followers}
-        initialParams={{ user }}
+        initialParams={{ uid: auth.currentUser.uid }}
       />
       <Tab.Screen
         name="Following"
         component={Following}
-        initialParams={{ user }}
+        initialParams={{ uid: auth.currentUser.uid }}
       />
       <Tab.Screen name="Make Friends" component={MakeFriends} />
     </Tab.Navigator>
@@ -157,6 +160,23 @@ function ProfileStack() {
   );
 }
 
+function FeedStack() {
+  const Stack = createNativeStackNavigator();
+  return (
+    <Stack.Navigator
+      initialRouteName="Feed"
+      screenOptions={{
+        headerStyle: { backgroundColor: "black" },
+        headerTintColor: "white",
+        headerTitleStyle: { fontWeight: "bold" },
+      }}
+    >
+      <Stack.Screen name="Feed" component={Feed} />
+      <Stack.Screen name="Notifications" component={Notifications} />
+    </Stack.Navigator>
+  );
+}
+
 //a bottom tab that holds the whole app
 function Base() {
   const Tab = createBottomTabNavigator();
@@ -216,8 +236,8 @@ function Base() {
         }}
       />
       <Tab.Screen
-        name="Feed"
-        component={Feed}
+        name="FeedStack"
+        component={FeedStack}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image
