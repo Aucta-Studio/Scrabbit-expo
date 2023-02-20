@@ -14,7 +14,6 @@ import Chat from "./Screens/Chat";
 import Feed from "./Screens/Feed";
 import Profile from "./Screens/Profile";
 import EditProfile from "./Screens/EditProfile";
-// import FFF from "./Screens/FFF";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useSelector } from "react-redux";
 import { Image } from "react-native";
@@ -24,28 +23,84 @@ import Followers from "./Screens/Followers";
 import Following from "./Screens/Following";
 import MakeFriends from "./Screens/MakeFriends";
 import ForeignProfile from "./Screens/ForeignProfile";
+import MutualFriends from "./Screens/MutualFriends";
 import { myFireBase } from "./fireBaseConfig";
 import { getAuth } from "firebase/auth";
 
-function FFF(){
+// a Followers following and mutual friends grouped in a material top tab
+function FFM() {
   const Tab = createMaterialTopTabNavigator();
-  const auth = getAuth(myFireBase);
-  const user = {uid:auth.currentUser.uid};
-  return(
-    <Tab.Navigator tabBarOptions={{
-      activeTintColor: 'white',
-      inactiveTintColor: 'white',
-      labelStyle: { fontWeight: 'bold' },
-      style: { backgroundColor: 'black' },
-      indicatorStyle: { backgroundColor: 'white' },
-    }}>
-      <Tab.Screen name="Followers" component={Followers} initialParams={{user}}/>
-      <Tab.Screen name="Following" component={Following} initialParams={{user}}/>
-      <Tab.Screen name="Make Friends" component={MakeFriends}/>
+  return (
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: "white",
+        inactiveTintColor: "white",
+        labelStyle: { fontWeight: "bold" },
+        style: { backgroundColor: "black" },
+        indicatorStyle: { backgroundColor: "white" },
+      }}
+    >
+      <Tab.Screen name="ForeignFollowers" component={Followers} />
+      <Tab.Screen name="ForeignFollowing" component={Following} />
+      <Tab.Screen name="MutualFriends" component={MutualFriends} />
     </Tab.Navigator>
   );
 }
 
+//the stack of the foreign profile holds foreign profile and FFM
+function ForeignProfileStack() {
+  const Stack = createNativeStackNavigator();
+  return (
+    <Stack.Navigator
+      initialRouteName="ForeignProfile"
+      screenOptions={{
+        headerShown: true,
+        headerStyle: { backgroundColor: "black" },
+        headerTintColor: "white",
+        headerTitleStyle: { fontWeight: "bold" },
+      }}
+    >
+      <Stack.Screen
+        name="ForeignProfile"
+        component={ForeignProfile}
+        // options={{ headerShown: false}}
+      />
+      <Stack.Screen name="FFM" component={FFM} />
+    </Stack.Navigator>
+  );
+}
+
+// FFF groups followers folllowing and makefriends in a material top tab
+function FFF() {
+  const Tab = createMaterialTopTabNavigator();
+  const auth = getAuth(myFireBase);
+  const user = { uid: auth.currentUser.uid };
+  return (
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: "white",
+        inactiveTintColor: "white",
+        labelStyle: { fontWeight: "bold" },
+        style: { backgroundColor: "black" },
+        indicatorStyle: { backgroundColor: "white" },
+      }}
+    >
+      <Tab.Screen
+        name="Followers"
+        component={Followers}
+        initialParams={{ user }}
+      />
+      <Tab.Screen
+        name="Following"
+        component={Following}
+        initialParams={{ user }}
+      />
+      <Tab.Screen name="Make Friends" component={MakeFriends} />
+    </Tab.Navigator>
+  );
+}
+
+// a drawer that holds the user's profile screen and the related settings pages
 function ProfileDrawer() {
   const Drawer = createDrawerNavigator();
   const account = useSelector((state) => state.account);
@@ -59,12 +114,13 @@ function ProfileDrawer() {
       <Drawer.Screen
         name="Profile"
         component={ProfileStack}
-        options={{headerShown: false, title: `${account.username}`}}
+        options={{ headerShown: false, title: `${account.username}` }}
       />
     </Drawer.Navigator>
   );
 }
 
+// the stack that hold the profile page the FFF page , the edit profile page and holds the foreign stack
 function ProfileStack() {
   const Stack = createNativeStackNavigator();
   const account = useSelector((state) => state.account);
@@ -73,22 +129,35 @@ function ProfileStack() {
       initialRouteName="Profile Screen"
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#000',
+          backgroundColor: "#000",
         },
-        headerTintColor: '#fff',
+        headerTintColor: "#fff",
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontWeight: "bold",
         },
       }}
     >
-      <Stack.Screen name="Profile Screen" component={Profile} options={{ title: `${account.username}` }} />
+      <Stack.Screen
+        name="Profile Screen"
+        component={Profile}
+        options={{ title: `${account.username}` }}
+      />
       <Stack.Screen name="Edit Profile" component={EditProfile} />
-      <Stack.Screen name="FFF" component={FFF} />
-      <Stack.Screen name="Foreign" component={ForeignProfile}/>
+      <Stack.Screen
+        name="FFF"
+        component={FFF}
+        options={{ title: `${account.username}` }}
+      />
+      <Stack.Screen
+        name="ForeignProfileStack"
+        component={ForeignProfileStack}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
 
+//a bottom tab that holds the whole app
 function Base() {
   const Tab = createBottomTabNavigator();
   return (
@@ -183,6 +252,7 @@ function Base() {
   );
 }
 
+//the stack that binds the login and register to the base
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
@@ -195,7 +265,7 @@ export default function App() {
           <Stack.Screen name="login" component={Login} />
           <Stack.Screen name="register" component={Register} />
           <Stack.Screen name="app" component={Base} />
-          <Stack.Screen name="Save" component={Save}/>
+          <Stack.Screen name="Save" component={Save} />
         </Stack.Navigator>
       </Provider>
     </NavigationContainer>
