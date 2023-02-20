@@ -8,11 +8,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  SafeAreaView
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { useSelector, useDispatch } from "react-redux";
-import MyScrapbooks from "./MyScrapbooks";
+import ScrapbooksList from "./ScrapbooksList";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 function Tab() {
@@ -34,10 +35,11 @@ function Tab() {
         }
       }}
     >
-      <Tab.Screen name="my" component={MyScrapbooks} />
+    <Tab.Screen name="my" component={ScrapbooksList} />
     </Tab.Navigator>
   );
 }
+
 export default () => {
   const [img, setimg] = useState(null);
   const account = useSelector((state) => state.account);
@@ -51,7 +53,7 @@ export default () => {
   };
   download();
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.profileContainer}>
         <View style={styles.avatarContainer}>
           <Image source={{ uri: img }} style={styles.avatar} />
@@ -80,7 +82,7 @@ export default () => {
         </View>
       </View>
       <Tab />
-    </View>
+    </SafeAreaView>
   );
 };
 
