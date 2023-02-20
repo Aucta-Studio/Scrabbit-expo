@@ -69,7 +69,14 @@ export default () => {
                 navigation.navigate("FFF");
               }}
             >
-              <Text style={styles.friendsText}>Friends</Text>
+              <Text style={styles.friendsText}>Followers</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("FFF",{screen: "Following"});
+              }}
+            >
+              <Text style={styles.friendsText}>Following</Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity

@@ -17,40 +17,16 @@ import MakeFriends from "./MakeFriends";
 import { useNavigation } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
-function TabNav() {
-  const Tab = createMaterialTopTabNavigator();
-  return (
-    <Tab.Navigator
-      initialRouteName="list"
-      screenOptions={{
-        tabBarActiveTintColor: "white",
-        tabBarInactiveTintColor: "white",
-        tabBarLabelStyle: {
-          fontWeight: "bold",
-        },
-        tabBarIndicatorStyle: {
-          backgroundColor: "white",
-        },
-        tabBarStyle: {
-          backgroundColor: "black",
-        },
-      }}
-    >
-      <Tab.Screen name="list" component={ScrapbooksList} />
-    </Tab.Navigator>
-  );
-}
-
 export default function ForeignProfile({ route }) {
   const { fuid } = route.params;
   const db = getFirestore(myFireBase);
   const navigation = useNavigation();
   const [value, loading, error] = useDocument(doc(db, "Profiles", `${fuid}`));
-  if (value) {
-    navigation.setOptions({
-      title: `${value.data().UserName}`,
-    });
-  }
+  // if (value) {
+  //   navigation.setOptions({
+  //     title: `${value.data().UserName}`,
+  //   });
+  // }
   return (
     <SafeAreaView>
       {error && <Text>Error: {JSON.stringify(error)}</Text>}
@@ -69,10 +45,17 @@ export default function ForeignProfile({ route }) {
               <View style={styles.friendsContainer}>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("FFM");
+                    navigation.navigate("FFM",{screen:"Followers"});
                   }}
                 >
-                  <Text style={styles.friendsText}>Friends</Text>
+                  <Text style={styles.friendsText}>Followers</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("FFM",{screen:"Following"});
+                  }}
+                >
+                  <Text style={styles.friendsText}>Following</Text>
                 </TouchableOpacity>
               </View>
               <TouchableOpacity>
@@ -80,14 +63,13 @@ export default function ForeignProfile({ route }) {
               </TouchableOpacity>
             </View>
           </View>
-          <TabNav />
         </>
       )}
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 1,
     backgroundColor: "#000",
@@ -172,4 +154,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#555",
     margin: "",
   },
-});
+};
