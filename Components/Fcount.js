@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function Notifications() {
+export default function Fcount({ id }) {
   return (
     <View>
-      <Text>Notifications</Text>
+      <Text>Fcount</Text>
     </View>
   )
 }
