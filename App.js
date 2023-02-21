@@ -29,7 +29,7 @@ import { getAuth } from "firebase/auth";
 import Notifications from "./Screens/Notifications";
 
 // a Followers following and mutual friends grouped in a material top tab
-function FFM({route}) {
+function FFM({ route }) {
   const Tab = createMaterialTopTabNavigator();
   const { fuid } = route.params;
   return (
@@ -42,17 +42,25 @@ function FFM({route}) {
         indicatorStyle: { backgroundColor: "white" },
       }}
     >
-      <Tab.Screen name="Followers" component={Followers} initialParams={{ uid: fuid }}/>
-      <Tab.Screen name="Following" component={Following} initialParams={{ uid: fuid }}/>
+      <Tab.Screen
+        name="Followers"
+        component={Followers}
+        initialParams={{ uid: fuid }}
+      />
+      <Tab.Screen
+        name="Following"
+        component={Following}
+        initialParams={{ uid: fuid }}
+      />
       <Tab.Screen name="MutualFriends" component={MutualFriends} />
     </Tab.Navigator>
   );
 }
 
 //the stack of the foreign profile holds foreign profile and FFM
-function ForeignProfileStack({route}) {
+function ForeignProfileStack({ route }) {
   const Stack = createNativeStackNavigator();
-  const { fuid } = route.params;
+  const { fuid, usrn } = route.params;
   return (
     <Stack.Navigator
       initialRouteName="ForeignProfile"
@@ -66,10 +74,15 @@ function ForeignProfileStack({route}) {
       <Stack.Screen
         name="ForeignProfile"
         component={ForeignProfile}
-        // options={{ headerShown: false}}
+        options={{ title: usrn}}
         initialParams={{ fuid: fuid }}
       />
-      <Stack.Screen name="FFM" component={FFM} initialParams={{ fuid: fuid }}/>
+      <Stack.Screen
+        name="FFM"
+        component={FFM}
+        options={{ title: usrn }}
+        initialParams={{ fuid: fuid }}
+      />
     </Stack.Navigator>
   );
 }
