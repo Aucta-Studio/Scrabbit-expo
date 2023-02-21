@@ -41,8 +41,8 @@ export default function Following({route}) {
   console.log(followed);
   return (
     <SafeAreaView>
-      {followed?.map((followed) => {
-        return <User id={followed} />;
+      {followed?.map((followed,index) => {
+        return <User key={index} id={followed} />;
       })}
     </SafeAreaView>
   );
