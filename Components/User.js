@@ -5,6 +5,7 @@ import { getFirestore, collection, doc } from "firebase/firestore";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import { useDownloadURL } from "react-firebase-hooks/storage";
 import { useState } from "react";
+import { getStorage, ref } from "firebase/storage";
 import Firemage from "./Firemage";
 import { useNavigation } from "@react-navigation/native";
 
@@ -12,7 +13,9 @@ export default function User({ id }) {
   const [thisImg, setThisimg] = useState(null);
   const [followed, setFollowed] = useState(null);
   const db = getFirestore(myFireBase);
+  const storage = getStorage(myFireBase);
   const navigation = useNavigation();
+
   const [value, loading, error] = useDocument(doc(db, "Profiles", `${id}`));
 
   return (
@@ -21,17 +24,21 @@ export default function User({ id }) {
         navigation.navigate("ForeignProfileStack", {fuid: `${id}`});
       }}
     >
-      <View>
+      <View style={styles.container}>
         {error && <Text>Error: {JSON.stringify(error)}</Text>}
         {loading && <Text>Document: Loading...</Text>}
         {value && (
           <>
-            <Firemage style={styles.img} path={value.data().Pfp} />
-            <Text>{value.data().UserName}</Text>
-            <TouchableOpacity>
-              <Text>F</Text>
-            </TouchableOpacity>
+          <View style={styles.row}>
+            <View style={styles.pfp}>
+              <Firemage style={styles.img} path={value.data().Pfp}/>
+            </View>
+              <Text style={styles.usernameText}>{value.data().UserName}</Text>
+              <TouchableOpacity><Text style={styles.fbutton}>Following</Text></TouchableOpacity>
+              
+          </View>
           </>
+          
         )}
       </View>
     </TouchableOpacity>
@@ -39,8 +46,47 @@ export default function User({ id }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#000",
+  },
+  usernameText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: "#fff",
+    marginRight: 12,
+  },
+  captionText: {
+    marginBottom: 0,
+    marginTop: 0,
+    fontSize: 14,
+    color: "#fff",
+  },
+  row: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 8
+  },
+  pfp: {
+    alignItems: 'center',
+    display: 'flex',
+    height: 48,
+    justifyContent: 'center',
+    marginRight: 12,
+    width: 48,
+  },
+  fbutton: {
+    // backgroundColor: '#4CAF50',
+    backgroundColor: "#ea0",
+    color : "#000",
+    // borderColor: "#000",
+    // borderWidth: 2,
+    borderRadius: 50,
+    padding: 10,
+    marginTop: 0,
+    float: 'right'
+  },
   img: {
-    width: 100,
-    height: 100,
+    height: 38,
+    width: 38,
   },
 });
