@@ -48,7 +48,7 @@ export default function ForeignProfile({ route }) {
                     navigation.navigate("FFM",{screen:"Followers"});
                   }}
                 >
-                  <Text style={styles.friendsText}>Followers</Text>
+                  <Text style={styles.friendsText}>Followers </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -59,7 +59,7 @@ export default function ForeignProfile({ route }) {
                 </TouchableOpacity>
               </View>
               <TouchableOpacity>
-                <Text style={styles.editButton}>F</Text>
+                <Text style={styles.fbutton}>F</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -75,10 +75,16 @@ const styles = {
     backgroundColor: "#000",
   },
 
-  editButton: {
-    fontSize: 15,
-    color: "#fff",
+  fbutton: {
+    // backgroundColor: '#4CAF50',
+    backgroundColor: "#ea0",
+    color : "#000",
+    // borderColor: "#000",
+    // borderWidth: 2,
+    borderRadius: 50,
+    padding: 10,
     marginTop: 10,
+    float: 'right'
   },
   profileContainer: {
     flexDirection: "row",
