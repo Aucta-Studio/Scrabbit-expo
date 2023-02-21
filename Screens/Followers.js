@@ -41,7 +41,7 @@ export default function Followers({route}) {
   console.log(followers);
   return (
     <SafeAreaView>
-      {followers?.map((follower)=>{return <User id={follower}/>})}
+      {followers?.map((follower,index)=>{return <User key={index} id={follower}/>})}
     </SafeAreaView>
   );
 }
