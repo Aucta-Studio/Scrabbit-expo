@@ -21,7 +21,7 @@ export default function User({ id }) {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("ForeignProfileStack", {fuid: `${id}`});
+        navigation.navigate("ForeignProfileStack", {fuid: `${id}`,usrn:value.data().UserName});
       }}
     >
       <View style={styles.container}>
