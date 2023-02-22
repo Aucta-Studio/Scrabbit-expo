@@ -35,7 +35,7 @@ export default function Followers({ route }) {
     getFollowers();
   }, []);
 
-  console.log(followers);
+  // console.log(followers);
   return (
     <SafeAreaView>
       <ScrollView>

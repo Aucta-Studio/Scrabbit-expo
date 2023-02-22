@@ -35,7 +35,7 @@ export default function Following({ route }) {
     getFollowed();
   }, []);
 
-  console.log(followed);
+  // console.log(followed);
   return (
     <SafeAreaView>
       <ScrollView>
