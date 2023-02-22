@@ -4,6 +4,7 @@ import { SearchBar } from "react-native-elements";
 import { useState } from "react";
 import { myFireBase } from "../fireBaseConfig";
 import { useCollection } from "react-firebase-hooks/firestore";
+import { useSelector } from "react-redux";
 import User from "../Components/User";
 import {
   getFirestore,
@@ -16,13 +17,14 @@ import {
 export default function MakeFriends() {
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const account = useSelector((state) => state.account);
   const db = getFirestore(myFireBase);
 
   useEffect(() => {
     const searchProfiles = async () => {
       let q;
       if (searchText === "") {
-        q = query(collection(db, "Profiles"));
+        q = query(collection(db, "Profiles"), where("UserName", "!=", `${account.username}`));
       } else {
         q = query(collection(db, "Profiles"), where("UserName", "==", searchText));
       }
