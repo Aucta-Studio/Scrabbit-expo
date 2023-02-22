@@ -155,7 +155,8 @@ const styles = {
   },
   friendsText: {
     fontSize: 16,
-    color: "#fff",
+    color: "#aaa",
+    fontWeight: "12"
   },
   photosContainer: {
     marginTop: 10,

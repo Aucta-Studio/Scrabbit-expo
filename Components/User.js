@@ -34,8 +34,7 @@ export default function User({ id }) {
               <Firemage style={styles.img} path={value.data().Pfp}/>
             </View>
               <Text style={styles.usernameText}>{value.data().UserName}</Text>
-              <TouchableOpacity><Text style={styles.fbutton}>Following</Text></TouchableOpacity>
-              
+              <TouchableOpacity style={styles.flexend}><Text style={styles.fbutton}>Following</Text></TouchableOpacity>              
           </View>
           </>
           
@@ -50,7 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
   usernameText: {
-    fontSize: 16,
+    fontSize: 16, 
     fontWeight: 'bold',
     color: "#fff",
     marginRight: 12,
@@ -76,17 +75,21 @@ const styles = StyleSheet.create({
   },
   fbutton: {
     // backgroundColor: '#4CAF50',
-    backgroundColor: "#ea0",
+    backgroundColor: "#EC6319",
     color : "#000",
     // borderColor: "#000",
     // borderWidth: 2,
     borderRadius: 50,
-    padding: 10,
-    marginTop: 0,
-    float: 'right'
+    padding: 9,
+    margin: 0,
+  },
+  flexend: {
+    marginRight: 0,
+    marginLeft:"auto",
   },
   img: {
     height: 38,
     width: 38,
+    borderRadius: 50
   },
 });
