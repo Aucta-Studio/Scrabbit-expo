@@ -108,8 +108,8 @@ const styles = {
   },
   fbutton: {
     // backgroundColor: '#4CAF50',
-    backgroundColor: "#ea0",
-    color: "#000",
+    backgroundColor: "#EC6319",
+    color : "#000",
     // borderColor: "#000",
     // borderWidth: 2,
     borderRadius: 50,
