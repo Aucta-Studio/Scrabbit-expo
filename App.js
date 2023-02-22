@@ -1,9 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { store } from "./store";
 import { Provider } from "react-redux";
 import Login from "./Screens/Login";
@@ -18,7 +20,6 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useSelector } from "react-redux";
 import { Image } from "react-native";
 import Save from "./Screens/Save";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import Followers from "./Screens/Followers";
 import Following from "./Screens/Following";
 import MakeFriends from "./Screens/MakeFriends";
@@ -27,32 +28,68 @@ import MutualFriends from "./Screens/MutualFriends";
 import { myFireBase } from "./fireBaseConfig";
 import { getAuth } from "firebase/auth";
 import Notifications from "./Screens/Notifications";
+import FeedScrapbook from "./Screens/FeedScrapbook";
+import Comments from "./Screens/Comments";
+import Scrabbit from "./Screens/Scrabbit";
+import { useEffect } from "react";
 
 // a Followers following and mutual friends grouped in a material top tab
-function FFM({route}) {
+function FFM({ route }) {
   const Tab = createMaterialTopTabNavigator();
   const { fuid } = route.params;
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: "white",
-        inactiveTintColor: "white",
-        labelStyle: { fontWeight: "bold" },
-        style: { backgroundColor: "black" },
-        indicatorStyle: { backgroundColor: "white" },
+      screenOptions={{
+        tabBarActiveTintColor: "white",
+        tabBarInactiveTintColor: "white",
+        tabBarLabelStyle: {
+          fontWeight: "bold",
+        },
+        tabBarIndicatorStyle: {
+          backgroundColor: "white",
+        },
+        tabBarStyle: {
+          backgroundColor: "black",
+        },
       }}
     >
-      <Tab.Screen name="Followers" component={Followers} initialParams={{ uid: fuid }}/>
-      <Tab.Screen name="Following" component={Following} initialParams={{ uid: fuid }}/>
-      <Tab.Screen name="MutualFriends" component={MutualFriends} />
+      <Tab.Screen
+        name="Followers"
+        component={Followers}
+        initialParams={{ uid: fuid }}
+      />
+      <Tab.Screen
+        name="Following"
+        component={Following}
+        initialParams={{ uid: fuid }}
+      />
+      <Tab.Screen
+        name="MutualFriends"
+        component={MutualFriends}
+        initialParams={{ fuid: fuid }}
+      />
     </Tab.Navigator>
   );
 }
 
 //the stack of the foreign profile holds foreign profile and FFM
-function ForeignProfileStack({route}) {
+function ForeignProfileStack({ route, navigation }) {
   const Stack = createNativeStackNavigator();
-  const { fuid } = route.params;
+  const { fuid, usrn } = route.params;
+  useEffect(() => {
+    const resetAction = CommonActions.reset({
+      index: 0,
+      routes: [
+        {
+          name: "ForeignProfile",
+          params: {
+            fuid: fuid,
+          },
+        },
+      ],
+    });
+    navigation.dispatch(resetAction);
+  }, [fuid, navigation]);
   return (
     <Stack.Navigator
       initialRouteName="ForeignProfile"
@@ -66,10 +103,15 @@ function ForeignProfileStack({route}) {
       <Stack.Screen
         name="ForeignProfile"
         component={ForeignProfile}
-        // options={{ headerShown: false}}
+        options={{ title: usrn }}
         initialParams={{ fuid: fuid }}
       />
-      <Stack.Screen name="FFM" component={FFM} initialParams={{ fuid: fuid }}/>
+      <Stack.Screen
+        name="FFM"
+        component={FFM}
+        options={{ title: usrn }}
+        initialParams={{ fuid: fuid }}
+      />
     </Stack.Navigator>
   );
 }
@@ -80,12 +122,18 @@ function FFF() {
   const auth = getAuth(myFireBase);
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: "white",
-        inactiveTintColor: "white",
-        labelStyle: { fontWeight: "bold" },
-        style: { backgroundColor: "black" },
-        indicatorStyle: { backgroundColor: "white" },
+      screenOptions={{
+        tabBarActiveTintColor: "white",
+        tabBarInactiveTintColor: "white",
+        tabBarLabelStyle: {
+          fontWeight: "bold",
+        },
+        tabBarIndicatorStyle: {
+          backgroundColor: "white",
+        },
+        tabBarStyle: {
+          backgroundColor: "black",
+        },
       }}
     >
       <Tab.Screen
@@ -131,13 +179,9 @@ function ProfileStack() {
     <Stack.Navigator
       initialRouteName="Profile Screen"
       screenOptions={{
-        headerStyle: {
-          backgroundColor: "#000",
-        },
-        headerTintColor: "#fff",
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
+        headerStyle: { backgroundColor: "black" },
+        headerTintColor: "white",
+        headerTitleStyle: { fontWeight: "bold" },
       }}
     >
       <Stack.Screen
@@ -160,6 +204,7 @@ function ProfileStack() {
   );
 }
 
+//the stack that holds the feed page the notifications page
 function FeedStack() {
   const Stack = createNativeStackNavigator();
   return (
@@ -173,6 +218,22 @@ function FeedStack() {
     >
       <Stack.Screen name="Feed" component={Feed} />
       <Stack.Screen name="Notifications" component={Notifications} />
+      <Stack.Screen name="FeedScrapbook" component={FeedScrapbook} />
+      <Stack.Screen name="Comments" component={Comments} />
+    </Stack.Navigator>
+  );
+}
+
+function MainStack() {
+  const Stack = createNativeStackNavigator();
+  return (
+    <Stack.Navigator
+      initialRouteName="Camera"
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="Camera" component={Camera} />
+      <Stack.Screen name="Scrabbit" component={Scrabbit} />
+      <Stack.Screen name="Save" component={Save} />
     </Stack.Navigator>
   );
 }
@@ -187,7 +248,7 @@ function Base() {
         tabBarStyle: { backgroundColor: "#000" },
         tabBarShowLabel: false,
       }}
-      initialRouteName="Scrabbit"
+      initialRouteName="Main"
     >
       <Tab.Screen
         name="World"
@@ -197,7 +258,7 @@ function Base() {
             <Icon
               name="earth-outline"
               size={32}
-              color={focused ? "#808080" : "white"}
+              color={focused ? "white" : "#808080"}
             />
           ),
         }}
@@ -210,14 +271,14 @@ function Base() {
             <Icon
               name="chatbubbles-outline"
               size={32}
-              color={focused ? "#808080" : "white"}
+              color={focused ? "white" : "#808080"}
             />
           ),
         }}
       />
       <Tab.Screen
-        name="Scrabbit"
-        component={Camera}
+        name="Main"
+        component={MainStack}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image
@@ -263,7 +324,7 @@ function Base() {
             <Icon
               name="person-circle-outline"
               size={32}
-              color={focused ? "#808080" : "white"}
+              color={focused ? "white" : "#808080"}
             />
           ),
         }}
