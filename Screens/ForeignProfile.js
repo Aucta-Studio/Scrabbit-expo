@@ -6,27 +6,49 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { myFireBase } from "../fireBaseConfig";
 import { getFirestore, doc } from "firebase/firestore";
 import { useDocument } from "react-firebase-hooks/firestore";
 import Firemage from "../Components/Firemage";
 import ScrapbooksList from "./ScrapbooksList";
-import MutualFriends from "./MutualFriends";
-import MakeFriends from "./MakeFriends";
 import { useNavigation } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+
+function Tab() {
+  const Tab = createMaterialTopTabNavigator();
+  return (
+    <Tab.Navigator
+      initialRouteName="list"
+      screenOptions={{
+        tabBarActiveTintColor: "white",
+        tabBarInactiveTintColor: "white",
+        tabBarLabelStyle: {
+          fontWeight: "bold",
+        },
+        tabBarIndicatorStyle: {
+          backgroundColor: "white",
+        },
+        tabBarStyle: {
+          backgroundColor: "black",
+        },
+      }}
+    >
+      <Tab.Screen name="list" component={ScrapbooksList} />
+    </Tab.Navigator>
+  );
+}
 
 export default function ForeignProfile({ route }) {
   const { fuid } = route.params;
   const db = getFirestore(myFireBase);
   const navigation = useNavigation();
   const [value, loading, error] = useDocument(doc(db, "Profiles", `${fuid}`));
+
   // if (value) {
-  //   navigation.setOptions({
-  //     title: `${value.data().UserName}`,
-  //   });
+  //   navigation.getParent().setParams({fuid: `${id}`,usrn:value.data().UserName});
   // }
+
   return (
     <SafeAreaView>
       {error && <Text>Error: {JSON.stringify(error)}</Text>}
@@ -45,14 +67,14 @@ export default function ForeignProfile({ route }) {
               <View style={styles.friendsContainer}>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("FFM",{screen:"Followers"});
+                    navigation.navigate("FFM", { screen: "Followers" });
                   }}
                 >
                   <Text style={styles.friendsText}>Followers </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("FFM",{screen:"Following"});
+                    navigation.navigate("FFM", { screen: "Following" });
                   }}
                 >
                   <Text style={styles.friendsText}>Following</Text>
@@ -62,6 +84,9 @@ export default function ForeignProfile({ route }) {
                 <Text style={styles.fbutton}>F</Text>
               </TouchableOpacity>
             </View>
+          </View>
+          <View style={styles.tav}>
+            <Tab />
           </View>
         </>
       )}
@@ -74,7 +99,13 @@ const styles = {
     flex: 1,
     backgroundColor: "#000",
   },
-
+  tav: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#000",
+    minHeight: "65%",
+  },
   fbutton: {
     // backgroundColor: '#4CAF50',
     backgroundColor: "#EC6319",
@@ -84,7 +115,7 @@ const styles = {
     borderRadius: 50,
     padding: 10,
     marginTop: 10,
-    float: 'right'
+    float: "right",
   },
   profileContainer: {
     flexDirection: "row",

@@ -1,7 +1,7 @@
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, ScrollView } from "react-native";
 import React, { useEffect } from "react";
 import { myFireBase } from "../fireBaseConfig";
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import {
   getFirestore,
   collection,
@@ -13,17 +13,14 @@ import { getAuth } from "firebase/auth";
 import { useState } from "react";
 import User from "../Components/User";
 
-export default function Followers({route}) {
+export default function Followers({ route }) {
   const { uid } = route.params;
   const [followers, setFolowers] = useState(null);
   const db = getFirestore(myFireBase);
   const auth = getAuth(myFireBase);
   const account = useSelector((state) => state.account);
   const relations = collection(db, "Relations");
-  const q = query(
-    relations,
-    where("Followed", "==", `${uid}`)
-  );
+  const q = query(relations, where("Followed", "==", `${uid}`));
   const getFollowers = async () => {
     const temp = await getDocs(q);
     const array = [];
@@ -41,7 +38,11 @@ export default function Followers({route}) {
   console.log(followers);
   return (
     <SafeAreaView>
-      {followers?.map((follower)=>{return <User id={follower}/>})}
+      <ScrollView>
+        {followers?.map((follower, index) => {
+          return <User key={index} id={follower} />;
+        })}
+      </ScrollView>
     </SafeAreaView>
   );
 }
