@@ -63,7 +63,11 @@ function FFM({ route }) {
         component={Following}
         initialParams={{ uid: fuid }}
       />
-      <Tab.Screen name="MutualFriends" component={MutualFriends} />
+      <Tab.Screen
+        name="MutualFriends"
+        component={MutualFriends}
+        initialParams={{ fuid: fuid }}
+      />
     </Tab.Navigator>
   );
 }
