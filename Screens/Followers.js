@@ -1,4 +1,4 @@
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, ScrollView } from "react-native";
 import React, { useEffect } from "react";
 import { myFireBase } from "../fireBaseConfig";
 import { useSelector } from "react-redux";
