@@ -13,17 +13,14 @@ import { getAuth } from "firebase/auth";
 import { useState } from "react";
 import User from "../Components/User";
 
-export default function Following({route}) {
+export default function Following({ route }) {
   const { uid } = route.params;
   const [followed, setFolowed] = useState(null);
   const db = getFirestore(myFireBase);
   const auth = getAuth(myFireBase);
   const account = useSelector((state) => state.account);
   const relations = collection(db, "Relations");
-  const q = query(
-    relations,
-    where("Follower", "==", `${uid}`)
-  );
+  const q = query(relations, where("Follower", "==", `${uid}`));
   const getFollowed = async () => {
     const temp = await getDocs(q);
     const array = [];
@@ -41,9 +38,11 @@ export default function Following({route}) {
   console.log(followed);
   return (
     <SafeAreaView>
-      {followed?.map((followed,index) => {
-        return <User key={index} id={followed} />;
-      })}
+      <ScrollView>
+        {followed?.map((followed, index) => {
+          return <User key={index} id={followed} />;
+        })}
+      </ScrollView>
     </SafeAreaView>
   );
 }
