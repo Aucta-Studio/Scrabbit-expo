@@ -37,7 +37,7 @@ export default function MakeFriends() {
       const result = await getDocs(q);
       const array = [];
       result.forEach((doc) => {
-        console.log(doc.id, "=>", doc.data());
+        // console.log(doc.id, "=>", doc.data());
         array.push(doc.id);
       });
       setSearchResults(array);

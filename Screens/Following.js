@@ -21,19 +21,21 @@ export default function Following({ route }) {
   const account = useSelector((state) => state.account);
   const relations = collection(db, "Relations");
   const q = query(relations, where("Follower", "==", `${uid}`));
+
   const getFollowed = async () => {
     const temp = await getDocs(q);
     const array = [];
     temp.forEach((doc) => {
-      console.log(doc.id, "=>", doc.data());
+      // console.log(doc.id, "=>", doc.data());
       array.push(doc.data().Followed);
     });
     setFolowed(array);
   };
 
-  useEffect(() => {
-    getFollowed();
-  }, []);
+  // useEffect(() => {
+  //   getFollowed();
+  // }, []);
+  getFollowed();
 
   // console.log(followed);
   return (

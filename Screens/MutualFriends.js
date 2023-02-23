@@ -52,12 +52,13 @@ export default function MutualFriends({ route }) {
   const { fuid } = route.params;
   const auth = getAuth(myFireBase);
   const [mutuals, setMutuals] = useState([]);
+
+  const getMutuals = async () => {
+    const mutuals = await getMutualFriends(auth.currentUser.uid, fuid);
+    setMutuals(mutuals);
+  };
   
   useEffect(() => {
-    const getMutuals = async () => {
-      const mutuals = await getMutualFriends(auth.currentUser.uid, fuid);
-      setMutuals(mutuals);
-    };
     getMutuals();
   }, [auth.currentUser.uid, fuid]);
 
