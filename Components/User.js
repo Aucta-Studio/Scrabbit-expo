@@ -9,11 +9,12 @@ import {
   query,
   where,
   getDocs,
+  deleteDoc,
+  setDoc,
+  addDoc,
 } from "firebase/firestore";
-import { useCollectionData, useDocument } from "react-firebase-hooks/firestore";
-import { useDownloadURL } from "react-firebase-hooks/storage";
+import { useDocument } from "react-firebase-hooks/firestore";
 import { useState } from "react";
-import { getStorage, ref } from "firebase/storage";
 import Firemage from "./Firemage";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
@@ -22,39 +23,76 @@ import { getAuth } from "firebase/auth";
 export default function User({ id }) {
   const [followed, setFollowed] = useState(null);
   const db = getFirestore(myFireBase);
-  const storage = getStorage(myFireBase);
   const auth = getAuth(myFireBase);
   const navigation = useNavigation();
 
   const [value, loading, error] = useDocument(doc(db, "Profiles", `${id}`));
 
-  // Check if the current user is following this user
-  useEffect(() => {
-    const checkFollowing = async () => {
+  const handleFollow = async () => {
+    if (followed) {
+      // If already following, unfollow
       const q = query(
         collection(db, "Relations"),
-        where("Followed", "==", `${id}`),
-        where("Follower", "==", `${auth.currentUser.uid}`)
+        where("Followed", "==", id),
+        where("Follower", "==", auth.currentUser.uid)
       );
-      const docSnap = await getDocs(q);
-      if (docSnap.size > 0) {
-        setFollowed(true);
-      } else {
-        setFollowed(false);
-      }
-    };
+      getDocs(q).then((docSnap) => {
+        docSnap.forEach((doc) => {
+          deleteDoc(doc.ref)
+            .then(() => {
+              console.log("Relation successfully deleted!");
+              setFollowed(false);
+            })
+            .catch((error) =>
+              console.error("Error removing document: ", error)
+            );
+        });
+      });
+    } else {
+      // If not following, follow
+      addDoc(collection(db, "Relations"), {
+        Followed: id,
+        Follower: auth.currentUser.uid,
+      })
+        .then(() => {
+          console.log("Relation successfully added!");
+          setFollowed(true);
+        })
+        .catch((error) => console.error("Error adding document: ", error));
+    }
+  };
+
+  const checkFollowing = async () => {
+    const q = query(
+      collection(db, "Relations"),
+      where("Followed", "==", `${id}`),
+      where("Follower", "==", `${auth.currentUser.uid}`)
+    );
+    const docSnap = await getDocs(q);
+    if (docSnap.size > 0) {
+      setFollowed(true);
+    } else {
+      setFollowed(false);
+    }
+  };
+
+  // Check if the current user is following this user
+  useEffect(() => {
     checkFollowing();
-  }, );
+  });
+  checkFollowing();
 
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("ForeignProfileStack", {
-          fuid: `${id}`,
-          usrn: value.data().UserName,
-        });
-        // navigation.setParams({fuid: `${id}`,usrn:value.data().UserName});
-        // navigation.navigate("ForeignProfileStack", {screen:"ForeignProfile", params:{fuid: `${id}`}});
+        if (id == auth.currentUser.uid) {
+          navigation.navigate("Profile Screen");
+        } else {
+          navigation.navigate("ForeignProfileStack", {
+            fuid: `${id}`,
+            usrn: value.data().UserName,
+          });
+        }
       }}
     >
       <View style={styles.container}>
@@ -67,11 +105,20 @@ export default function User({ id }) {
                 <Firemage style={styles.img} path={value.data().Pfp} />
               </View>
               <Text style={styles.usernameText}>{value.data().UserName}</Text>
-              <TouchableOpacity style={styles.flexend}>
-                <Text style={styles.fbutton}>
+              {id == auth.currentUser.uid ? (
+                <></>
+              ) : (
+                <TouchableOpacity style={styles.flexend} onPress={handleFollow}>
+                  <Text style={followed ? styles.fbutton : styles.unfollow}>
+                    {followed ? "Following" : "Follow"}
+                  </Text>
+                </TouchableOpacity>
+              )}
+              {/* <TouchableOpacity style={styles.flexend} onPress={handleFollow}>
+                <Text style={followed? styles.fbutton:styles.unfollow}>
                   {followed ? "Following" : "Follow"}
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </>
         )}
@@ -79,6 +126,8 @@ export default function User({ id }) {
     </TouchableOpacity>
   );
 }
+
+// {(id == auth.currentUser.uid)? (<></>):}
 
 const styles = StyleSheet.create({
   container: {
@@ -118,6 +167,18 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 9,
     margin: 0,
+    textAlign: "center",
+  },
+  unfollow: {
+    // backgroundColor: '#4CAF50',
+    backgroundColor: "#FFF",
+    color: "#000",
+    // borderColor: "#000",
+    // borderWidth: 2,
+    borderRadius: 50,
+    padding: 9,
+    margin: 0,
+    textAlign: "center",
   },
   flexend: {
     marginRight: 0,
