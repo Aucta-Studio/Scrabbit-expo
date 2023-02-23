@@ -6,10 +6,22 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { myFireBase } from "../fireBaseConfig";
-import { getFirestore, doc } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  query,
+  where,
+  getDocs,
+  deleteDoc,
+  setDoc,
+  addDoc,
+} from "firebase/firestore";
 import { useDocument } from "react-firebase-hooks/firestore";
+import { getAuth } from "firebase/auth";
 import Firemage from "../Components/Firemage";
 import ScrapbooksList from "./ScrapbooksList";
 import { useNavigation } from "@react-navigation/native";
@@ -42,8 +54,64 @@ function Tab() {
 export default function ForeignProfile({ route }) {
   const { fuid } = route.params;
   const db = getFirestore(myFireBase);
+  const auth = getAuth(myFireBase);
   const navigation = useNavigation();
+  const [followed, setFollowed] = useState(null);
   const [value, loading, error] = useDocument(doc(db, "Profiles", `${fuid}`));
+
+  const handleFollow = async () => {
+    if (followed) {
+      // If already following, unfollow
+      const q = query(
+        collection(db, "Relations"),
+        where("Followed", "==", fuid),
+        where("Follower", "==", auth.currentUser.uid)
+      );
+      getDocs(q).then((docSnap) => {
+        docSnap.forEach((doc) => {
+          deleteDoc(doc.ref)
+            .then(() => {
+              console.log("Relation successfully deleted!");
+              setFollowed(false);
+            })
+            .catch((error) =>
+              console.error("Error removing document: ", error)
+            );
+        });
+      });
+    } else {
+      // If not following, follow
+      addDoc(collection(db, "Relations"), {
+        Followed: fuid,
+        Follower: auth.currentUser.uid,
+      })
+        .then(() => {
+          console.log("Relation successfully added!");
+          setFollowed(true);
+        })
+        .catch((error) => console.error("Error adding document: ", error));
+    }
+  };
+
+  const checkFollowing = async () => {
+    const q = query(
+      collection(db, "Relations"),
+      where("Followed", "==", `${fuid}`),
+      where("Follower", "==", `${auth.currentUser.uid}`)
+    );
+    const docSnap = await getDocs(q);
+    if (docSnap.size > 0) {
+      setFollowed(true);
+    } else {
+      setFollowed(false);
+    }
+  };
+
+  // Check if the current user is following this user
+  useEffect(() => {
+    checkFollowing();
+  });
+  checkFollowing();
 
   // if (value) {
   //   navigation.getParent().setParams({fuid: `${id}`,usrn:value.data().UserName});
@@ -80,8 +148,10 @@ export default function ForeignProfile({ route }) {
                   <Text style={styles.friendsText}>Following</Text>
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity>
-                <Text style={styles.fbutton}>F</Text>
+              <TouchableOpacity onPress={handleFollow}>
+                <Text style={followed? styles.fbutton:styles.unfollow}>
+                  {followed ? "Following" : "Follow"}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -109,13 +179,26 @@ const styles = {
   fbutton: {
     // backgroundColor: '#4CAF50',
     backgroundColor: "#EC6319",
-    color : "#000",
+    color: "#000",
     // borderColor: "#000",
     // borderWidth: 2,
     borderRadius: 50,
     padding: 10,
     marginTop: 10,
     float: "right",
+    textAlign: "center"
+  },
+  unfollow:{
+    // backgroundColor: '#4CAF50',
+    backgroundColor: "#FFF",
+    color: "#000",
+    // borderColor: "#000",
+    // borderWidth: 2,
+    borderRadius: 50,
+    padding: 10,
+    marginTop: 10,
+    float: "right",
+    textAlign: "center"
   },
   profileContainer: {
     flexDirection: "row",
