@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
+import Icon from "react-native-vector-icons/Ionicons";
 
 export default function App({navigation}) {
   const [type, setType] = useState(CameraType.back);
@@ -63,15 +64,30 @@ export default function App({navigation}) {
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
             {/*<Text style={styles.text}>Flip Camera</Text>*/}
-            <Image source={require('../assets/camera_flip_icon_nobg.png')} style={styles.ImageIconStyle}/>
+            <Icon
+              name={"camera-reverse-outline"}
+              size={40}
+              color={"white"}
+              style={styles.ImageIconStyle}
+          />
           </TouchableOpacity>
           <TouchableOpacity style = {styles.button} onPress={takePicture}>
             {/*<Text style={styles.text}>Take Picture</Text>*/}
-            <Image source={require('../assets/take_pic_nobg.png')} style={styles.ImageIconStyle2}/>
+            <Icon
+              name={"aperture"}
+              size={40}
+              color={"white"}
+              style={styles.ImageIconStyle}
+          />
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={pickImage}>
             {/*<Text style={styles.text}>Pick Image</Text>*/}
-            <Image source={require('../assets/pick_image_icon.png')} style={styles.ImageIconStyle}/>
+            <Icon
+              name={"folder-open-outline"}
+              size={40}
+              color={"white"}
+              style={styles.ImageIconStyle}
+          />
           </TouchableOpacity>
           {/* <TouchableOpacity style={styles.button_save} onPress={() => navigation.navigate('Save', {image})}>
             <Text style={styles.text}>Save</Text>

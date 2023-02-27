@@ -17,7 +17,7 @@ import {
   getDoc,
   doc,
 } from "firebase/firestore";
-import login from "../assets/images/login.png";
+import login from "../Components/images/login.png";
 import { useNavigation } from "@react-navigation/native";
 import { myFireBase } from "../fireBaseConfig";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
