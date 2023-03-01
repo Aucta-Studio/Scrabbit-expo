@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
 import { Marker, Callout } from "react-native-maps";
 import Firemage from "./Firemage";
-import carrot from "./images/carrot_node.png";
+import carrot from "../images/carrot_node.png";
 import { TouchableOpacity } from "react-native";
 
 export default function Carrot({ coordinate, name, uid}) {
