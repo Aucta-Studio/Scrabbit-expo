@@ -284,8 +284,8 @@ function Base() {
             <Image
               source={
                 focused
-                  ? require("./assets/images/Scrabbit_Logo_Focused.png")
-                  : require("./assets/images/Scrabbit_Logo.png")
+                  ? require("./Components/images/Scrabbit_Logo_Focused.png")
+                  : require("./Components/images/Scrabbit_Logo.png")
               }
               style={{
                 width: size,
@@ -304,8 +304,8 @@ function Base() {
             <Image
               source={
                 focused
-                  ? require("./assets/images/feed_button_f.png")
-                  : require("./assets/images/feed_button.png")
+                  ? require("./Components/images/feed_button_f.png")
+                  : require("./Components/images/feed_button.png")
               }
               style={{
                 width: size,
