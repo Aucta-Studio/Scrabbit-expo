@@ -1,5 +1,5 @@
 import { SafeAreaView, ScrollView } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { myFireBase } from "../fireBaseConfig";
 import { useSelector } from "react-redux";
 import {
@@ -10,7 +10,6 @@ import {
   where,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { useState } from "react";
 import User from "../Components/User";
 
 export default function Following({ route }) {
