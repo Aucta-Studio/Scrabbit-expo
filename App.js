@@ -244,10 +244,14 @@ function ChatStack() {
   return (
     <Stack.Navigator
       initialRouteName="ChatList"
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        headerStyle: { backgroundColor: "black" },
+        headerTintColor: "white",
+        headerTitleStyle: { fontWeight: "bold" },
+      }}
     >
-      <Stack.Screen name="ChatList" component={ChatList} />
-      {/* <Stack.Screen name="Chat" component={Chat} /> */}
+      <Stack.Screen name="ChatList" component={ChatList} options={{title: "Chats"}}/>
+      <Stack.Screen name="Chat" component={Chat} />
     </Stack.Navigator>
   );
 }
