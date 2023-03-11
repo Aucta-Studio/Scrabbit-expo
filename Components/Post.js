@@ -2,32 +2,50 @@ import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { color } from "react-native-reanimated";
 import Icon from "react-native-vector-icons/Ionicons";
+import Firemage from "./Firemage";
+import { myFireBase } from "../fireBaseConfig";
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  query,
+  where,
+  getDocs,
+  deleteDoc,
+  setDoc,
+  addDoc,
+} from "firebase/firestore";
+import { useDocument } from "react-firebase-hooks/firestore";
 
 // Frontend & Styling of the post completed
-export default ({ pfp, user, caption, state, image }) => {
+export default ({ user, uid, caption, photos, collected, likes, comments, location, date }) => {
+  const db = getFirestore(myFireBase);
+  const [value, loading, error] = useDocument(doc(db, "Profiles", `${uid}`));
+  // console.log(value.data())
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   return (
     <View style={styles.container}>
-
       <TouchableOpacity>
-      <View style={styles.postHeader}>
-
-        <View style={styles.postPfp}>
-          <Image style={styles.postPfpImage} source={{ uri: pfp }} />
+        <View style={styles.postHeader}>
+          <View style={styles.postPfp}>
+            <Firemage style={styles.postPfpImage} path={value.data().Pfp}/>
+          </View>
+          <Text style={styles.usernameText}>{user}</Text>
         </View>
-        <Text style={styles.usernameText}>{user}</Text>
-
-      </View>
       </TouchableOpacity>
 
       {/* thumbnail photo/location */}
       <View style={styles.postImageB}>
-          <Image
+        <TouchableOpacity>
+          <Firemage
             style={styles.postImage}
+            path={photos[0]}
             //resizeMode="contain"
-            source={{ uri: image }}
+            // source={{ uri: image }}
           />
+        </TouchableOpacity>
       </View>
 
       {/* Like comment and save buttons */}
@@ -38,35 +56,34 @@ export default ({ pfp, user, caption, state, image }) => {
           }}
         >
           <Icon
-              name={liked ? "heart-sharp" : "heart-outline"}
-              size={34}
-              color={liked ? "#EC6319" : "white"}
-              style={styles.icon}
+            name={liked ? "heart-sharp" : "heart-outline"}
+            size={34}
+            color={liked ? "#EC6319" : "white"}
+            style={styles.icon}
           />
         </TouchableOpacity>
 
         <TouchableOpacity>
           <Icon
-                name={"chatbubble-outline"}
-                size={32}
-                color={"#FFFFFF"}
-                style={styles.icon}
-            />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => {
-              setBookmarked(!bookmarked);
-            }}
-        >
-          <Icon
-              name={bookmarked ? "bookmark" : "bookmark-outline"}
-              size={32}
-              color={bookmarked ? "#FFFFFF" : "white"}
-              style={styles.icon}
+            name={"chatbubble-outline"}
+            size={32}
+            color={"#FFFFFF"}
+            style={styles.icon}
           />
         </TouchableOpacity>
 
+        {/* <TouchableOpacity
+          onPress={() => {
+            setBookmarked(!bookmarked);
+          }}
+        >
+          <Icon
+            name={bookmarked ? "bookmark" : "bookmark-outline"}
+            size={32}
+            color={bookmarked ? "#FFFFFF" : "white"}
+            style={styles.icon}
+          />
+        </TouchableOpacity> */}
       </View>
       {/* Caption and comments link */}
       <View style={styles.postCaption}>
@@ -74,7 +91,6 @@ export default ({ pfp, user, caption, state, image }) => {
         <Text style={styles.captionText}>{caption}</Text>
       </View>
     </View>
-
   );
 };
 
@@ -94,7 +110,7 @@ const styles = StyleSheet.create({
   },
   usernameText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "#fff",
     marginRight: 12,
   },
@@ -105,30 +121,31 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   postHeader: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    padding: 8
+    alignItems: "center",
+    flexDirection: "row",
+    padding: 8,
   },
   postCaption: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    padding: 8
+    alignItems: "center",
+    flexDirection: "row",
+    padding: 8,
   },
   postPfp: {
-    alignItems: 'center',
-    display: 'flex',
+    alignItems: "center",
+    display: "flex",
     height: 48,
-    justifyContent: 'center',
+    justifyContent: "center",
     marginRight: 12,
     width: 48,
   },
   postPfpImage: {
     height: 38,
     width: 38,
+    borderRadius: 100
   },
   postImageB: {
     flex: 1,
-    minHeight: 320
+    minHeight: 320,
   },
   postImage: {
     aspectRatio: 1,
@@ -137,6 +154,6 @@ const styles = StyleSheet.create({
   lcblist: {
     paddingTop: 8,
     paddingLeft: 5,
-    flexDirection: 'row'
-  }
+    flexDirection: "row",
+  },
 });
