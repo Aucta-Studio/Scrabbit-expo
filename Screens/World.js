@@ -109,20 +109,6 @@ export default () => {
             }}
             title="Me"
           />
-          {/* <Carrot
-            coordinate={{
-              latitude: 25.101969,
-              longitude: 55.162172,
-            }}
-            name="node"
-          /> */}
-          {/* <Carrot
-            coordinate={{
-              latitude: 24.101969,
-              longitude: 55.162172,
-            }}
-            name="node"
-          /> */}
           {posts?.map((post, index) => {
             // console.log(post);
             return (
