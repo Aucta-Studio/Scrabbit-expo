@@ -12,8 +12,6 @@ import {
 } from "react-native";
 import {
   getFirestore,
-  collection,
-  getDocs,
   getDoc,
   doc,
 } from "firebase/firestore";
