@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, SafeAreaView, ScrollView } from "react-native";
-import { myFireBase } from "../fireBaseConfig";
+
 import { getAuth } from "firebase/auth";
 import {
-  getFirestore,
   collection,
   getDocs,
+  getFirestore,
   query,
   where,
 } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import Post from "../Components/Post";
+import { myFireBase } from "../fireBaseConfig";
 
 // The post retrieval from database is in progress.
 // For now, posts are hardcoded to show how the feed will look like.
@@ -34,7 +35,7 @@ const Feed = () => {
       array.push(doc.data().Followed);
     });
     array.push(`${auth.currentUser.uid}`);
-    console.log(array);
+    // console.log(array);
     setList(array);
   };
 
@@ -46,7 +47,7 @@ const Feed = () => {
     const temp = await getDocs(qp);
     temp.forEach((doc) => {
       // console.log(doc.id, "=>", doc.data());
-      array.push(doc.data());
+      array.push({ id: doc.id, ...doc.data() });
     });
     console.log(array);
     setPosts(array);
@@ -71,13 +72,15 @@ const Feed = () => {
               key={index}
               user={post.UserName}
               uid={post.author}
-              caption={post.Title}
+              title={post.Title}
+              caption={post.Caption}
               photos={post.photos}
               collected={post.Collected}
               likes={post.Likes}
               comments={post.Comments}
               location={post.location}
               date={post.createdAt}
+              docID={post.id}
             />
           );
         })}
@@ -86,4 +89,4 @@ const Feed = () => {
   );
 };
 
-export default Feed;
+export default Feed;
