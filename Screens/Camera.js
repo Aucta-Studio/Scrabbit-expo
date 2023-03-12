@@ -33,12 +33,12 @@ export default function App({navigation}) {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   }
   
-  function settimeout() {
+  function settimeout(images) {
     setTimeout(() => {
       console.log(images.length);
       console.log(images);
       navigation.navigate('Save', { images });
-    }, 2000);
+    }, 1000);
   }
 
   const pickImage = async () => {
@@ -52,12 +52,7 @@ export default function App({navigation}) {
     if (assets.length > 0) {
       setImages([...images, ...assets.map((asset) => asset.uri)]);
     }
-    settimeout();
-    // setTimeout(() => {
-    //   console.log(images.length);
-    //   console.log(images);
-    //   navigation.navigate('Save', { images });
-    // }, 500);
+    settimeout([...images, ...assets.map((asset) => asset.uri)]);
   };
 
   const takePicture = async () => {
