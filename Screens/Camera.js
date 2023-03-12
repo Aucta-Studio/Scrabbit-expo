@@ -55,7 +55,16 @@ export default function App({navigation}) {
   return (
     <View style={styles.container}>
       <Camera 
-      ref = {ref => setCamera(ref)} style={styles.fixedRatio} type={type} ratio = {'1:1'}>
+      ref = {ref => setCamera(ref)} style={styles.fixedRatio} >
+       <TouchableOpacity style={[styles.button_cancel, { marginTop: 10 }]} onPress={() => setImage(null)}>
+       <Icon
+          name={"close-outline"}
+          size={40}
+          color={"white"}
+          style={styles.ImageIconStyle}
+        />
+       </TouchableOpacity>
+        
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button_save} onPress={() => navigation.navigate('Save', {image})}>
             <Text style={styles.text}>Next</Text>
@@ -136,7 +145,7 @@ const styles = StyleSheet.create({
   button_save: {
     flex: 1,
     left: 200,
-    marginTop: 10,
+    marginTop: -70,
     marginLeft: 100,
     marginRight:150,
   },
