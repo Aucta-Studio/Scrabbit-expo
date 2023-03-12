@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Linking } from "react-native";
 import React from "react";
 import { Marker, Callout } from "react-native-maps";
 import Firemage from "./Firemage";
@@ -8,9 +8,10 @@ import { TouchableOpacity } from "react-native";
 export default function Carrot({ coordinate, title, username, doc, saves, likes, comments}) {
   const timestamp = new Date(doc?.seconds * 1000 + doc?.nanoseconds / 1000000);
   const date = timestamp.toLocaleDateString('en-GB');
+  const url = `https://www.google.com/maps/search/?api=1&query=${coordinate.latitude},${coordinate.longitude}`;
   return (
     <Marker coordinate={coordinate} image={carrot}>
-      <Callout style={styles.callout} tooltip={true}>
+      <Callout style={styles.callout} tooltip={true} onPress={()=>{Linking.openURL(url);}}>
         <View>
           <Text>
             <Firemage style={styles.img} path='Pfps/default.jpg' />
