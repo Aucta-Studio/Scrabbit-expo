@@ -53,6 +53,27 @@ export default ({
   // setLiked();
   const acquired = collected.includes(auth.currentUser.uid);
   // console.log(docID);
+  const timestamp = new Date(
+    date?.seconds * 1000 + date?.nanoseconds / 1000000
+  );
+
+  const currentTime = new Date();
+  const timeDiffMs = currentTime.getTime() - timestamp.getTime();
+  var timeDiff = "";
+  const elapsedSeconds = Math.floor(timeDiffMs / 1000);
+  const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+  const elapsedHours = Math.floor(elapsedMinutes / 60);
+  const elapsedDays = Math.floor(elapsedHours / 24);
+
+  if (elapsedSeconds < 60) {
+    timeDiff = "just now";
+  } else if (elapsedMinutes < 60) {
+    timeDiff = `${elapsedMinutes}m ago`;
+  } else if (elapsedHours < 24) {
+    timeDiff = `${elapsedHours}h ago`;
+  } else {
+    timeDiff = `${elapsedDays} days ago`;
+  }
 
   const [imgActive, setimgActive] = useState(0);
 
@@ -133,7 +154,7 @@ export default ({
           <View style={styles.wrapDot}>
             {photos?.map((photo, index) => (
               <Text
-                key={photo}
+                key={index}
                 style={imgActive == index ? styles.dotActive : styles.dot}
               >
                 ●
@@ -142,32 +163,48 @@ export default ({
           </View>
         </View>
       )}
+
+      {/* if the post isnt captured then display a prompt */}
+      {!acquired && (
+        <View style={styles.postCaption}>
+          <Text style={styles.captionText}>
+            You haven't collected this Scrapbook yet please go to it's location
+            and collect this scrapbook
+          </Text>
+        </View>
+      )}
+
       {/* Caption and comments link */}
       <View style={styles.postCaption}>
         <Text style={styles.usernameText}>{user}</Text>
         <Text style={styles.captionText}>{caption}</Text>
       </View>
-      {/* Like comment and save buttons */}
-      <View style={styles.lcblist}>
-        <TouchableOpacity onPress={handleLike}>
-          <Icon
-            name={liked ? "heart-sharp" : "heart-outline"}
-            size={34}
-            color={liked ? "#EC6319" : "white"}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
+      {/* Time difference */}
+      <View style={styles.postCaption}>
+        <Text style={styles.captionText}>{timeDiff}</Text>
+      </View>
+      {/* Like comment and save buttons only when its acquired*/}
+      {acquired && (
+        <View style={styles.lcblist}>
+          <TouchableOpacity onPress={handleLike}>
+            <Icon
+              name={liked ? "heart-sharp" : "heart-outline"}
+              size={34}
+              color={liked ? "#EC6319" : "white"}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
 
-        <TouchableOpacity>
-          <Icon
-            name={"chatbubble-outline"}
-            size={32}
-            color={"#FFFFFF"}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon
+              name={"chatbubble-outline"}
+              size={32}
+              color={"#FFFFFF"}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
 
-        {/* <TouchableOpacity
+          {/* <TouchableOpacity
           onPress={() => {
             setBookmarked(!bookmarked);
           }}
@@ -179,7 +216,8 @@ export default ({
             style={styles.icon}
           />
         </TouchableOpacity> */}
-      </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -252,11 +290,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "center",
   },
-  dotActive: {
+  dot: {
     margin: 3,
     color: "#000",
   },
-  dot: {
+  dotActive: {
     margin: 3,
     color: "#FFF",
   },
