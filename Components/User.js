@@ -30,6 +30,7 @@ export default function User({ id }) {
 
   const handleFollow = async () => {
     if (followed) {
+      // setFollowed(!followed);
       // If already following, unfollow
       const q = query(
         collection(db, "Relations"),
