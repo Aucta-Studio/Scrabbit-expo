@@ -1,4 +1,3 @@
-
 import { getAuth } from "firebase/auth";
 import {
   collection,
@@ -7,8 +6,8 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import React, { useEffect, useState, useCallback } from "react";
+import { SafeAreaView, ScrollView, Text, View, RefreshControl } from "react-native";
 import Post from "../Components/Post";
 import { myFireBase } from "../fireBaseConfig";
 
@@ -20,12 +19,21 @@ const Feed = () => {
   const db = getFirestore(myFireBase);
   const [idList, setList] = useState(null);
   const [posts, setPosts] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
   const relations = collection(db, "Relations");
   const PostStore = collection(db, "Posts");
   const q = query(
     relations,
     where("Follower", "==", `${auth.currentUser.uid}`)
   );
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    getPosts();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const getList = async () => {
     const temp = await getDocs(q);
@@ -63,7 +71,7 @@ const Feed = () => {
   }
 
   return (
-    <SafeAreaView className="bg-zinc-900 h-full p-4">
+    <SafeAreaView>
       <ScrollView>
         {/* <Text className="text-white">This is the feed page</Text> */}
         {posts?.map((post, index) => {
