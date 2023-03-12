@@ -15,6 +15,8 @@ import {
   orderBy,
   query,
   onSnapshot,
+  getDoc,
+  doc
 } from 'firebase/firestore';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 
@@ -27,10 +29,16 @@ export default function Save(props, {navigation}) {
     const [Comments, setComments] = useState([])
     const [Likes, setLikes] = useState([])
     const location = useState("");
-    const fileURIs = [];
+    const [imagepaths, setimagepaths] = useState(false);
     const selectedImages = props.route.params.images;
     const selectedImage = props.route.params.pic;
+    const user = auth.currentUser.uid;
 
+    const getUserName = async () => {
+      const temp = await getDoc(doc(db, "Profiles", `${user}`));
+      return temp.data().UserName.toString();
+    };
+    
     // created this method to show any message onto the screen like "Posted!"
     const showMessage = (title, message) => {
         Alert.alert(
@@ -38,11 +46,11 @@ export default function Save(props, {navigation}) {
           message
         );
     };
-
+    console.log("Camera",selectedImage);
+    console.log("Gallery",selectedImages);
     // this method is used to upload image to firebase storage.
     const uploadImage = async () => {
         const photos = [];
-        const user = auth.currentUser.uid;
         const storage = getStorage();
         const metadata = {
             contentType: 'image/jpeg'
@@ -76,21 +84,24 @@ export default function Save(props, {navigation}) {
         showMessage("Posted!", "Your picture has been posted.");
     };
 
-    const savePostData = (photos) => {
+    const savePostData = async (photos) => {
+      const userName = await getUserName();
       addDoc(collection(db, "Posts"), {
           Caption,
           //Collected,
           //Comments,
           //Likes,
           Title,
-          UserName: auth.currentUser.displayName,
+          UserName: userName,
           author: auth.currentUser.uid,
           createdAt: Date.now(),
           //location,
           photos
       }).then((function () {
           console.log("Picture posted!")
-      }))
+      })).catch((error) => {
+        console.error("Error posting picture: ", error);
+      });
     }
 
     // const renderItem = ({ item }) => {
