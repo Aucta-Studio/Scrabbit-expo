@@ -5,7 +5,7 @@ import React, {
   useCallback
 } from 'react'
 import { useSelector, useDispatch } from "react-redux";
-import { View, TextInput, FlatList, Image, Text, Button, StyleSheet, Alert } from 'react-native'
+import { View, TextInput, Image, Text, Button, StyleSheet, Alert, Dimensions, ScrollView } from 'react-native'
 import 'firebase/storage';
 import { db, auth, myFireBase } from "../fireBaseConfig";
 import {
@@ -20,7 +20,8 @@ import {
 } from 'firebase/firestore';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 
-const MAX_IMAGES = 10;
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
 
 export default function Save(props, {navigation}) {
     const [Title, setTitle] = useState("")
@@ -29,9 +30,20 @@ export default function Save(props, {navigation}) {
     const [Comments, setComments] = useState([])
     const [Likes, setLikes] = useState([])
     const location = useState("");
-    const [imagepaths, setimagepaths] = useState(false);
+
     const selectedImages = props.route.params.images;
     const selectedImage = props.route.params.pic;
+
+    const [imgActive, setimgActive] = useState(0);
+    onchange = (nativeEvent) => {
+      if (nativeEvent) {
+        const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width);
+        if (slide != imgActive) {
+          setimgActive(slide);
+        }
+      }
+    }
+
     const user = auth.currentUser.uid;
 
     const getUserName = async () => {
@@ -46,8 +58,7 @@ export default function Save(props, {navigation}) {
           message
         );
     };
-    console.log("Camera",selectedImage);
-    console.log("Gallery",selectedImages);
+    
     // this method is used to upload image to firebase storage.
     const uploadImage = async () => {
         const photos = [];
@@ -104,18 +115,42 @@ export default function Save(props, {navigation}) {
       });
     }
 
-    // const renderItem = ({ item }) => {
-    //   return <Image style={styles.image} source={{ uri: item }} />;
-    // };
-
     return (
         <View style={styles.view}>
             <Text style={{marginTop: 50, fontWeight: 'bold', padding: 10, fontSize: 20, marginLeft: 15}}>New Post</Text>
-            {/* <FlatList
-        data={selectedImages}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-      /> */}
+            {selectedImages == null ? <Image style={styles.wrap} source={{uri : selectedImage[0]}}/> : 
+            <View style={styles.wrap}>
+            <ScrollView 
+              onScroll={({nativeEvent}) => onchange(nativeEvent)}
+              showsHorizontalScrollIndicator={false}
+              pagingEnabled
+              horizontal
+              style={styles.wrap}
+            >
+              {
+                selectedImages.map((e, index) =>
+                  <Image
+                    key={e}
+                    resizeMode='stretch'
+                    style={styles.wrap}
+                    source={{uri : e}}
+                  />
+                )
+              }
+            </ScrollView>
+            <View style={styles.wrapDot}>
+              {
+                selectedImages.map((e, index) =>
+                  <Text
+                    key={e}
+                    style={imgActive == index ? styles.dotActive : styles.dot}
+                  >
+                    ●
+                  </Text>
+                )
+              }
+            </View>
+          </View>}
             <TextInput style={styles.title}
               placeholder="Enter Title"
               onChangeText={(Title) => setTitle(Title)}
@@ -134,12 +169,6 @@ const styles = StyleSheet.create({
     view: {
       flex: 1,
       backgroundColor: "#000",
-      //flexDirection: 'row',
-      //alignItems: 'center',
-      //borderBottomWidth: 1,
-      //borderBottomColor: '#ccc',
-      //paddingBottom: 10,
-      //marginBottom: 10,
     },
     input: {
       marginTop: 10,
@@ -173,5 +202,24 @@ const styles = StyleSheet.create({
       width: 200,
       height: 200,
       margin: 10,
+    },
+    wrap: {
+      width: WIDTH * 0.75,
+      height: HEIGHT * 0.5,
+      alignSelf: 'center'
+    },
+    wrapDot: {
+      position: 'absolute',
+      bottom: 0,
+      flexDirection: 'row',
+      alignSelf: 'center'
+    },
+    dotActive: {
+      margin: 3,
+      color: '#000'
+    },
+    dot: {
+      margin: 3,
+      color: '#FFF'
     }
   });
