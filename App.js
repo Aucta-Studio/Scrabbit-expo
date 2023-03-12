@@ -32,6 +32,7 @@ import FeedScrapbook from "./Screens/FeedScrapbook";
 import Comments from "./Screens/Comments";
 import Scrabbit from "./Screens/Scrabbit";
 import { useEffect } from "react";
+import ChatList from "./Screens/ChatList";
 
 // a Followers following and mutual friends grouped in a material top tab
 function FFM({ route }) {
@@ -238,6 +239,23 @@ function MainStack() {
   );
 }
 
+function ChatStack() {
+  const Stack = createNativeStackNavigator();
+  return (
+    <Stack.Navigator
+      initialRouteName="ChatList"
+      screenOptions={{
+        headerStyle: { backgroundColor: "black" },
+        headerTintColor: "white",
+        headerTitleStyle: { fontWeight: "bold" },
+      }}
+    >
+      <Stack.Screen name="ChatList" component={ChatList} options={{title: "Chats"}}/>
+      <Stack.Screen name="Chat" component={Chat} />
+    </Stack.Navigator>
+  );
+}
+
 //a bottom tab that holds the whole app
 function Base() {
   const Tab = createBottomTabNavigator();
@@ -264,8 +282,8 @@ function Base() {
         }}
       />
       <Tab.Screen
-        name="Chat"
-        component={Chat}
+        name="ChatStack"
+        component={ChatStack}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Icon

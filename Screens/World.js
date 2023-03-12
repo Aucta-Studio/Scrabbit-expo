@@ -24,7 +24,10 @@ export default () => {
   const [posts, setPosts] = useState(null);
   const relations = collection(db, "Relations");
   const PostStore = collection(db, "Posts");
-  const q = query(relations, where("Follower", "==", `${auth.currentUser.uid}`));
+  const q = query(
+    relations,
+    where("Follower", "==", `${auth.currentUser.uid}`)
+  );
 
   const getList = async () => {
     const temp = await getDocs(q);
@@ -34,21 +37,24 @@ export default () => {
       array.push(doc.data().Followed);
     });
     array.push(`${auth.currentUser.uid}`);
-    console.log(array)
+    // console.log(array)
     setList(array);
   };
 
-  const getPosts = async() => {
-    const qp = idList ? query(PostStore, where("author", "in", idList)) : query()
-    const array = []
+  const getPosts = async () => {
+    const qp = idList
+      ? query(PostStore, where("author", "in", idList))
+      : query();
+    // const qp = query(PostStore, where("author", "in", idList));
+    const array = [];
     const temp = await getDocs(qp);
     temp.forEach((doc) => {
-      console.log(doc.id, "=>", doc.data());
+      // console.log(doc.id, "=>", doc.data());
       array.push(doc.data());
     });
-    console.log(array)
+    console.log(array);
     setPosts(array);
-  }
+  };
 
   const [myLocation, setLocation] = useState({
     latitude: 25.101969,
@@ -76,9 +82,11 @@ export default () => {
   useEffect(() => {
     userLocation();
     getList();
-    getPosts();
+    // getPosts();
   }, []);
 
+  {idList && !posts && getPosts();}
+  
   return (
     <SafeAreaView>
       <SearchBar
@@ -101,13 +109,24 @@ export default () => {
             }}
             title="Me"
           />
-          <Carrot
-            coordinate={{
-              latitude: 25.101969,
-              longitude: 55.162172,
-            }}
-            name="node"
-          />
+          {posts?.map((post, index) => {
+            // console.log(post);
+            return (
+              <Carrot
+                key={index}
+                coordinate={{
+                  latitude: post?.location.latitude,
+                  longitude: post?.location.longitude,
+                }}
+                title={post?.Title}
+                username={post?.UserName}
+                doc={post?.createdAt}
+                saves={post?.Collected.length}
+                likes={post?.Likes.length}
+                comments={post?.Comments.length}
+              />
+            );
+          })}
         </MapView>
       </ScrollView>
     </SafeAreaView>
