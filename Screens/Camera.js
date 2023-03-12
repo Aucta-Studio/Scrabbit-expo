@@ -9,6 +9,8 @@ export default function App({navigation}) {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [image, setImage] = useState(null);
   const [camera, setCamera] =useState(null);
+  const [images, setImages] = useState([]);
+
 
   if (!permission) {
     // Camera permissions are still loading
@@ -31,45 +33,53 @@ export default function App({navigation}) {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   }
   
+  function settimeout() {
+    setTimeout(() => {
+      console.log(images.length);
+      console.log(images);
+      navigation.navigate('Save', { images });
+    }, 2000);
+  }
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    let {assets} = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
+      maxNumberOfFiles: 10 - images.length,
+      allowsMultipleSelection: true,
       quality: 1,
     });
-
-    if (!result.canceled) {
-      setImage(result.uri);
+    
+    if (assets.length > 0) {
+      setImages([...images, ...assets.map((asset) => asset.uri)]);
     }
+    settimeout();
+    // setTimeout(() => {
+    //   console.log(images.length);
+    //   console.log(images);
+    //   navigation.navigate('Save', { images });
+    // }, 500);
   };
 
   const takePicture = async () => {
+    const pic = [];
     if (camera){
       const data = await camera.takePictureAsync(null);
-      setImage(data.uri);
+      console.log("Data URI",data.uri);
+      pic.push(data.uri);
     }
+    console.log(images.length, 'Number of images')
+    navigation.navigate('Save', { pic });
   }
 
   return (
     <View style={styles.container}>
       <Camera 
-      ref = {ref => setCamera(ref)} style={styles.fixedRatio} >
-       <TouchableOpacity style={[styles.button_cancel, { marginTop: 10 }]} onPress={() => setImage(null)}>
-       <Icon
-          name={"close-outline"}
-          size={40}
-          color={"white"}
-          style={styles.ImageIconStyle}
-        />
-       </TouchableOpacity>
-        
-        <View style={styles.buttonContainer}>
+      ref = {ref => setCamera(ref)} style={styles.fixedRatio} type={type} ratio = {'1:1'}>
+        {/* <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button_save} onPress={() => navigation.navigate('Save', {image})}>
             <Text style={styles.text}>Next</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
             {/*<Text style={styles.text}>Flip Camera</Text>*/}
@@ -103,7 +113,7 @@ export default function App({navigation}) {
           </TouchableOpacity> */}
         </View>
       </Camera>
-       {image && <Image source={{ uri: image }} style={{ width: "100%", height: "92%", position: 'absolute', bottom: 0, right: 0 }} />}
+       {/* {image && <Image source={{ uri: image }} style={{ width: "100%", height: "92%", position: 'absolute', bottom: 0, right: 0 }} />} */}
     </View>
   );
 }
@@ -145,7 +155,7 @@ const styles = StyleSheet.create({
   button_save: {
     flex: 1,
     left: 200,
-    marginTop: -70,
+    marginTop: 10,
     marginLeft: 100,
     marginRight:150,
   },
