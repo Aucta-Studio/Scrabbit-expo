@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  Linking,
 } from "react-native";
 import { color } from "react-native-reanimated";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -53,18 +54,18 @@ export default ({
   // setLiked();
   const acquired = collected.includes(auth.currentUser.uid);
   // console.log(docID);
-  const timestamp = new Date(
-    date?.seconds * 1000 + date?.nanoseconds / 1000000
-  );
 
+  // initialising constants and variables for time calculations 
+  const timestamp = new Date(date?.seconds * 1000 + date?.nanoseconds / 1000000);
   const currentTime = new Date();
   const timeDiffMs = currentTime.getTime() - timestamp.getTime();
-  var timeDiff = "";
   const elapsedSeconds = Math.floor(timeDiffMs / 1000);
   const elapsedMinutes = Math.floor(elapsedSeconds / 60);
   const elapsedHours = Math.floor(elapsedMinutes / 60);
   const elapsedDays = Math.floor(elapsedHours / 24);
 
+  // defining the string for display
+  var timeDiff = "";
   if (elapsedSeconds < 60) {
     timeDiff = "just now";
   } else if (elapsedMinutes < 60) {
@@ -75,8 +76,23 @@ export default ({
     timeDiff = `${elapsedDays} days ago`;
   }
 
+  // initialisin variables for the carousel 
   const [imgActive, setimgActive] = useState(0);
+  const onchange = (nativeEvent) => {
+    if (nativeEvent) {
+      const slide = Math.ceil(
+        nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
+      );
+      if (slide != imgActive) {
+        setimgActive(slide);
+      }
+    }
+  };
 
+  // initialising url 
+  const url = `https://www.google.com/maps/search/?api=1&query=${location.latitude},${location.longitude}`;
+
+  // handle like function
   const handleLike = async () => {
     const postRef = doc(db, "Posts", docID);
     const temp = await getDoc(postRef);
@@ -99,17 +115,6 @@ export default ({
         .catch((error) => {
           console.log("error liking post");
         });
-    }
-  };
-
-  const onchange = (nativeEvent) => {
-    if (nativeEvent) {
-      const slide = Math.ceil(
-        nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
-      );
-      if (slide != imgActive) {
-        setimgActive(slide);
-      }
     }
   };
 
@@ -167,10 +172,17 @@ export default ({
       {/* if the post isnt captured then display a prompt */}
       {!acquired && (
         <View style={styles.postCaption}>
-          <Text style={styles.captionText}>
-            You haven't collected this Scrapbook yet please go to it's location
-            and collect this scrapbook
-          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              Linking.openURL(url);
+            }}
+          >
+            <Text style={styles.captionText}>
+              You haven't collected this Scrapbook yet please go to it's
+              location and collect this scrapbook. Tap here to open the location
+              on google maps.
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
 
