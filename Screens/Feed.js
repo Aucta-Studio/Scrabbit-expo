@@ -5,6 +5,7 @@ import {
   getFirestore,
   query,
   where,
+  orderBy
 } from "firebase/firestore";
 import React, { useEffect, useState, useCallback } from "react";
 import { SafeAreaView, ScrollView, Text, View, RefreshControl } from "react-native";
@@ -49,7 +50,7 @@ const Feed = () => {
 
   const getPosts = async () => {
     const qp = idList
-      ? query(PostStore, where("author", "in", idList))
+      ? query(PostStore, where("author", "in", idList), orderBy("createdAt", "asc"))
       : query();
     const array = [];
     const temp = await getDocs(qp);
