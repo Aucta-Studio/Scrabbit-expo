@@ -22,7 +22,7 @@ export default function Carrot({ coordinate, title, username, doc, saves, likes,
           <Text>Date Created: {date}</Text>
           <Text>Saves: {saves}</Text>
           <Text>Likes: {likes}</Text>
-          <Text>Comments: {comments}</Text>
+          {comments && <Text>Comments: {comments}</Text>}
           <TouchableOpacity><Text>GO TO</Text></TouchableOpacity>
         </View>
       </Callout>
