@@ -62,19 +62,8 @@ function renderTime(props) {
     timeDiff = `${elapsedDays} days ago`;
   }
   return (
-    <View
-    // style={styles.timeContainer}
-    >
+    <View style={{ alignItems: "flex-end", width: "82%" }}>
       <Text>{timeDiff}</Text>
-      {/* {currentMessage.user._id === me._id ? (
-        <Text
-        // style={styles.timeRight}
-        >{timeDiff}</Text>
-      ) : (
-        <Text
-        // style={styles.time}
-        >{timeDiff}</Text>
-      )} */}
     </View>
   );
 }
@@ -171,16 +160,20 @@ export default function Comments({ route }) {
         {...props}
         wrapperStyle={{
           left: {
-            backgroundColor: "#f0f0f0",
+            backgroundColor: "blue",
             borderRadius: 8,
+            padding: "1%",
             marginLeft: 0,
+            width: "98%",
           },
           right: {
             backgroundColor: "#EC6319",
             borderRadius: 8,
             padding: "1%",
-            marginLeft: "1%",
+            paddingRight: "auto",
+            marginLeft: "2%",
             alignSelf: "flex-start",
+            width: "98%",
           },
         }}
         textStyle={{
