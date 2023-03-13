@@ -180,6 +180,7 @@ export default function ForeignProfile({ route }) {
               </TouchableOpacity>
             </View>
           </View>
+          {followed && <ScrapbooksList uid={fuid}/>}
           {/* <View style={styles.tav}>
             <Tab />
           </View> */}
