@@ -9,6 +9,7 @@ import {
   Linking,
 } from "react-native";
 import { color } from "react-native-reanimated";
+import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons";
 import Firemage from "./Firemage";
 import { myFireBase } from "../fireBaseConfig";
@@ -39,12 +40,12 @@ export default ({
   photos,
   collected,
   likes,
-  comments,
   location,
   date,
   docID,
 }) => {
   const db = getFirestore(myFireBase);
+  const navigation = useNavigation();
   const [value, loading, error] = useDocument(doc(db, "Profiles", `${uid}`));
   const auth = getAuth(myFireBase);
   // console.log(value.data())
@@ -207,7 +208,7 @@ export default ({
             />
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>{navigation.navigate("Comments", {postID: docID})}}>
             <Icon
               name={"chatbubble-outline"}
               size={32}
