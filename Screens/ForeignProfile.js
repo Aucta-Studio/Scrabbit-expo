@@ -53,11 +53,35 @@ function Tab() {
 
 export default function ForeignProfile({ route }) {
   const { fuid } = route.params;
+  const [followerCount, setfollowerCount] = useState(0);
+  const [followingCount, setfollowingCount] = useState(0);
   const db = getFirestore(myFireBase);
   const auth = getAuth(myFireBase);
   const navigation = useNavigation();
   const [followed, setFollowed] = useState(null);
   const [value, loading, error] = useDocument(doc(db, "Profiles", `${fuid}`));
+  const relations = collection(db, "Relations");
+  const q1 = query(relations, where("Follower", "==", `${fuid}`));
+  const q2 = query(relations, where("Followed", "==", `${fuid}`));
+
+  const getCounts = async () => {
+    const temp1 = await getDocs(q1);
+    const temp2 = await getDocs(q2);
+    var count = 0;
+    temp1.forEach((doc) => {
+      // console.log(doc.id, "=>", doc.data());
+      count++;
+    });
+    // console.log(count);
+    setfollowingCount(count);
+    count = 0;
+    temp2.forEach((doc) => {
+      // console.log(doc.id, "=>", doc.data());
+      count++;
+    });
+    // console.log(count);
+    setfollowerCount(count);
+  };
 
   const handleFollow = async () => {
     if (followed) {
@@ -110,6 +134,7 @@ export default function ForeignProfile({ route }) {
   // Check if the current user is following this user
   useEffect(() => {
     checkFollowing();
+    getCounts();
   });
   checkFollowing();
 
@@ -138,14 +163,14 @@ export default function ForeignProfile({ route }) {
                     navigation.navigate("FFM", { screen: "Followers" });
                   }}
                 >
-                  <Text style={styles.friendsText}>Followers </Text>
+                  <Text style={styles.friendsText}>{followerCount} Followers    </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("FFM", { screen: "Following" });
                   }}
                 >
-                  <Text style={styles.friendsText}>Following</Text>
+                  <Text style={styles.friendsText}>{followingCount} Following</Text>
                 </TouchableOpacity>
               </View>
               <TouchableOpacity onPress={handleFollow}>
@@ -155,9 +180,9 @@ export default function ForeignProfile({ route }) {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.tav}>
+          {/* <View style={styles.tav}>
             <Tab />
-          </View>
+          </View> */}
         </>
       )}
     </SafeAreaView>
@@ -205,6 +230,7 @@ const styles = {
     alignItems: "center",
     padding: 14,
     backgroundColor: "#000",
+    // height: "100%"
   },
   avatarContainer: {
     shadowColor: "#000",

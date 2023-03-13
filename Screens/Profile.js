@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   ScrollView,
@@ -8,13 +8,24 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { myFireBase } from "../fireBaseConfig";
 import { useSelector, useDispatch } from "react-redux";
 import ScrapbooksList from "./ScrapbooksList";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import Firemage from "../Components/Firemage";
 
 function Tab() {
   const Tab = createMaterialTopTabNavigator();
@@ -25,38 +36,64 @@ function Tab() {
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "white",
         tabBarLabelStyle: {
-          fontWeight: "bold"
+          fontWeight: "bold",
         },
         tabBarIndicatorStyle: {
-          backgroundColor: "white"
+          backgroundColor: "white",
         },
         tabBarStyle: {
-          backgroundColor: "black"
-        }
+          backgroundColor: "black",
+        },
       }}
     >
-    <Tab.Screen name="my" component={ScrapbooksList} />
+      <Tab.Screen name="my" component={ScrapbooksList} />
     </Tab.Navigator>
   );
 }
 
 export default () => {
-  const [img, setimg] = useState(null);
+  const [followerCount, setfollowerCount] = useState(0);
+  const [followingCount, setfollowingCount] = useState(0);
   const account = useSelector((state) => state.account);
+  const db = getFirestore(myFireBase);
+  const auth = getAuth(myFireBase);
+  const relations = collection(db, "Relations");
+  const q1 = query(relations, where("Follower", "==", auth.currentUser.uid));
+  const q2 = query(relations, where("Followed", "==", auth.currentUser.uid));
   const dispatch = useDispatch();
   const storage = getStorage();
   const navigation = useNavigation();
 
-  const download = async () => {
-    const temp = await getDownloadURL(ref(storage, `${account.pfp}`));
-    setimg(temp);
+  const getCounts = async () => {
+    const temp1 = await getDocs(q1);
+    const temp2 = await getDocs(q2);
+    var count = 0;
+    temp1.forEach((doc) => {
+      // console.log(doc.id, "=>", doc.data());
+      count++;
+    });
+    // console.log(count);
+    setfollowingCount(count);
+    count = 0;
+    temp2.forEach((doc) => {
+      // console.log(doc.id, "=>", doc.data());
+      count++;
+    });
+    // console.log(count);
+    setfollowerCount(count);
   };
-  download();
+
+  useEffect(() => {
+    getCounts();
+  }, []);
+
+  // console.log(auth.currentUser.uid);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.profileContainer}>
         <View style={styles.avatarContainer}>
-          <Image source={{ uri: img }} style={styles.avatar} />
+          <Firemage style={styles.avatar} path={account.pfp} />
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.nameText}>
@@ -69,14 +106,14 @@ export default () => {
                 navigation.navigate("FFF");
               }}
             >
-              <Text style={styles.friendsText}>Followers </Text>
+              <Text style={styles.friendsText}>{followerCount} Followers    </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("FFF",{screen: "Following"});
+                navigation.navigate("FFF", { screen: "Following" });
               }}
             >
-              <Text style={styles.friendsText}>Following</Text>
+              <Text style={styles.friendsText}>{followingCount} Following</Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity
@@ -88,7 +125,7 @@ export default () => {
           </TouchableOpacity>
         </View>
       </View>
-      <Tab />
+      {/* <Tab /> */}
     </SafeAreaView>
   );
 };
@@ -156,7 +193,7 @@ const styles = {
   friendsText: {
     fontSize: 16,
     color: "#aaa",
-    fontWeight: "12"
+    fontWeight: "12",
   },
   photosContainer: {
     marginTop: 10,
