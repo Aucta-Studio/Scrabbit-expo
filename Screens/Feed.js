@@ -66,9 +66,9 @@ const Feed = () => {
     // getPosts();
   }, []);
 
-  {
-    idList && !posts && getPosts();
-  }
+  {idList && !posts && getPosts();}
+  // getPosts();
+  
 
   return (
     <SafeAreaView>
@@ -85,7 +85,6 @@ const Feed = () => {
               photos={post.photos}
               collected={post.Collected}
               likes={post.Likes}
-              comments={post.Comments}
               location={post.location}
               date={post.createdAt}
               docID={post.id}
