@@ -89,13 +89,6 @@ export default () => {
   
   return (
     <SafeAreaView>
-      <SearchBar
-        placeholder="Search for location or title"
-        value={searchText}
-        onChangeText={(text) => {
-          setSearchText(text);
-        }}
-      />
       <ScrollView>
         <MapView
           style={styles.map}
