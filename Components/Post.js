@@ -208,7 +208,7 @@ export default ({
             />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={()=>{navigation.navigate("Comments", {postID: docID})}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate("Comments", {postID: docID, owner: uid})}}>
             <Icon
               name={"chatbubble-outline"}
               size={32}

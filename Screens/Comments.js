@@ -1,6 +1,18 @@
 import React, { useState, useCallback } from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { GiftedChat, Bubble, InputToolbar } from "react-native-gifted-chat";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Clipboard,
+} from "react-native";
+import {
+  GiftedChat,
+  Bubble,
+  InputToolbar,
+  Message,
+} from "react-native-gifted-chat";
 import { myFireBase } from "../fireBaseConfig";
 import { getAuth } from "firebase/auth";
 import {
@@ -20,16 +32,17 @@ import {
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
+import Icon from "react-native-vector-icons/Ionicons";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-const renderMessage = (props) => {
-  const { currentMessage } = props;
-};
+// const renderMessage = (props) => {
+//   const { currentMessage } = props;
+// };
 
 function renderTime(props) {
   const { currentMessage } = props;
-  const date = currentMessage.createdAt
+  const date = currentMessage.createdAt;
   const timestamp = new Date(date);
   const currentTime = new Date();
   const timeDiffMs = currentTime.getTime() - timestamp.getTime();
@@ -66,36 +79,6 @@ function renderTime(props) {
   );
 }
 
-function renderBubble(props) {
-  return (
-    <Bubble
-      {...props}
-      wrapperStyle={{
-        left: {
-          backgroundColor: "#f0f0f0",
-          borderRadius: 8,
-          marginLeft: 0,
-        },
-        right: {
-          backgroundColor: "#EC6319",
-          borderRadius: 8,
-          padding: '1%',
-          marginLeft: '1%',
-          alignSelf: 'flex-start'
-        },
-      }}
-      textStyle={{
-        left: {
-          color: "#000",
-        },
-        right: {
-          color: "#000",
-        },
-      }}
-    />
-  );
-}
-
 function renderInputToolbar(props) {
   return (
     <InputToolbar
@@ -114,27 +97,103 @@ export default function Comments({ route }) {
   const db = getFirestore(myFireBase);
   const account = useSelector((state) => state.account);
   const postID = route.params.postID;
+  const ownerID = route.params.owner;
   const [comments, setComments] = useState([]);
   const postRef = doc(db, "Posts", postID);
   const postsCommentsRef = collection(postRef, "Comments");
   const q = query(postsCommentsRef, orderBy("createdAt", "asc"));
-  const me ={
+  const me = {
     _id: auth.currentUser.uid,
     name: account.username,
-  }
+  };
 
   const onSend = useCallback((messages = []) => {
-    setComments(previousMessages =>
+    setComments((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );
-    const { _id, createdAt, text, user } = messages[0];    
+    const { _id, createdAt, text, user } = messages[0];
     addDoc(postsCommentsRef, {
       _id,
       createdAt,
       text,
-      user
+      user,
     });
-  }, []); 
+  }, []);
+
+  const onDelete = async (messageId) => {
+    setComments(comments.filter((message) => message._id !== messageId));
+    const q = query(postsCommentsRef, where("_id", "==", messageId));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (doc) => {
+      await deleteDoc(doc.ref);
+    });
+  };
+
+  function onLongPress(context, message) {
+    console.log(context, message);
+    const supporter = message.user._id == me._id;
+    const ownership = ownerID == me._id;
+    const options1 = ["Copy Text", "Delete", "Cancel"];
+    const options2 = ["Copy Text", "Cancel"];
+    var options = supporter ? options1 : options2;
+    if (ownership) options = options1;
+    const cancelButtonIndex = options.length - 1;
+    context.actionSheet().showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+      },
+      (buttonIndex) => {
+        if (ownership || supporter) {
+          switch (buttonIndex) {
+            case 0:
+              Clipboard.setString(message.text);
+              break;
+            case 1:
+              // this.onDelete(messageIdToDelete) //pass the function here
+              onDelete(message._id);
+              break;
+          }
+        } else {
+          switch (buttonIndex) {
+            case 0:
+              Clipboard.setString(message.text);
+              break;
+          }
+        }
+      }
+    );
+  }
+
+  function renderBubble(props) {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          left: {
+            backgroundColor: "#f0f0f0",
+            borderRadius: 8,
+            marginLeft: 0,
+          },
+          right: {
+            backgroundColor: "#EC6319",
+            borderRadius: 8,
+            padding: "1%",
+            marginLeft: "1%",
+            alignSelf: "flex-start",
+          },
+        }}
+        textStyle={{
+          left: {
+            color: "#000",
+          },
+          right: {
+            color: "#000",
+          },
+        }}
+      />
+    );
+  }
 
   const getComments = async () => {
     const temp = onSnapshot(q, (querySnapshot) => {
@@ -159,6 +218,7 @@ export default function Comments({ route }) {
       // inverted={true}
       onSend={onSend}
       user={me}
+      onLongPress={onLongPress}
       // renderMessage={renderMessage}
       renderBubble={renderBubble}
       renderAvatar={null}
