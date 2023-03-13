@@ -11,7 +11,6 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import {
   getFirestore,
   collection,
@@ -27,30 +26,6 @@ import ScrapbooksList from "./ScrapbooksList";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import Firemage from "../Components/Firemage";
 
-function Tab() {
-  const Tab = createMaterialTopTabNavigator();
-  return (
-    <Tab.Navigator
-      initialRouteName="my"
-      screenOptions={{
-        tabBarActiveTintColor: "white",
-        tabBarInactiveTintColor: "white",
-        tabBarLabelStyle: {
-          fontWeight: "bold",
-        },
-        tabBarIndicatorStyle: {
-          backgroundColor: "white",
-        },
-        tabBarStyle: {
-          backgroundColor: "black",
-        },
-      }}
-    >
-      <Tab.Screen name="my" component={ScrapbooksList} />
-    </Tab.Navigator>
-  );
-}
-
 export default () => {
   const [followerCount, setfollowerCount] = useState(0);
   const [followingCount, setfollowingCount] = useState(0);
@@ -61,8 +36,31 @@ export default () => {
   const q1 = query(relations, where("Follower", "==", auth.currentUser.uid));
   const q2 = query(relations, where("Followed", "==", auth.currentUser.uid));
   const dispatch = useDispatch();
-  const storage = getStorage();
   const navigation = useNavigation();
+
+  function Tab() {
+    const Tab = createMaterialTopTabNavigator();
+    return (
+      <Tab.Navigator
+        initialRouteName="my"
+        screenOptions={{
+          tabBarActiveTintColor: "white",
+          tabBarInactiveTintColor: "white",
+          tabBarLabelStyle: {
+            fontWeight: "bold",
+          },
+          tabBarIndicatorStyle: {
+            backgroundColor: "white",
+          },
+          tabBarStyle: {
+            backgroundColor: "black",
+          },
+        }}
+      >
+        <Tab.Screen name="my" component={ScrapbooksList} initialParams={{uid : auth.currentUser.uid}}/>
+      </Tab.Navigator>
+    );
+  }
 
   const getCounts = async () => {
     const temp1 = await getDocs(q1);
@@ -126,6 +124,7 @@ export default () => {
         </View>
       </View>
       {/* <Tab /> */}
+      <ScrapbooksList uid={auth.currentUser.uid}/>
     </SafeAreaView>
   );
 };
