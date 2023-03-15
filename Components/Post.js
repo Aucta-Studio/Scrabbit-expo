@@ -136,7 +136,7 @@ export default ({
     </Text>
   </View>
   <View style={styles.reportButtonContainer}>
-  <TouchableOpacity
+<TouchableOpacity
   style={styles.reportButton}
   onPress={() => {
     let reason = "";
@@ -178,7 +178,7 @@ export default ({
     }
   }}
 >
-  <Text style={styles.reportButtonText}>Report</Text>
+  <Icon name="flag-outline" size={19}  />
 </TouchableOpacity>
     </View>
     </TouchableOpacity>
@@ -307,12 +307,14 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     marginRight: 20,
     marginTop: 10,
+    
   },
   reportButton: {
-    backgroundColor: "#ff0000",
+    backgroundColor: "red",
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
+    
   },
   reportButtonText: {
     color: "#fff",
