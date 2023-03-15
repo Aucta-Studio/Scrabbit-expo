@@ -4,6 +4,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  TextInput,
+  Platform,
   ScrollView,
   Dimensions,
   Linking,
@@ -137,13 +139,43 @@ export default ({
   <TouchableOpacity
   style={styles.reportButton}
   onPress={() => {
-    Alert.prompt(
-      "Report Image",
-      "Please tell us the reason for the report:",
-      (reason) => {
-        Alert.alert(`Image Reported for ${reason}`);
-      }
-    );
+    let reason = "";
+    if (Platform.OS === "ios") {
+      Alert.prompt(
+        "Report Image",
+        "Please tell us the reason for the report:",
+        (text) => {
+          reason = text;
+          Alert.alert(`Image Reported for ${reason}`);
+        },
+
+      );
+    } else {
+      Alert.alert(
+        "Report Image",
+        "Please tell us the reason for the report:",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "OK",
+            onPress: () => {
+              Alert.alert(`Image Reported for ${reason}`);
+            },
+          },
+        ],
+        {
+          editable: true,
+          onDismiss: (text) => {
+            reason = text;
+          },
+          style: { backgroundColor: "black" },
+          placeholder: "Enter reason here",
+        }
+      );
+    }
   }}
 >
   <Text style={styles.reportButtonText}>Report</Text>
