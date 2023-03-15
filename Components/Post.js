@@ -4,6 +4,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  TextInput,
+  Platform,
   ScrollView,
   Dimensions,
   Linking,
@@ -134,17 +136,50 @@ export default ({
     </Text>
   </View>
   <View style={styles.reportButtonContainer}>
-    <TouchableOpacity
-    
-    
-      style={styles.reportButton}
-      onPress={() => {
-        Alert.alert("Image Reported");
-      }}
-      
-    >
-      <Text style={styles.reportButtonText}>Report</Text>
-    </TouchableOpacity>
+<TouchableOpacity
+  style={styles.reportButton}
+  onPress={() => {
+    let reason = "";
+    if (Platform.OS === "ios") {
+      Alert.prompt(
+        "Report Image",
+        "Please tell us the reason for the report:",
+        (text) => {
+          reason = text;
+          Alert.alert(`Image Reported for ${reason}`);
+        },
+
+      );
+    } else {
+      Alert.alert(
+        "Report Image",
+        "Please tell us the reason for the report:",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "OK",
+            onPress: () => {
+              Alert.alert(`Image Reported for ${reason}`);
+            },
+          },
+        ],
+        {
+          editable: true,
+          onDismiss: (text) => {
+            reason = text;
+          },
+          style: { backgroundColor: "black" },
+          placeholder: "Enter reason here",
+        }
+      );
+    }
+  }}
+>
+<Icon name="flag-outline" size={19}/>
+</TouchableOpacity>
     </View>
     </TouchableOpacity>
 
@@ -272,12 +307,14 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     marginRight: 20,
     marginTop: 10,
+    
   },
   reportButton: {
-    backgroundColor: "#ff0000",
+    backgroundColor: "red",
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
+    
   },
   reportButtonText: {
     color: "#fff",
