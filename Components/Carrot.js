@@ -4,6 +4,8 @@ import { Marker, Callout } from "react-native-maps";
 import Firemage from "./Firemage";
 import carrot from "../images/carrot_node.png";
 import { TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+import { block } from "react-native-reanimated";
 
 export default function Carrot({ coordinate, title, username, doc, saves, likes, comments}) {
   const timestamp = new Date(doc?.seconds * 1000 + doc?.nanoseconds / 1000000);
@@ -11,19 +13,35 @@ export default function Carrot({ coordinate, title, username, doc, saves, likes,
   const url = `https://www.google.com/maps/search/?api=1&query=${coordinate.latitude},${coordinate.longitude}`;
   return (
     <Marker coordinate={coordinate} image={carrot}>
-      <Callout style={styles.callout} tooltip={true} onPress={()=>{Linking.openURL(url);}}>
+      <Callout borderRadius={10} tooltip={true} style={styles.callout} overflow={"hidden"} onPress={()=>{Linking.openURL(url);}}>
         <View>
-          <Text>
-            <Firemage style={styles.img} path='Pfps/default.jpg' />
-            <Image style={styles.img} source={carrot} />
+          <Text style={styles.margins}>
+            {/* <Firemage style={styles.img} path='Pfps/default.jpg' /> */}
+            <Icon name="ios-person-circle" style={styles.img} />
+            <Text style={styles.username}>{username} • {date}</Text>
           </Text>
-          <Text>{title}</Text>
-          <Text>by {username}</Text>
-          <Text>Date Created: {date}</Text>
-          <Text>Saves: {saves}</Text>
-          <Text>Likes: {likes}</Text>
+
+          <Text style={styles.title}>{title}</Text>
+            <View flex-direction={"row"} justifyContent={"space-around"}alignItems={"stretch"}>
+              
+              <Text style={styles.countn}>
+              <Icon
+                    name={"eye"}
+                    size={34}
+                    color={"#000"}
+                  />{saves}</Text>
+              <Text style={styles.countn}>
+              <Icon
+                name={"heart"}
+                size={34}
+                color={"#000"}
+              />{likes}</Text>
+            </View>
           {comments && <Text>Comments: {comments}</Text>}
-          <TouchableOpacity><Text>GO TO</Text></TouchableOpacity>
+        
+          <TouchableOpacity alignItems={"center"}><Text style={styles.mapgo} >
+          <Icon name="navigate" size={34} color="#000" />
+          </Text></TouchableOpacity>
         </View>
       </Callout>
     </Marker>
@@ -32,14 +50,39 @@ export default function Carrot({ coordinate, title, username, doc, saves, likes,
 
 const styles = StyleSheet.create({
   img: {
-    width: 20,
-    height: 20,
+    width: 32,
+    height: 32,
+  },
+  title:{
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  username:{
+    fontSize: 13,
+    color: "#000",
+
   },
   callout:{
     width: 250,
     height: 250,
     padding: '5%',
-    borderRadius: 200,
-    backgroundColor: "#EC6319"
+    borderColor: "#AAA",
+    backgroundColor: "#EC6319",
+  },
+  margins:{
+    marginTop: -5,
+    marginBottom: -5,
+  },
+  countn:{
+    fontSize: 34,
+  },
+  mapgo:{
+    fontSize: 34,
+    fontWeight: "bold",
+    textAlign:"center",
+    marginTop:50
   }
+
+
 });

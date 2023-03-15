@@ -21,6 +21,7 @@ import {
 } from "firebase/firestore";
 import { myFireBase } from "../fireBaseConfig";
 import Icon from "react-native-vector-icons/Ionicons";
+import Icon1 from "react-native-vector-icons/FontAwesome5";
 import Post from "../Components/Post";
 
 export default ({ uid }) => {
@@ -53,11 +54,20 @@ export default ({ uid }) => {
 
   return (
     <SafeAreaView style={styles.page}>
-      <View>
-        <Text style={styles.tex}>{posts?.length}</Text>
-        <Icon name="file-tray" size={32} color="white" />
+      <View style={styles.flexend}>
+        <Text style={styles.tex}>
+        <Icon1 name="carrot" size={32} color="white" />
+        {posts?.length}
+        </Text>
         {/* <Image source={require("../images/feed_button.png")} style={styles.icon} resizeMode="contain"/> */}
       </View>
+      <View
+        style={{
+        borderBottomColor: '#fff',
+        borderBottomWidth: 2,
+        marginTop: -2,
+      }}
+/>
       {/* <Text style={styles.tex}>This is My scrapbooks page</Text> */}
       <ScrollView>
         {posts?.map((post, index) => {
@@ -89,10 +99,19 @@ const styles = StyleSheet.create({
   },
   tex: {
     color: "#FFF",
+    textAlign: "center",
+    fontSize: 32,
+    fontWeight:"",
   },
   icon: {
     width: "35%",
     height: "35%",
     aspectRatio: 1,
+  },
+  flexend: {
+    marginRight: "auto",
+    marginLeft: "auto",
+    //borderBottomColor: "#FFF",
+    //borderBottomWidth: 2
   },
 });
