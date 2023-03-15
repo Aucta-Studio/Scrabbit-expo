@@ -36,17 +36,16 @@ export default () => {
   const auth = getAuth(myFireBase);
   const db = getFirestore(myFireBase);
 
-  function handleRegister() {
+  const handleRegister = async () => {
     const q = query(
       collection(db, "Profiles"),
       where("UserName", "==", username)
     );
-    getDocs(q).then((querySnapshot) => {
-      if (querySnapshot.size > 0) {
-        Alert.alert("Error", "Username already exists");
-        return;
-      }
-    });
+    let temp = await getDocs(q);
+    if (temp.size > 0) {
+      Alert.alert("Error", "Username already exists");
+      return;
+    }
     if (password != repassword) {
       Alert.alert("Error", "Passwords dont match");
       setPassword("");
@@ -83,7 +82,7 @@ export default () => {
         setRePassword("");
         // console.log(error);
       });
-  }
+  };
 
   function navigateToLogin() {
     navigation.navigate("login");
