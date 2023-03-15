@@ -7,7 +7,7 @@ import {
   ScrollView,
   Dimensions,
   Linking,
-  Alert
+  Alert,
 } from "react-native";
 import { color } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
@@ -57,8 +57,10 @@ export default ({
   const acquired = collected.includes(auth.currentUser.uid);
   // console.log(docID);
 
-  // initialising constants and variables for time calculations 
-  const timestamp = new Date(date?.seconds * 1000 + date?.nanoseconds / 1000000);
+  // initialising constants and variables for time calculations
+  const timestamp = new Date(
+    date?.seconds * 1000 + date?.nanoseconds / 1000000
+  );
   const currentTime = new Date();
   const timeDiffMs = currentTime.getTime() - timestamp.getTime();
   const elapsedSeconds = Math.floor(timeDiffMs / 1000);
@@ -78,7 +80,7 @@ export default ({
     timeDiff = `${elapsedDays} days ago`;
   }
 
-  // initialisin variables for the carousel 
+  // initialisin variables for the carousel
   const [imgActive, setimgActive] = useState(0);
   const onchange = (nativeEvent) => {
     if (nativeEvent) {
@@ -91,7 +93,7 @@ export default ({
     }
   };
 
-  // initialising url 
+  // initialising url
   const url = `https://www.google.com/maps/search/?api=1&query=${location.latitude},${location.longitude}`;
 
   // handle like function
@@ -123,34 +125,33 @@ export default ({
   return (
     <View style={styles.container}>
       <TouchableOpacity>
-  <View style={styles.postHeader}>
-    <View style={styles.postPfp}>
-      {value && (
-        <Firemage style={styles.postPfpImage} path={value.data().Pfp} />
-      )}
-    </View>
-    <Text style={styles.usernameText}>
-      {user} at {title}
-    </Text>
-  </View>
-  <View style={styles.reportButtonContainer}>
-  <TouchableOpacity
-  style={styles.reportButton}
-  onPress={() => {
-    Alert.prompt(
-      "Report Image",
-      "Please tell us the reason for the report:",
-      (reason) => {
-        Alert.alert(`Image Reported for ${reason}`);
-      }
-    );
-  }}
->
-  <Text style={styles.reportButtonText}>Report</Text>
-</TouchableOpacity>
-    </View>
-    </TouchableOpacity>
-
+        <View style={styles.postHeader}>
+          <View style={styles.postPfp}>
+            {value && (
+              <Firemage style={styles.postPfpImage} path={value.data().Pfp} />
+            )}
+          </View>
+          <Text style={styles.usernameText}>
+            {user} at {title}
+          </Text>
+        </View>
+        <View style={styles.reportButtonContainer}>
+          <TouchableOpacity
+            style={styles.reportButton}
+            onPress={() => {
+              Alert.prompt(
+                "Report Image",
+                "Please tell us the reason for the report:",
+                (reason) => {
+                  Alert.alert(`Image Reported for ${reason}`);
+                }
+              );
+            }}
+          >
+            <Text style={styles.reportButtonText}>Report</Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
 
       {/* thumbnail photo/location */}
       {acquired && (
@@ -190,21 +191,20 @@ export default ({
 
       {/* if the post isnt captured then display a prompt */}
       {!acquired && (
-       <View style={styles.postCaption}>
-       <Text style={styles.captionText}>
-         You haven't collected this Scrapbook yet please go to its
-         location and collect this scrapbook. Tap here to open the location on Google Maps.{''}
-         <TouchableOpacity
-           onPress={() => {
-             Linking.openURL(url);
-           }}
-         >
-             <Icon name="map-outline" size={24} color="white" />
-           
-         </TouchableOpacity>
-       </Text>
-     </View>
-     
+        <View style={styles.postCaption}>
+          <Text style={styles.captionText}>
+            You haven't collected this Scrapbook yet please go to its location
+            and collect this scrapbook. Tap here to open the location on Google
+            Maps.{""}
+            <TouchableOpacity
+              onPress={() => {
+                Linking.openURL(url);
+              }}
+            >
+              <Icon name="map-outline" size={24} color="white" />
+            </TouchableOpacity>
+          </Text>
+        </View>
       )}
 
       {/* Caption and comments link */}
@@ -228,7 +228,11 @@ export default ({
             />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={()=>{navigation.navigate("Comments", {postID: docID, owner: uid})}}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Comments", { postID: docID, owner: uid });
+            }}
+          >
             <Icon
               name={"chatbubble-outline"}
               size={32}
@@ -269,7 +273,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     margin: 10,
   },
-  
+
   reportButtonContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -286,7 +290,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
-  
+
   usernameText: {
     fontSize: 16,
     fontWeight: "bold",
