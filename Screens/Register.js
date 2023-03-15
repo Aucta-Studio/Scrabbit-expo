@@ -11,7 +11,16 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { myFireBase } from "../fireBaseConfig";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, collection, setDoc, doc } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  setDoc,
+  doc,
+  query,
+  getDocs,
+  where,
+} from "firebase/firestore";
+import { Alert } from "react-native";
 
 export default () => {
   const [firstName, setfirstName] = useState("");
@@ -28,10 +37,28 @@ export default () => {
   const db = getFirestore(myFireBase);
 
   function handleRegister() {
+    const q = query(
+      collection(db, "Profiles"),
+      where("UserName", "==", username)
+    );
+    getDocs(q).then((querySnapshot) => {
+      if (querySnapshot.size > 0) {
+        Alert.alert("Error", "Username already exists");
+        return;
+      }
+    });
+    if (password != repassword) {
+      Alert.alert("Error", "Passwords dont match");
+      setPassword("");
+      setRePassword("");
+      return;
+    }
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const upload = async (uid, data) => {
-          await setDoc(doc(db, "Profiles", `${uid}`), data).catch((error) => {console.log(error)});
+          await setDoc(doc(db, "Profiles", `${uid}`), data).catch((error) => {
+            console.log(error);
+          });
         };
         console.log("Signed up");
         const user = userCredential.user.uid;
@@ -46,7 +73,16 @@ export default () => {
         upload(user, data);
         navigateToLogin();
       })
-      .catch((error) => {console.log(error)});
+      .catch((error) => {
+        Alert.alert("Register unsuccessful");
+        setfirstName("");
+        setlastName("");
+        setEmail("");
+        setUsername("");
+        setPassword("");
+        setRePassword("");
+        // console.log(error);
+      });
   }
 
   function navigateToLogin() {
@@ -67,6 +103,7 @@ export default () => {
             style={styles.input}
             onChangeText={setfirstName}
             placeholder="Enter your first name"
+            placeholderTextColor="#FFF"
           />
           {/* lastname */}
           <Text>Last Name</Text>
@@ -75,6 +112,7 @@ export default () => {
             style={styles.input}
             onChangeText={setlastName}
             placeholder="Enter your last name"
+            placeholderTextColor="#FFF"
           />
           {/* phone number
           <Text>Phone Number</Text>
@@ -90,7 +128,8 @@ export default () => {
             value={email}
             style={styles.input}
             onChangeText={setEmail}
-            placeholder="Enter your email address "
+            placeholder="Enter your email address"
+            placeholderTextColor="#FFF"
           />
           {/* DOB
           <Text>Date Of Birth</Text>
@@ -107,6 +146,7 @@ export default () => {
             style={styles.input}
             onChangeText={(text) => setUsername(text)}
             placeholder="Enter your username..."
+            placeholderTextColor="#FFF"
           ></TextInput>
           {/* password */}
           <Text>Password</Text>
@@ -115,6 +155,8 @@ export default () => {
             style={styles.input}
             onChangeText={(text) => setPassword(text)}
             placeholder="Enter your password..."
+            placeholderTextColor="#FFF"
+            secureTextEntry={true}
           ></TextInput>
           {/* retype password */}
           <Text>Retype Password</Text>
@@ -123,15 +165,20 @@ export default () => {
             style={styles.input}
             onChangeText={(text) => setRePassword(text)}
             placeholder="Retype your password..."
+            placeholderTextColor="#FFF"
+            secureTextEntry={true}
           ></TextInput>
           {/* register button */}
           <TouchableOpacity style={styles.button} onPress={handleRegister}>
             <Text>Register</Text>
           </TouchableOpacity>
           {/* in case of a new user with no account */}
-          <TouchableOpacity style = {{marginTop: 10, alignSelf: 'center'}} onPress={navigateToLogin}>
+          <TouchableOpacity
+            style={{ marginTop: 10, alignSelf: "center" }}
+            onPress={navigateToLogin}
+          >
             <Text>Have an account?</Text>
-            <Text style = {{fontWeight: 'bold', marginLeft: 35}}>Login</Text>
+            <Text style={{ fontWeight: "bold", marginLeft: 35 }}>Login</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
