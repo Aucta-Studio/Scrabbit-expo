@@ -172,19 +172,21 @@ export default ({
 
       {/* if the post isnt captured then display a prompt */}
       {!acquired && (
-        <View style={styles.postCaption}>
-          <TouchableOpacity
-            onPress={() => {
-              Linking.openURL(url);
-            }}
-          >
-            <Text style={styles.captionText}>
-              You haven't collected this Scrapbook yet please go to it's
-              location and collect this scrapbook. Tap here to open the location
-              on google maps.
-            </Text>
-          </TouchableOpacity>
-        </View>
+       <View style={styles.postCaption}>
+       <Text style={styles.captionText}>
+         You haven't collected this Scrapbook yet please go to its
+         location and collect this scrapbook. Tap here to open the location on Google Maps.{''}
+         <TouchableOpacity
+           onPress={() => {
+             Linking.openURL(url);
+           }}
+         >
+             <Icon name="map-outline" size={24} color="white" />
+           
+         </TouchableOpacity>
+       </Text>
+     </View>
+     
       )}
 
       {/* Caption and comments link */}
