@@ -146,61 +146,61 @@ export default () => {
     }
   };
 
-  return (
-    <ScrollView style={styles.container}>
-      {/* where the avatar gets changed */}
-      <View>
+    return (
+      <ScrollView style={styles.container}>
+        {/* where the avatar gets changed */}
+        <View>
         <Firemage style={styles.avatar} path={account.pfp} />
         <TouchableOpacity onPress={handleAvatarChange}>
-          <Text style={styles.changeText}>Change Avatar</Text>
-        </TouchableOpacity>
-      </View>
-      {/* where the other fields get changed */}
-      <View>
-        <Text style={styles.usernameText}>Username</Text>
-        <TextInput
-          type="text"
-          value={localusername}
-          style={styles.nameText}
+            <Text style={styles.changeText}>Change Avatar</Text>
+          </TouchableOpacity>
+        </View>
+        {/* where the other fields get changed */}
+        <View>
+          <Text style={styles.usernameText}>Username</Text>
+          <TextInput
+            type="text"
+            value={localusername}
+            style={styles.nameText}
           onChangeText={(text) => {
             setLocalUsername(text);
-          }}
-        />
-        <View>
-          <Text style={styles.usernameText}>Firstname</Text>
-          <TextInput
-            type="text"
-            value={localFirstname}
-            style={styles.nameText}
-            onChangeText={(text) => {
-              setLocalFirstname(text);
             }}
           />
-          <Text style={styles.usernameText}>Lastname</Text>
-          <TextInput
-            type="text"
-            value={localLastname}
-            style={styles.nameText}
+          <View>
+            <Text style={styles.usernameText}>Firstname</Text>
+            <TextInput
+              type="text"
+              value={localFirstname}
+              style={styles.nameText}
+            onChangeText={(text) => {
+              setLocalFirstname(text);
+              }}
+            />
+            <Text style={styles.usernameText}>Lastname</Text>
+            <TextInput
+              type="text"
+              value={localLastname}
+              style={styles.nameText}
             onChangeText={(text) => {
               setLocalLastname(text);
+              }}
+            />
+          </View>
+          <Text style={styles.usernameText}>Bio</Text>
+          <TextInput
+            type="text"
+            value={localBio}
+            style={styles.nameText}
+          onChangeText={(text) => {
+            setLocalBio(text);
             }}
           />
         </View>
-        <Text style={styles.usernameText}>Bio</Text>
-        <TextInput
-          type="text"
-          value={localBio}
-          style={styles.nameText}
-          onChangeText={(text) => {
-            setLocalBio(text);
-          }}
-        />
-      </View>
       <TouchableOpacity onPress={handleSave}>
-        <Text style={styles.button}>Save</Text>
-      </TouchableOpacity>
-    </ScrollView>
-  );
+          <Text style={styles.button}>Save</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    );
 };
 
 const styles = {
