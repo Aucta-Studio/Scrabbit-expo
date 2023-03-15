@@ -178,7 +178,7 @@ export default ({
     }
   }}
 >
-  <Icon name="flag-outline" size={19}/>
+<Icon name="flag-outline" size={19}/>
 </TouchableOpacity>
     </View>
     </TouchableOpacity>
