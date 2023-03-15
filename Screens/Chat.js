@@ -1,87 +1,85 @@
-import React, {
-  useState,
-  useEffect,
-  useLayoutEffect,
-  useCallback
-} from 'react';
-import { TouchableOpacity, Text } from 'react-native';
-// Used React Native Gifted Chat Library
+import React, { useState, useCallback, useEffect } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
-import {
-  collection,
-  addDoc,
-  orderBy,
-  query,
-  onSnapshot
-} from 'firebase/firestore';
-import { signOut } from 'firebase/auth';
-import { auth, db } from '../fireBaseConfig';
+import { db } from '../fireBaseConfig';
+import { collection, query, where, orderBy, limit, addDoc, onSnapshot } from 'firebase/firestore';
+import { useSelector } from "react-redux";
 
-export default function Chat({ navigation }) {
+export default function Chat({ route }) {
+  const { user } = route.params;
   const [messages, setMessages] = useState([]);
+  const account = useSelector((state) => state.account);
 
-  const onSignOut = () => {
-    signOut(auth).catch(error => console.log('Error logging out: ', error));
-  };
-  // Imported the Firebase firestore database, wrote queries and saved them in database.
-  // Shows previously sent messages too.
+
   useEffect(() => {
-    const collectionRef = collection(db, 'chats');
-    const q = query(collectionRef, orderBy('createdAt', 'desc'));
+    const q = query(
+      collection(db, 'Chats'),
+      orderBy('createdAt', 'desc'),
+      // where('users', 'array-contains', account.username),
+      // where('users', 'array-contains', user.UserName)
+    );
+    const messageList = [];
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+      const message = {
+      ...doc.data(),
+      createdAt: new Date(doc.data().createdAt.seconds * 1000),
+      _id: doc.id,
+    };
+    messageList.push(message);
+  });
 
-    const unsubscribe = onSnapshot(q, querySnapshot => {
-      setMessages(
-        querySnapshot.docs.map(doc => ({
-          _id: doc.data()._id,
-          createdAt: doc.data().createdAt.toDate(),
-          text: doc.data().text,
-          user: doc.data().user
-        }))
+        setMessages((previousMessages) =>
+        GiftedChat.append(previousMessages, messageList)
       );
     });
 
     return () => unsubscribe();
   }, []);
 
-  // Click on send and new message is stored with the previous messages send.
-  const onSend = useCallback((messages = []) => {
-    setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, messages)
-    );
-    const { _id, createdAt, text, user } = messages[0];    
-    addDoc(collection(db, 'chats'), {
-      _id,
-      createdAt,
-      text,
-      user
-    });
-  }, []);
 
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          style={{
-            marginRight: 10
-          }}
-          onPress={onSignOut}
-        >
-          <Text>Logout</Text>
-        </TouchableOpacity>
-      )
-    });
-  }, [navigation]);
+  const handleSend = async (newMessages = []) => {
+    const { text } = newMessages[0];
   
+    try {
+      const docRef = await addDoc(collection(db, 'Chats'), {
+        text,
+        user: {
+          _id: account.username,
+        },
+        users: [user.UserName, account.username],
+        createdAt: new Date(),
+      });
+  
+      const newMessage = {
+        text,
+        createdAt: new Date(),
+        user: {
+          _id: account.username,
+          name: account.username,
+        },
+      };
+  
+      setMessages((previousMessages) =>
+        GiftedChat.append(previousMessages, newMessage),
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  
+  
+  
+
   return (
     <GiftedChat
       messages={messages}
-      showAvatarForEveryMessage={true}
-      onSend={messages => onSend(messages)}
+      onSend={(newMessage) => handleSend(newMessage)}
       user={{
-        _id: auth?.currentUser?.email,
-        avatar: 'https://i.pravatar.cc/300'
+        _id: account.username,
+        name: account.firstname,
       }}
     />
   );
-};
+}
