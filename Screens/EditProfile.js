@@ -7,6 +7,7 @@ import {
   View,
   StyleSheet,
   Image,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -18,7 +19,12 @@ import {
   setBio,
 } from "../Slices/account/accountSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { myFireBase } from "../fireBaseConfig";
 import {
   getFirestore,
@@ -31,6 +37,7 @@ import {
   where,
   updateDoc,
 } from "firebase/firestore";
+import * as ImagePicker from "expo-image-picker";
 import { getAuth } from "firebase/auth";
 import Firemage from "../Components/Firemage";
 
@@ -39,6 +46,7 @@ export default () => {
   const db = getFirestore(myFireBase);
   const auth = getAuth(myFireBase);
   const dispatch = useDispatch();
+  const storage = getStorage(myFireBase);
 
   const [localusername, setLocalUsername] = useState(`${account.username}`);
   const [localFirstname, setLocalFirstname] = useState(`${account.firstname}`);
@@ -68,36 +76,69 @@ export default () => {
     }
 
     updateDoc(userRef, data)
-    .then(() => {
-      if (data.UserName) {
-        dispatch(setUsername(data.UserName));
-      }
-      if (data.FirstName) {
-        dispatch(setFirstName(data.FirstName));
-      }
-      if (data.LastName) {
-        dispatch(setLastName(data.LastName));
-      }
-      if (data.Bio) {
-        dispatch(setBio(data.Bio));
-      }
-      console.log("Success", "User information saved");
-    })
-    .catch((error) => {
-      console.log(error);
-      console.log("Error", "Failed to save user information");
-    });
-
+      .then(() => {
+        if (data.UserName) {
+          dispatch(setUsername(data.UserName));
+        }
+        if (data.FirstName) {
+          dispatch(setFirstName(data.FirstName));
+        }
+        if (data.LastName) {
+          dispatch(setLastName(data.LastName));
+        }
+        if (data.Bio) {
+          dispatch(setBio(data.Bio));
+        }
+        console.log("Success", "User information saved");
+      })
+      .catch((error) => {
+        console.log(error);
+        console.log("Error", "Failed to save user information");
+      });
   }
 
-  function handleAvatarChange() {}
+  const handleAvatarChange = async () => {
+    let asset = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      maxNumberOfFiles: 1,
+      allowsMultipleSelection: false,
+      quality: 1,
+    });
+
+    if (!asset.canceled) {
+      const response = await fetch(asset.uri);
+      const blob = await response.blob();
+
+      const storageRef = ref(storage, `Pfps/${auth.currentUser.uid}.jpg`);
+      const uploadTask = uploadBytesResumable(storageRef, blob);
+
+      try {
+        await uploadTask;
+        // const downloadURL = await getDownloadURL(storageRef);
+        dispatch(setPfp(`Pfps/${auth.currentUser.uid}.jpg`));
+      } catch (error) {
+        console.error(error);
+        Alert.alert("Error", "Failed to upload avatar");
+      }
+
+      const userRef = doc(db, "Profiles", auth.currentUser.uid);
+      const data = {};
+      data.Pfp = `Pfps/${auth.currentUser.uid}.jpg`;
+      updateDoc(userRef, data)
+        .then(()=>{console.log("Success, avatar changed")})
+        .catch((error) => {
+          console.log(error);
+          console.log("Error", "Failed to save new avatar");
+        });
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
       {/* where the avatar gets changed */}
       <View>
         <Firemage style={styles.avatar} path={account.pfp} />
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleAvatarChange}>
           <Text style={styles.changeText}>Change Avatar</Text>
         </TouchableOpacity>
       </View>
