@@ -1,23 +1,23 @@
 import React, {
-  useState,
-  useEffect,
-  useLayoutEffect,
-  useCallback
-} from 'react'
+    useState,
+    useEffect,
+    useLayoutEffect,
+    useCallback
+  } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import { View, TextInput, Image, Text, Button, StyleSheet, Alert, Dimensions, ScrollView } from 'react-native'
 import 'firebase/storage';
 import { db, auth, myFireBase } from "../fireBaseConfig";
 import {
-  firestore,
-  collection,
-  addDoc,
-  orderBy,
-  query,
-  onSnapshot,
+    firestore,
+    collection,
+    addDoc,
+    orderBy,
+    query,
+    onSnapshot,
   getDoc,
   doc
-} from 'firebase/firestore';
+  } from 'firebase/firestore';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 
 const WIDTH = Dimensions.get('window').width;
@@ -66,15 +66,15 @@ export default function Save(props, {navigation}) {
         const metadata = {
             contentType: 'image/jpeg'
           };
-  
+          
         if (selectedImage != null) {
           console.log("Image :", selectedImage[0]);
           const response = await fetch(selectedImage[0]);
           const blob = await response.blob();
           const childPath = 'posts/'+user+'/'+Math.random().toString(36)+'.jpeg'
           const storageRef = ref(storage, childPath);
-          const task = uploadBytesResumable(storageRef, blob, metadata);
-          await task;
+        const task = uploadBytesResumable(storageRef, blob, metadata);
+        await task;
           photos.push(childPath);
         }
         else if (selectedImage == null){
@@ -87,9 +87,9 @@ export default function Save(props, {navigation}) {
             const task = uploadBytesResumable(storageRef, blob, metadata);
             await task;
             photos.push(childPath);
-          }
         }
-        
+        }
+
         console.log("Add details to Firestore")
         savePostData(photos);
         showMessage("Posted!", "Your picture has been posted.");
@@ -108,7 +108,7 @@ export default function Save(props, {navigation}) {
           createdAt: Date.now(),
           //location,
           photos
-      }).then((function () {
+        }).then((function () {
           console.log("Picture posted!")
       })).catch((error) => {
         console.error("Error posting picture: ", error);
