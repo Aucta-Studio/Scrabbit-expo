@@ -53,12 +53,23 @@ export default () => {
   const [localLastname, setLocalLastname] = useState(`${account.lastname}`);
   const [localBio, setLocalBio] = useState(`${account.bio}`);
 
-  function handleSave() {
+  const handleSave = async () => {
     const userRef = doc(db, "Profiles", auth.currentUser.uid);
     const data = {};
+    const q = query(
+      collection(db, "Profiles"),
+      where("UserName", "==", localusername)
+    );
 
     if (localusername !== account.username) {
-      data.UserName = localusername.toLowerCase();
+      let temp = await getDocs(q);
+      if (temp.size > 0) {
+        console.log(temp);
+        Alert.alert("Error", "Username already exists");
+        setLocalUsername(account.username);
+        return;
+      }
+      data.UserName = localusername;
     }
     if (localFirstname !== account.firstname) {
       data.FirstName = localFirstname;
@@ -95,7 +106,7 @@ export default () => {
         console.log(error);
         console.log("Error", "Failed to save user information");
       });
-  }
+  };
 
   const handleAvatarChange = async () => {
     let asset = await ImagePicker.launchImageLibraryAsync({
@@ -125,7 +136,9 @@ export default () => {
       const data = {};
       data.Pfp = `Pfps/${auth.currentUser.uid}.jpg`;
       updateDoc(userRef, data)
-        .then(()=>{console.log("Success, avatar changed")})
+        .then(() => {
+          console.log("Success, avatar changed");
+        })
         .catch((error) => {
           console.log(error);
           console.log("Error", "Failed to save new avatar");
