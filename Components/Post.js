@@ -7,6 +7,7 @@ import {
   ScrollView,
   Dimensions,
   Linking,
+  Alert
 } from "react-native";
 import { color } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
@@ -122,17 +123,34 @@ export default ({
   return (
     <View style={styles.container}>
       <TouchableOpacity>
-        <View style={styles.postHeader}>
-          <View style={styles.postPfp}>
-            {value && (
-              <Firemage style={styles.postPfpImage} path={value.data().Pfp} />
-            )}
-          </View>
-          <Text style={styles.usernameText}>
-            {user} at {title}
-          </Text>
-        </View>
-      </TouchableOpacity>
+  <View style={styles.postHeader}>
+    <View style={styles.postPfp}>
+      {value && (
+        <Firemage style={styles.postPfpImage} path={value.data().Pfp} />
+      )}
+    </View>
+    <Text style={styles.usernameText}>
+      {user} at {title}
+    </Text>
+  </View>
+  <View style={styles.reportButtonContainer}>
+  <TouchableOpacity
+  style={styles.reportButton}
+  onPress={() => {
+    Alert.prompt(
+      "Report Image",
+      "Please tell us the reason for the report:",
+      (reason) => {
+        Alert.alert(`Image Reported for ${reason}`);
+      }
+    );
+  }}
+>
+  <Text style={styles.reportButtonText}>Report</Text>
+</TouchableOpacity>
+    </View>
+    </TouchableOpacity>
+
 
       {/* thumbnail photo/location */}
       {acquired && (
@@ -251,6 +269,24 @@ const styles = StyleSheet.create({
     marginTop: 0,
     margin: 10,
   },
+  
+  reportButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginRight: 20,
+    marginTop: 10,
+  },
+  reportButton: {
+    backgroundColor: "#ff0000",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  reportButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  
   usernameText: {
     fontSize: 16,
     fontWeight: "bold",
