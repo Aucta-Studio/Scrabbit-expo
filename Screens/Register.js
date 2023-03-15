@@ -44,6 +44,7 @@ export default () => {
     let temp = await getDocs(q);
     if (temp.size > 0) {
       Alert.alert("Error", "Username already exists");
+      setUsername("");
       return;
     }
     if (password != repassword) {
