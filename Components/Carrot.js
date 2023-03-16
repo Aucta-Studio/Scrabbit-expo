@@ -45,7 +45,7 @@ export default function Carrot({ coordinate, title, userID, dateOC, saves, likes
           {comments && <Text>Comments: {comments}</Text>}
         
           <TouchableOpacity alignItems={"center"}><Text style={styles.mapgo} >
-          <Icon name="navigate" size={34} color="#000" />
+          <Icon name="ios-navigate-circle" size={34} color="#000" />
           </Text></TouchableOpacity>
         </View>
       </Callout>
