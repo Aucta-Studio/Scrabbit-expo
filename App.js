@@ -16,6 +16,7 @@ import Chat from "./Screens/Chat";
 import Feed from "./Screens/Feed";
 import Profile from "./Screens/Profile";
 import EditProfile from "./Screens/EditProfile";
+import { DrawerContent } from './Screens/DrawerContent';
 import Icon from "react-native-vector-icons/Ionicons";
 import { useSelector } from "react-redux";
 import { Image } from "react-native";
@@ -161,10 +162,12 @@ function ProfileDrawer() {
       initialRouteName="Profile"
       screenOptions={{
         drawerPosition: "right",
+      
       }}
+      drawerContent={props => <DrawerContent {...props} />}
     >
       <Drawer.Screen
-        name="Profile"
+        name="DrawerContent"
         component={ProfileStack}
         options={{ headerShown: false, title: `${account.username}` }}
       />
