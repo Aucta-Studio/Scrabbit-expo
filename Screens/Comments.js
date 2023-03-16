@@ -62,7 +62,7 @@ function renderTime(props) {
     timeDiff = `${elapsedDays} days ago`;
   }
   return (
-    <View style={{ alignItems: "flex-end", width: "82%" }}>
+    <View style={{ justifyContent: "space-between", alignItems: "flex-end", minWidth:"70%"}}>
       <Text>{timeDiff}</Text>
     </View>
   );
