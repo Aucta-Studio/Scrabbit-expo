@@ -167,7 +167,7 @@ function ProfileDrawer() {
       drawerContent={props => <DrawerContent {...props} />}
     >
       <Drawer.Screen
-        name="DrawerContent"
+        name="Profile"
         component={ProfileStack}
         options={{ headerShown: false, title: `${account.username}` }}
       />
