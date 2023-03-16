@@ -104,7 +104,7 @@ export default () => {
                 navigation.navigate("FFF");
               }}
             >
-              <Text style={styles.friendsText}>{followerCount} Followers    </Text>
+              <Text style={styles.friendsText}>{followerCount} Followers</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
@@ -180,9 +180,10 @@ const styles = {
     marginTop: 8,
   },
   friendsContainer: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     marginTop: 10,
+    justifyContent: "space-around"
   },
   friendsCount: {
     fontSize: 15,
