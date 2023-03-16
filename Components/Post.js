@@ -134,7 +134,7 @@ export default ({
             )}
           </View>
           <Text style={styles.usernameText}>
-            {user} at {title}
+            {value?.data()?.UserName} at {title}
           </Text>
         </View>
         <View style={styles.reportButtonContainer}>
