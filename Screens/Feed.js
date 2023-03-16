@@ -5,10 +5,16 @@ import {
   getFirestore,
   query,
   where,
-  orderBy
+  orderBy,
 } from "firebase/firestore";
 import React, { useEffect, useState, useCallback } from "react";
-import { SafeAreaView, ScrollView, Text, View, RefreshControl } from "react-native";
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+  RefreshControl,
+} from "react-native";
 import Post from "../Components/Post";
 import { myFireBase } from "../fireBaseConfig";
 
@@ -50,7 +56,11 @@ const Feed = () => {
 
   const getPosts = async () => {
     const qp = idList
-      ? query(PostStore, where("author", "in", idList), orderBy("createdAt", "asc"))
+      ? query(
+          PostStore,
+          where("author", "in", idList),
+          orderBy("createdAt", "asc")
+        )
       : query();
     const array = [];
     const temp = await getDocs(qp);
@@ -67,13 +77,19 @@ const Feed = () => {
     // getPosts();
   }, []);
 
-  {idList && !posts && getPosts();}
+  {
+    idList && !posts && getPosts();
+  }
   // getPosts();
-  
 
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {/* <Text className="text-white">This is the feed page</Text> */}
         {posts?.map((post, index) => {
           return (
@@ -97,4 +113,4 @@ const Feed = () => {
   );
 };
 
-export default Feed;
+export default Feed;
