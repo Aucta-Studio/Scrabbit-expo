@@ -152,8 +152,8 @@ export default () => {
                 longitude: post?.location.longitude,
               }}
               title={post?.Title}
-              username={post?.UserName}
-              doc={post?.createdAt}
+              userID={post?.author}
+              dateOC={post?.createdAt}
               saves={post?.Collected.length}
               likes={post?.Likes.length}
               // comments={post?.Comments?.length}

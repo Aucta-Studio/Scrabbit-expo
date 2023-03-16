@@ -6,11 +6,16 @@ import carrot from "../images/carrot_node.png";
 import { TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { block } from "react-native-reanimated";
+import { useDocument } from "react-firebase-hooks/firestore";
+import { doc } from "firebase/firestore";
+import { db } from "../fireBaseConfig";
 
-export default function Carrot({ coordinate, title, username, doc, saves, likes, comments}) {
-  const timestamp = new Date(doc?.seconds * 1000 + doc?.nanoseconds / 1000000);
+export default function Carrot({ coordinate, title, userID, dateOC, saves, likes, comments}) {
+  const timestamp = new Date(dateOC?.seconds * 1000 + dateOC?.nanoseconds / 1000000);
   const date = timestamp.toLocaleDateString('en-GB');
   const url = `https://www.google.com/maps/search/?api=1&query=${coordinate.latitude},${coordinate.longitude}`;
+  // const d = doc();
+  const [value, loading, error] = useDocument(doc(db, "Profiles", `${userID}`));
   return (
     <Marker coordinate={coordinate} image={carrot}>
       <Callout borderRadius={10} tooltip={true} style={styles.callout} overflow={"hidden"} onPress={()=>{Linking.openURL(url);}}>
@@ -18,7 +23,7 @@ export default function Carrot({ coordinate, title, username, doc, saves, likes,
           <Text style={styles.margins}>
             {/* <Firemage style={styles.img} path='Pfps/default.jpg' /> */}
             <Icon name="ios-person-circle" style={styles.img} />
-            <Text style={styles.username}>{username} • {date}</Text>
+            <Text style={styles.username}>{value?.data()?.UserName} • {date}</Text>
           </Text>
 
           <Text style={styles.title}>{title}</Text>
