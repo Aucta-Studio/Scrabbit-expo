@@ -139,6 +139,11 @@ const styles = {
     fontSize: 15,
     color: "#fff",
     marginTop: 10,
+    backgroundColor: "#333",
+    borderRadius: 50,
+    padding: 5,
+    marginTop: 10,
+    textAlign: "center",
   },
   profileContainer: {
     flexDirection: "row",
