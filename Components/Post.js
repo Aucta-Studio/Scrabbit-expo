@@ -134,6 +134,7 @@ export default ({
     <Text style={styles.usernameText}>
       {user} at {title}
     </Text>
+<<<<<<< HEAD
   </View>
   <View style={styles.reportButtonContainer}>
 <TouchableOpacity
@@ -181,6 +182,54 @@ export default ({
 <Icon name="flag-outline" size={19}/>
 </TouchableOpacity>
     </View>
+=======
+    <TouchableOpacity
+      style={styles.reportButton}
+      onPress={() => {
+        let reason = "";
+        if (Platform.OS === "android") {
+          Alert.prompt(
+            "Report Image",
+            "Please tell us the reason for the report:",
+            (text) => {
+              reason = text;
+              Alert.alert(`Image Reported for ${reason}`);
+            },
+
+          );
+        } else {
+          Alert.alert(
+            "Report Image",
+            "Please tell us the reason for the report:",
+            [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "OK",
+                onPress: () => {
+                  Alert.alert(`Image Reported for ${reason}`);
+                },
+              },
+            ],
+            {
+              editable: true,
+              onDismiss: (text) => {
+                reason = text;
+              },
+              style: { backgroundColor: "black" },
+              placeholder: "Enter reason here",
+            }
+          );
+        }
+      }}
+      
+    >
+<Icon name="ios-warning-outline" size={32} color="orange" />
+</TouchableOpacity>
+  </View>
+>>>>>>> e0c11e07bb9784229fdd25774ada827fb61c9b88
     </TouchableOpacity>
 
 
@@ -240,14 +289,7 @@ export default ({
       )}
 
       {/* Caption and comments link */}
-      <View style={styles.postCaption}>
-        <Text style={styles.usernameText}>{user}</Text>
-        <Text style={styles.captionText}>{caption}</Text>
-      </View>
-      {/* Time difference */}
-      <View style={styles.postCaption}>
-        <Text style={styles.captionText}>{timeDiff}</Text>
-      </View>
+      
       {/* Like comment and save buttons only when its acquired*/}
       {acquired && (
         <View style={styles.lcblist}>
@@ -283,6 +325,14 @@ export default ({
         </TouchableOpacity> */}
         </View>
       )}
+      <View style={styles.postCaption}>
+        <Text style={styles.usernameText}>{user}</Text>
+        <Text style={styles.captionText}>{caption}</Text>
+      </View>
+      {/* Time difference */}
+      <View style={styles.postCaption}>
+        <Text style={styles.date}>{timeDiff}</Text>
+      </View>
     </View>
   );
 };
@@ -306,6 +356,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     marginRight: 20,
+<<<<<<< HEAD
     marginTop: 10,
     
   },
@@ -315,12 +366,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 5,
     
+=======
+    marginTop: 10,    
+  },
+  reportButton: {
+    marginRight: 0,
+    marginLeft: "auto",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+>>>>>>> e0c11e07bb9784229fdd25774ada827fb61c9b88
   },
   reportButtonText: {
     color: "#fff",
     fontWeight: "bold",
-  },
-  
+    backgroundColor: "#ff0000",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },  
   usernameText: {
     fontSize: 16,
     fontWeight: "bold",
@@ -342,6 +405,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     padding: 8,
+  },
+  date: {
+    alignItems: "center",
+    flexDirection: "row",
+    padding: 8,
+    marginTop: -15,
+    color: "#aaa"
   },
   postPfp: {
     alignItems: "center",
