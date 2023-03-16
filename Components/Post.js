@@ -4,6 +4,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  TextInput,
+  Platform,
   ScrollView,
   Dimensions,
   Linking,
@@ -133,16 +135,50 @@ export default ({
       {user} at {title}
     </Text>
     <TouchableOpacity
-    
-    
       style={styles.reportButton}
       onPress={() => {
-        Alert.alert("Image Reported");
+        let reason = "";
+        if (Platform.OS === "android") {
+          Alert.prompt(
+            "Report Image",
+            "Please tell us the reason for the report:",
+            (text) => {
+              reason = text;
+              Alert.alert(`Image Reported for ${reason}`);
+            },
+
+          );
+        } else {
+          Alert.alert(
+            "Report Image",
+            "Please tell us the reason for the report:",
+            [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "OK",
+                onPress: () => {
+                  Alert.alert(`Image Reported for ${reason}`);
+                },
+              },
+            ],
+            {
+              editable: true,
+              onDismiss: (text) => {
+                reason = text;
+              },
+              style: { backgroundColor: "black" },
+              placeholder: "Enter reason here",
+            }
+          );
+        }
       }}
       
     >
-      <Icon name="ios-warning-outline" size={32} color="orange" />
-    </TouchableOpacity>
+<Icon name="ios-warning-outline" size={32} color="orange" />
+</TouchableOpacity>
   </View>
     </TouchableOpacity>
 
@@ -275,6 +311,8 @@ const styles = StyleSheet.create({
   reportButton: {
     marginRight: 0,
     marginLeft: "auto",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
   },
   reportButtonText: {
     color: "#fff",
