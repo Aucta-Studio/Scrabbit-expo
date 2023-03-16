@@ -132,8 +132,6 @@ export default ({
     <Text style={styles.usernameText}>
       {user} at {title}
     </Text>
-  </View>
-  <View style={styles.reportButtonContainer}>
     <TouchableOpacity
     
     
@@ -143,9 +141,9 @@ export default ({
       }}
       
     >
-      <Text style={styles.reportButtonText}>Report</Text>
+      <Icon name="ios-warning-outline" size={32} color="orange" />
     </TouchableOpacity>
-    </View>
+  </View>
     </TouchableOpacity>
 
 
@@ -205,14 +203,7 @@ export default ({
       )}
 
       {/* Caption and comments link */}
-      <View style={styles.postCaption}>
-        <Text style={styles.usernameText}>{user}</Text>
-        <Text style={styles.captionText}>{caption}</Text>
-      </View>
-      {/* Time difference */}
-      <View style={styles.postCaption}>
-        <Text style={styles.captionText}>{timeDiff}</Text>
-      </View>
+      
       {/* Like comment and save buttons only when its acquired*/}
       {acquired && (
         <View style={styles.lcblist}>
@@ -248,6 +239,14 @@ export default ({
         </TouchableOpacity> */}
         </View>
       )}
+      <View style={styles.postCaption}>
+        <Text style={styles.usernameText}>{user}</Text>
+        <Text style={styles.captionText}>{caption}</Text>
+      </View>
+      {/* Time difference */}
+      <View style={styles.postCaption}>
+        <Text style={styles.date}>{timeDiff}</Text>
+      </View>
     </View>
   );
 };
@@ -271,19 +270,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     marginRight: 20,
-    marginTop: 10,
+    marginTop: 10,    
   },
   reportButton: {
-    backgroundColor: "#ff0000",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
+    marginRight: 0,
+    marginLeft: "auto",
   },
   reportButtonText: {
     color: "#fff",
     fontWeight: "bold",
-  },
-  
+    backgroundColor: "#ff0000",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },  
   usernameText: {
     fontSize: 16,
     fontWeight: "bold",
@@ -305,6 +305,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     padding: 8,
+  },
+  date: {
+    alignItems: "center",
+    flexDirection: "row",
+    padding: 8,
+    marginTop: -15,
+    color: "#aaa"
   },
   postPfp: {
     alignItems: "center",
