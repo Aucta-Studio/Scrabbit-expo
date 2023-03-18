@@ -57,7 +57,11 @@ export default () => {
           },
         }}
       >
-        <Tab.Screen name="my" component={ScrapbooksList} initialParams={{uid : auth.currentUser.uid}}/>
+        <Tab.Screen
+          name="my"
+          component={ScrapbooksList}
+          initialParams={{ uid: auth.currentUser.uid }}
+        />
       </Tab.Navigator>
     );
   }
@@ -81,10 +85,8 @@ export default () => {
     setfollowerCount(count);
   };
 
-  useEffect(() => {
-    getCounts();
-  }, []);
-
+  useEffect(() => {}, []);
+  getCounts();
   // console.log(auth.currentUser.uid);
 
   return (
@@ -124,7 +126,7 @@ export default () => {
         </View>
       </View>
       {/* <Tab /> */}
-      <ScrapbooksList uid={auth.currentUser.uid}/>
+      <ScrapbooksList uid={auth.currentUser.uid} />
     </SafeAreaView>
   );
 };
@@ -188,7 +190,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     marginTop: 10,
-    justifyContent: "space-around"
+    justifyContent: "space-around",
   },
   friendsCount: {
     fontSize: 15,
