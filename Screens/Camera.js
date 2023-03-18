@@ -3,6 +3,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import Icon from "react-native-vector-icons/Ionicons";
+import { db, auth, myFireBase } from "../fireBaseConfig";
 
 export default function App({navigation}) {
   const [type, setType] = useState(CameraType.back);
@@ -10,6 +11,7 @@ export default function App({navigation}) {
   const [image, setImage] = useState(null);
   const [camera, setCamera] =useState(null);
   const [images, setImages] = useState([]);
+  const user = auth.currentUser.uid;
 
 
   if (!permission) {
@@ -55,6 +57,13 @@ export default function App({navigation}) {
     settimeout([...images, ...assets.map((asset) => asset.uri)]);
   };
 
+  const isModerator = () => {
+    
+    if (user ) {
+      
+    }
+  }
+
   const takePicture = async () => {
     const pic = [];
     if (camera){
@@ -70,11 +79,7 @@ export default function App({navigation}) {
     <View style={styles.container}>
       <Camera 
       ref = {ref => setCamera(ref)} style={styles.fixedRatio} type={type} ratio = {'1:1'}>
-        {/* <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button_save} onPress={() => navigation.navigate('Save', {image})}>
-            <Text style={styles.text}>Next</Text>
-          </TouchableOpacity>
-        </View> */}
+        
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
             {/*<Text style={styles.text}>Flip Camera</Text>*/}

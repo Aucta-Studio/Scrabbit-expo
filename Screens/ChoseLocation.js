@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Animated, Image, Text, Button, StyleSheet, Alert, Dimensions, ScrollView, TouchableOpacity } from "react-native";
+import { View, TextInput, Image, Text, Button, StyleSheet, Alert, Dimensions, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Marker } from "react-native-maps";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -22,7 +22,8 @@ import {
     getDoc,
     doc,
     where,
-    GeoPoint
+    GeoPoint,
+    Timestamp,
   } from 'firebase/firestore';
   import { getStorage, ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
   import { useNavigation } from '@react-navigation/native';
@@ -34,6 +35,13 @@ export default function ChoseLocation(props, {navigation}) {
   const navigationn = useNavigation();
   const account = useSelector((state) => state.account);
   const [myLocation, setLocation] = useState({
+    latitude: 25.101969,
+    longitude: 55.162172,
+    latitudeDelta: 0.009,
+    longitudeDelta: 0.009,
+  })
+
+  const [region, setRegion] = useState({
     latitude: 25.101969,
     longitude: 55.162172,
     latitudeDelta: 0.009,
@@ -94,17 +102,16 @@ export default function ChoseLocation(props, {navigation}) {
         showMessage("Posted!", "Your picture has been posted.");
         navigationn.navigate("Camera");
     };
-
+    console.log(Timestamp.now());
     const savePostData = async (photos) => {
       addDoc(collection(db, "Posts"), {
           Caption: props.route.params.Caption,
-          Collected: [],
+          Collected: [user],
           Comments: [],
           Likes: [],
           Title: props.route.params.Title,
-          UserName: account.username,
           author: user,
-          createdAt: Date.now(),
+          createdAt: new Timestamp.now(),
           report_flag: "N",
           flagged_enabled: "N",
           location: new GeoPoint(myLocation.latitude, myLocation.longitude),
@@ -138,22 +145,38 @@ export default function ChoseLocation(props, {navigation}) {
   }, []);
   
   return (
-    <View style={{marginTop: '8%', flex:1, backgroundColor: "#000"}}>
+    <View style={{marginTop: '6%', flex:1}}>
         <GooglePlacesAutocomplete
             placeholder="Search"
+            fetchDetails={true}
+            GooglePlacesSearchQuery={{
+                rankby: "distance"
+            }}
             onPress={(data, details = null) => {
                 console.log(data, details)
+                setRegion({
+                    latitude: details.geometry.location.lat,
+                    longitude: details.geometry.location.lng,
+                    latitudeDelta: 0.009,
+                    longitudeDelta: 0.009,
+                })
             }}
+            onFail={error => console.log(error)}
+            onNotFound={() => console.log('No results were found')}
+            listEmptyComponent={() => (
+                <View style={{flex: 1}}>
+                  <Text>No results were found</Text>
+                </View>
+            )}
             query={{
                 key: "AIzaSyC07oPjwqktz8vYdin-JzyV8fQ-tjg5yM4",
                 language: "en"
             }}
             styles={{
-                container: {flex:0, position: "relative", width: "100%", zIndex: 0, backgroundColor: "#000"},
-                listView: {backgroundColor: "#000"}
+                container: {flex:0, position: "absolute", width: "100%", zIndex: 1},
+                listView: {backgroundColor: "black"}
             }}
         />
-        <View style={{flex: 1}}>
         <MapView
           style={styles.map}
           //region={myLocation}
@@ -163,6 +186,7 @@ export default function ChoseLocation(props, {navigation}) {
           draggable={true}
           onRegionChangeComplete={onRegionChange}
         >
+            <Marker coordinate={{latitude: region.latitude, longitude: region.longitude}}/>
             <Marker
             coordinate={{
                 latitude: myLocation.latitude,
@@ -171,23 +195,10 @@ export default function ChoseLocation(props, {navigation}) {
             title="Drag me!"
             image={target}
             style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}></Marker>
-            <Animated.View style={{flex:1}}>
-                <Image
-                  fadeDuration={0}
-                  resizeMode="contain"
-                  //onLoadEnd={doRedraw}
-                  style={styles.image}
-                  source={require("../images/carrot_2.png")}
-                />
-            </Animated.View>
         </MapView>
-        {/* <TouchableOpacity style={{marginBottom: 10}} onPress={uploadImage}>
-                <Image style={styles.image} source={carrot}/>
-            </TouchableOpacity> */}
-        </View>
-        {/* <TouchableOpacity style={{marginBottom: 10}} onPress={uploadImage}>
+        <TouchableOpacity style={{marginBottom: 10}} onPress={uploadImage}>
             <Image style={styles.image} source={carrot} resizeMode = 'cover'/>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
     </View>
   );
 };
@@ -197,14 +208,12 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height*0.75,
     flex:1,
-    zIndex: 0
   },
   image: {
     //marginTop: '150%', 
     marginLeft: '42%', 
     width: 55, 
     height: 55,
-    zIndex: 1
     //position: 'absolute', top: 100, left: 10
   }
 });
