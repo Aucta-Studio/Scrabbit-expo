@@ -37,12 +37,6 @@ export default function Save(props, {navigation}) {
     const navigationn = useNavigation();
     const [Title, setTitle] = useState("")
     const [Caption, setCaption] = useState("")
-    const [location, setLocation] = useState({
-      latitude: 25.122810,
-      longitude: 55.396981,
-      latitudeDelta: 0.009,
-      longitudeDelta: 0.009,
-    });
 
     const selectedImages = props.route.params.images;
     const selectedImage = props.route.params.pic;
