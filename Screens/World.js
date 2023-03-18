@@ -130,41 +130,6 @@ export default () => {
         }}
         styles={{container:{flex:0, position: "absolute", width: "100%", zIndex: 1}}}
       />
-<<<<<<< HEAD
-      <ScrollView>
-        <MapView
-          style={styles.map}
-          region={myLocation}
-          customMapStyle={darkStyle}
-        >
-          <Marker
-            coordinate={{
-              latitude: myLocation.latitude,
-              longitude: myLocation.longitude,
-            }}
-            title="Me"
-          />
-          {posts?.map((post, index) => {
-            // console.log(post);
-            return (
-              <Carrot
-                key={index}
-                coordinate={{
-                  latitude: post?.location.latitude,
-                  longitude: post?.location.longitude,
-                }}
-                title={post?.Title}
-                username={post?.UserName}
-                doc={post?.createdAt}
-                saves={post?.Collected.length}
-                likes={post?.Likes.length}
-                comments={post?.Comments?.length}
-              />
-            );
-          })}
-        </MapView>
-      </ScrollView>
-=======
       <MapView
         style={styles.map}
         region={region}
@@ -197,7 +162,6 @@ export default () => {
         })}
       </MapView>
       {/* </ScrollView> */}
->>>>>>> afb052bcd17bc94c4a4d206eb215248579881863
     </SafeAreaView>
   );
 };
