@@ -123,7 +123,7 @@ export default () => {
                 doc={post?.createdAt}
                 saves={post?.Collected.length}
                 likes={post?.Likes.length}
-                comments={post?.Comments.length}
+                comments={post?.Comments?.length}
               />
             );
           })}
