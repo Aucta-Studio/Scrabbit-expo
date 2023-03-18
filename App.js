@@ -21,6 +21,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useSelector } from "react-redux";
 import { Image } from "react-native";
 import Save from "./Screens/Save";
+import ChoseLocation from "./Screens/ChoseLocation";
 import Followers from "./Screens/Followers";
 import Following from "./Screens/Following";
 import MakeFriends from "./Screens/MakeFriends";
@@ -238,6 +239,7 @@ function MainStack() {
       <Stack.Screen name="Camera" component={Camera} />
       <Stack.Screen name="Scrabbit" component={Scrabbit} />
       <Stack.Screen name="Save" component={Save} />
+      <Stack.Screen name="ChoseLocation" component={ChoseLocation} />
     </Stack.Navigator>
   );
 }
@@ -367,7 +369,7 @@ export default function App() {
           <Stack.Screen name="login" component={Login} />
           <Stack.Screen name="register" component={Register} />
           <Stack.Screen name="app" component={Base} />
-          <Stack.Screen name="Save" component={Save} />
+          {/* <Stack.Screen name="Save" component={Save} /> */}
         </Stack.Navigator>
       </Provider>
     </NavigationContainer>
