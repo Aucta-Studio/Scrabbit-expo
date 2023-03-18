@@ -1,9 +1,9 @@
 import React, {
-    useState,
-    useEffect,
-    useLayoutEffect,
-    useCallback
-  } from 'react'
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback
+} from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import { View, TextInput, Image, Text, Button, StyleSheet, Alert, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
 import 'firebase/storage';
@@ -16,15 +16,17 @@ import {
  } from "react-native-popup-menu";
 import { db, auth, myFireBase } from "../fireBaseConfig";
 import {
-    firestore,
-    collection,
-    addDoc,
-    orderBy,
-    query,
-    onSnapshot,
+  firestore,
+  collection,
+  addDoc,
+  orderBy,
+  query,
+  onSnapshot,
   getDoc,
-  doc
-  } from 'firebase/firestore';
+  doc,
+  where
+} from 'firebase/firestore';
+import Modal from "react-native-modal";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -49,72 +51,21 @@ export default function Save(props, {navigation}) {
       }
     }
 
-    const user = auth.currentUser.uid;
-
-    const getUserName = async () => {
-      const temp = await getDoc(doc(db, "Profiles", `${user}`));
-      return temp.data().UserName.toString();
-    };
-    
-    // created this method to show any message onto the screen like "Posted!"
-    const showMessage = (title, message) => {
-        Alert.alert(
-          title,
-          message
-        );
-    };
-    
-    // this method is used to upload image to firebase storage.
-    const uploadImage = async () => {
-        const photos = [];
-        const storage = getStorage();
-        const metadata = {
-            contentType: 'image/jpeg'
-          };
-          
-        if (selectedImage != null) {
-          console.log("Image :", selectedImage[0]);
-          const response = await fetch(selectedImage[0]);
-          const blob = await response.blob();
-          const childPath = 'posts/'+user+'/'+Math.random().toString(36)+'.jpeg'
-          const storageRef = ref(storage, childPath);
-        const task = uploadBytesResumable(storageRef, blob, metadata);
-        await task;
-          photos.push(childPath);
-        }
-        else if (selectedImage == null){
-          for (let i = 0; i < selectedImages.length; i++){
-            console.log("Image :", selectedImages[i]);
-            const response = await fetch(selectedImages[i]);
-            const blob = await response.blob();
-            const childPath = 'posts/'+user+'/'+Math.random().toString(36)+'.jpeg'
-            const storageRef = ref(storage, childPath);
-            const task = uploadBytesResumable(storageRef, blob, metadata);
-            await task;
-            photos.push(childPath);
-        }
-        }
-
-        console.log("Add details to Firestore")
-        savePostData(photos);
-        showMessage("Posted!", "Your picture has been posted.");
-    };
-
-    const savePostData = async (photos) => {
-      const userName = await getUserName();
-      addDoc(collection(db, "Posts"), {
+    function navigateToChoseLocation() {
+      if (selectedImages == null){
+        navigationn.navigate('ChoseLocation', {
           Caption,
           Title,
-          UserName: userName,
-          author: auth.currentUser.uid,
-          createdAt: Date.now(),
-          //location,
-          photos
-        }).then((function () {
-          console.log("Picture posted!")
-      })).catch((error) => {
-        console.error("Error posting picture: ", error);
-      });
+          selectedImage
+        });
+      }
+      else {
+        navigationn.navigate('ChoseLocation', {
+          Caption,
+          Title,
+          selectedImages
+        });
+      }
     }
 
     return (
