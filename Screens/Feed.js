@@ -1,15 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, SafeAreaView, ScrollView } from "react-native";
-import { myFireBase } from "../fireBaseConfig";
 import { getAuth } from "firebase/auth";
 import {
-  getFirestore,
   collection,
   getDocs,
+  getFirestore,
   query,
   where,
+  orderBy,
 } from "firebase/firestore";
+import React, { useEffect, useState, useCallback } from "react";
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+  RefreshControl,
+} from "react-native";
 import Post from "../Components/Post";
+import { myFireBase } from "../fireBaseConfig";
 
 // The post retrieval from database is in progress.
 // For now, posts are hardcoded to show how the feed will look like.
@@ -19,12 +26,21 @@ const Feed = () => {
   const db = getFirestore(myFireBase);
   const [idList, setList] = useState(null);
   const [posts, setPosts] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
   const relations = collection(db, "Relations");
   const PostStore = collection(db, "Posts");
   const q = query(
     relations,
     where("Follower", "==", `${auth.currentUser.uid}`)
   );
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    getPosts();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const getList = async () => {
     const temp = await getDocs(q);
@@ -34,19 +50,23 @@ const Feed = () => {
       array.push(doc.data().Followed);
     });
     array.push(`${auth.currentUser.uid}`);
-    console.log(array);
+    // console.log(array);
     setList(array);
   };
 
   const getPosts = async () => {
     const qp = idList
-      ? query(PostStore, where("author", "in", idList))
+      ? query(
+          PostStore,
+          where("author", "in", idList),
+          orderBy("createdAt", "asc")
+        )
       : query();
     const array = [];
     const temp = await getDocs(qp);
     temp.forEach((doc) => {
       // console.log(doc.id, "=>", doc.data());
-      array.push(doc.data());
+      array.push({ id: doc.id, ...doc.data() });
     });
     console.log(array);
     setPosts(array);
@@ -60,10 +80,16 @@ const Feed = () => {
   {
     idList && !posts && getPosts();
   }
+  // getPosts();
 
   return (
-    <SafeAreaView className="bg-zinc-900 h-full p-4">
-      <ScrollView>
+    <SafeAreaView>
+      <ScrollView
+        showsVerticalScrollIndicator
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {/* <Text className="text-white">This is the feed page</Text> */}
         {posts?.map((post, index) => {
           return (
@@ -71,13 +97,14 @@ const Feed = () => {
               key={index}
               user={post.UserName}
               uid={post.author}
-              caption={post.Title}
+              title={post.Title}
+              caption={post.Caption}
               photos={post.photos}
               collected={post.Collected}
               likes={post.Likes}
-              comments={post.Comments}
               location={post.location}
               date={post.createdAt}
+              docID={post.id}
             />
           );
         })}

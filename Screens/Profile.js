@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   ScrollView,
@@ -8,55 +8,92 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { myFireBase } from "../fireBaseConfig";
 import { useSelector, useDispatch } from "react-redux";
 import ScrapbooksList from "./ScrapbooksList";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-
-function Tab() {
-  const Tab = createMaterialTopTabNavigator();
-  return (
-    <Tab.Navigator
-      initialRouteName="my"
-      screenOptions={{
-        tabBarActiveTintColor: "white",
-        tabBarInactiveTintColor: "white",
-        tabBarLabelStyle: {
-          fontWeight: "bold"
-        },
-        tabBarIndicatorStyle: {
-          backgroundColor: "white"
-        },
-        tabBarStyle: {
-          backgroundColor: "black"
-        }
-      }}
-    >
-    <Tab.Screen name="my" component={ScrapbooksList} />
-    </Tab.Navigator>
-  );
-}
+import Firemage from "../Components/Firemage";
 
 export default () => {
-  const [img, setimg] = useState(null);
+  const [followerCount, setfollowerCount] = useState(0);
+  const [followingCount, setfollowingCount] = useState(0);
   const account = useSelector((state) => state.account);
+  const db = getFirestore(myFireBase);
+  const auth = getAuth(myFireBase);
+  const relations = collection(db, "Relations");
+  const q1 = query(relations, where("Follower", "==", auth.currentUser.uid));
+  const q2 = query(relations, where("Followed", "==", auth.currentUser.uid));
   const dispatch = useDispatch();
-  const storage = getStorage();
   const navigation = useNavigation();
 
-  const download = async () => {
-    const temp = await getDownloadURL(ref(storage, `${account.pfp}`));
-    setimg(temp);
+  function Tab() {
+    const Tab = createMaterialTopTabNavigator();
+    return (
+      <Tab.Navigator
+        initialRouteName="my"
+        screenOptions={{
+          tabBarActiveTintColor: "white",
+          tabBarInactiveTintColor: "white",
+          tabBarLabelStyle: {
+            fontWeight: "bold",
+          },
+          tabBarIndicatorStyle: {
+            backgroundColor: "white",
+          },
+          tabBarStyle: {
+            backgroundColor: "black",
+          },
+        }}
+      >
+        <Tab.Screen
+          name="my"
+          component={ScrapbooksList}
+          initialParams={{ uid: auth.currentUser.uid }}
+        />
+      </Tab.Navigator>
+    );
+  }
+
+  const getCounts = async () => {
+    const temp1 = await getDocs(q1);
+    const temp2 = await getDocs(q2);
+    var count = 0;
+    temp1.forEach((doc) => {
+      // console.log(doc.id, "=>", doc.data());
+      count++;
+    });
+    // console.log(count);
+    setfollowingCount(count);
+    count = 0;
+    temp2.forEach((doc) => {
+      // console.log(doc.id, "=>", doc.data());
+      count++;
+    });
+    // console.log(count);
+    setfollowerCount(count);
   };
-  download();
+
+  useEffect(() => {}, []);
+  getCounts();
+  // console.log(auth.currentUser.uid);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.profileContainer}>
         <View style={styles.avatarContainer}>
-          <Image source={{ uri: img }} style={styles.avatar} />
+          <Firemage style={styles.avatar} path={account.pfp} />
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.nameText}>
@@ -69,14 +106,14 @@ export default () => {
                 navigation.navigate("FFF");
               }}
             >
-              <Text style={styles.friendsText}>Followers </Text>
+              <Text style={styles.friendsText}>{followerCount} Followers</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("FFF",{screen: "Following"});
+                navigation.navigate("FFF", { screen: "Following" });
               }}
             >
-              <Text style={styles.friendsText}>Following</Text>
+              <Text style={styles.friendsText}>{followingCount} Following</Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity
@@ -88,7 +125,8 @@ export default () => {
           </TouchableOpacity>
         </View>
       </View>
-      <Tab />
+      {/* <Tab /> */}
+      <ScrapbooksList uid={auth.currentUser.uid} />
     </SafeAreaView>
   );
 };
@@ -103,6 +141,11 @@ const styles = {
     fontSize: 15,
     color: "#fff",
     marginTop: 10,
+    backgroundColor: "#333",
+    borderRadius: 50,
+    padding: 5,
+    marginTop: 10,
+    textAlign: "center",
   },
   profileContainer: {
     flexDirection: "row",
@@ -144,9 +187,10 @@ const styles = {
     marginTop: 8,
   },
   friendsContainer: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     marginTop: 10,
+    justifyContent: "space-around",
   },
   friendsCount: {
     fontSize: 15,
@@ -156,7 +200,7 @@ const styles = {
   friendsText: {
     fontSize: 16,
     color: "#aaa",
-    fontWeight: "12"
+    fontWeight: "12",
   },
   photosContainer: {
     marginTop: 10,
