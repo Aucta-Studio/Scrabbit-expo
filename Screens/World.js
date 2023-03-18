@@ -6,7 +6,6 @@ import MapView, { Marker } from "react-native-maps";
 import { SearchBar } from "react-native-elements";
 import Carrot from "../Components/Carrot";
 import * as Location from "expo-location";
-
 import { myFireBase } from "../fireBaseConfig";
 import { getAuth } from "firebase/auth";
 import {
@@ -16,6 +15,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 export default () => {
   const auth = getAuth(myFireBase);
@@ -62,6 +62,13 @@ export default () => {
     latitudeDelta: 0.009,
     longitudeDelta: 0.009,
   });
+  const [region, setRegion] = useState({
+    latitude: 25.101969,
+    longitude: 55.162172,
+    latitudeDelta: 0.009,
+    longitudeDelta: 0.009,
+  });
+
   const [searchText, setSearchText] = useState("");
   const userLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -77,6 +84,12 @@ export default () => {
       latitudeDelta: 0.005,
       longitudeDelta: 0.005,
     });
+    setRegion({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
+    });
   };
 
   useEffect(() => {
@@ -85,17 +98,39 @@ export default () => {
     // getPosts();
   }, []);
 
-  {idList && !posts && getPosts();}
-  
+  {
+    idList && !posts && getPosts();
+  }
+
   return (
-    <SafeAreaView>
-      <SearchBar
-        placeholder="Search for location or title"
-        value={searchText}
-        onChangeText={(text) => {
-          setSearchText(text);
+    <SafeAreaView style={{marginTop: 50, flex: 1}}>
+      {/* <ScrollView> */}
+      <GooglePlacesAutocomplete
+        placeholder="Search"
+        fetchDetails={true}
+        GooglePlacesSearchQuery={{
+          rankby: "distance"
         }}
+        onPress={(data, details = null) => {
+          // 'details' is provided when fetchDetails = true
+          console.log(data, details);
+          setRegion({
+            latitude: details.geometry.location.lat,
+            longitude: details.geometry.location.lng,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          });
+        }}
+        query={{
+          key: "AIzaSyC07oPjwqktz8vYdin-JzyV8fQ-tjg5yM4",
+          language: "en",
+          types: "establishment",
+          radius: 30000,
+          location: `${myLocation.latitude}, ${myLocation.longitude}`
+        }}
+        styles={{container:{flex:0, position: "absolute", width: "100%", zIndex: 1}}}
       />
+<<<<<<< HEAD
       <ScrollView>
         <MapView
           style={styles.map}
@@ -129,6 +164,40 @@ export default () => {
           })}
         </MapView>
       </ScrollView>
+=======
+      <MapView
+        style={styles.map}
+        region={region}
+        customMapStyle={darkStyle}
+      >
+        <Marker
+          coordinate={{
+            latitude: myLocation.latitude,
+            longitude: myLocation.longitude,
+          }}
+          title="Me"
+        />
+        {posts?.map((post, index) => {
+          // console.log(post);
+          return (
+            <Carrot
+              key={index}
+              coordinate={{
+                latitude: post?.location.latitude,
+                longitude: post?.location.longitude,
+              }}
+              title={post?.Title}
+              userID={post?.author}
+              dateOC={post?.createdAt}
+              saves={post?.Collected.length}
+              likes={post?.Likes.length}
+              // comments={post?.Comments?.length}
+            />
+          );
+        })}
+      </MapView>
+      {/* </ScrollView> */}
+>>>>>>> afb052bcd17bc94c4a4d206eb215248579881863
     </SafeAreaView>
   );
 };

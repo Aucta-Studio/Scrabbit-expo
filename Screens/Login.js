@@ -41,8 +41,10 @@ export default () => {
         navigation.navigate("app");
       })
       .catch((error) => {
-        Alert.alert(error);
-        console.log(error);
+        Alert.alert("Login unsuccesful");
+        setemail("");
+        setPassword("");
+        // console.log(error);
       });
   }
 
