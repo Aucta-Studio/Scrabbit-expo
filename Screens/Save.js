@@ -23,15 +23,8 @@ import {
     query,
     onSnapshot,
   getDoc,
-<<<<<<< HEAD
-  doc,
-  where
-} from 'firebase/firestore';
-import Modal from "react-native-modal";
-=======
   doc
   } from 'firebase/firestore';
->>>>>>> afb052bcd17bc94c4a4d206eb215248579881863
 import { getStorage, ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -56,11 +49,6 @@ export default function Save(props, {navigation}) {
       }
     }
 
-<<<<<<< HEAD
-    function navigateToChoseLocation() {
-      if (selectedImages == null){
-        navigationn.navigate('ChoseLocation', {
-=======
     const user = auth.currentUser.uid;
 
     const getUserName = async () => {
@@ -115,21 +103,8 @@ export default function Save(props, {navigation}) {
     const savePostData = async (photos) => {
       const userName = await getUserName();
       addDoc(collection(db, "Posts"), {
->>>>>>> afb052bcd17bc94c4a4d206eb215248579881863
           Caption,
           Title,
-<<<<<<< HEAD
-          selectedImage
-        });
-      }
-      else {
-        navigationn.navigate('ChoseLocation', {
-          Caption,
-          Title,
-          selectedImages
-        });
-      }
-=======
           UserName: userName,
           author: auth.currentUser.uid,
           createdAt: Date.now(),
@@ -140,7 +115,6 @@ export default function Save(props, {navigation}) {
       })).catch((error) => {
         console.error("Error posting picture: ", error);
       });
->>>>>>> afb052bcd17bc94c4a4d206eb215248579881863
     }
 
     return (
