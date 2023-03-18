@@ -134,10 +134,9 @@ export default function ForeignProfile({ route }) {
   // Check if the current user is following this user
   useEffect(() => {
     checkFollowing();
-    getCounts();
   });
   checkFollowing();
-
+  getCounts();
   // if (value) {
   //   navigation.getParent().setParams({fuid: `${id}`,usrn:value.data().UserName});
   // }
@@ -163,24 +162,28 @@ export default function ForeignProfile({ route }) {
                     navigation.navigate("FFM", { screen: "Followers" });
                   }}
                 >
-                  <Text style={styles.friendsText}>{followerCount} Followers    </Text>
+                  <Text style={styles.friendsText}>
+                    {followerCount} Followers{" "}
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("FFM", { screen: "Following" });
                   }}
                 >
-                  <Text style={styles.friendsText}>{followingCount} Following</Text>
+                  <Text style={styles.friendsText}>
+                    {followingCount} Following
+                  </Text>
                 </TouchableOpacity>
               </View>
               <TouchableOpacity onPress={handleFollow}>
-                <Text style={followed? styles.fbutton:styles.unfollow}>
+                <Text style={followed ? styles.fbutton : styles.unfollow}>
                   {followed ? "Following" : "Follow"}
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
-          {followed && <ScrapbooksList uid={fuid}/>}
+          {followed && <ScrapbooksList uid={fuid} />}
           {/* <View style={styles.tav}>
             <Tab />
           </View> */}
@@ -212,9 +215,9 @@ const styles = {
     padding: 10,
     marginTop: 10,
     float: "right",
-    textAlign: "center"
+    textAlign: "center",
   },
-  unfollow:{
+  unfollow: {
     // backgroundColor: '#4CAF50',
     backgroundColor: "#FFF",
     color: "#000",
@@ -224,7 +227,7 @@ const styles = {
     padding: 10,
     marginTop: 10,
     float: "right",
-    textAlign: "center"
+    textAlign: "center",
   },
   profileContainer: {
     flexDirection: "row",
