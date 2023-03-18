@@ -104,6 +104,7 @@ export default function Save(props, {navigation}) {
               }
             </View>
           </View>}
+          <ScrollView>
             <TextInput style={styles.title}
               placeholder="Enter Scrapbook Name"
               onChangeText={(Title) => setTitle(Title)}
@@ -113,20 +114,10 @@ export default function Save(props, {navigation}) {
                 placeholder="Want to share something?"
                 onChangeText={(Caption) => setCaption(Caption)}
             />
-            {/* <MenuProvider style={styles.button}>
-              <Menu>
-                <MenuTrigger
-                  text="Select Scrapbook"
-                />
-                <MenuOptions>
-                  <MenuOption onSelect={navigateToExistingScrapbook} text="Existing Scrapbook"/>
-                  <MenuOption onSelect={navigateToNewScrapbook} text="New Scrapbook" />
-                </MenuOptions>
-              </Menu>
-            </MenuProvider> */}
             <TouchableOpacity style = {styles.button} onPress={navigateToChoseLocation}>
               <Text style={{fontWeight: 'bold'}}>Chose Location</Text>
             </TouchableOpacity>
+          </ScrollView>
         </View>
     )
 }
