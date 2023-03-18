@@ -57,13 +57,6 @@ export default function App({navigation}) {
     settimeout([...images, ...assets.map((asset) => asset.uri)]);
   };
 
-  const isModerator = () => {
-    
-    if (user ) {
-      
-    }
-  }
-
   const takePicture = async () => {
     const pic = [];
     if (camera){
