@@ -42,6 +42,8 @@ export default () => {
           LastName: lastName,
           Pfp: "Pfps/default.jpg",
           UserName: username,
+          report_flag: "N",
+          flagged_enabled: "N",
         };
         upload(user, data);
         navigateToLogin();

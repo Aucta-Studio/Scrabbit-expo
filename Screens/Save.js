@@ -5,8 +5,15 @@ import React, {
   useCallback
 } from 'react'
 import { useSelector, useDispatch } from "react-redux";
-import { View, TextInput, Image, Text, Button, StyleSheet, Alert, Dimensions, ScrollView } from 'react-native'
+import { View, TextInput, Image, Text, Button, StyleSheet, Alert, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
 import 'firebase/storage';
+import {
+  Menu,
+  MenuProvider,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+ } from "react-native-popup-menu";
 import { db, auth, myFireBase } from "../fireBaseConfig";
 import {
   firestore,
@@ -16,20 +23,26 @@ import {
   query,
   onSnapshot,
   getDoc,
-  doc
+  doc,
+  where
 } from 'firebase/firestore';
+import Modal from "react-native-modal";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
 export default function Save(props, {navigation}) {
+    const navigationn = useNavigation();
     const [Title, setTitle] = useState("")
     const [Caption, setCaption] = useState("")
-    const [Collected, setCollected] = useState([])
-    const [Comments, setComments] = useState([])
-    const [Likes, setLikes] = useState([])
-    const location = useState("");
+    const [location, setLocation] = useState({
+      latitude: 25.122810,
+      longitude: 55.396981,
+      latitudeDelta: 0.009,
+      longitudeDelta: 0.009,
+    });
 
     const selectedImages = props.route.params.images;
     const selectedImage = props.route.params.pic;
@@ -44,75 +57,21 @@ export default function Save(props, {navigation}) {
       }
     }
 
-    const user = auth.currentUser.uid;
-
-    const getUserName = async () => {
-      const temp = await getDoc(doc(db, "Profiles", `${user}`));
-      return temp.data().UserName.toString();
-    };
-    
-    // created this method to show any message onto the screen like "Posted!"
-    const showMessage = (title, message) => {
-        Alert.alert(
-          title,
-          message
-        );
-    };
-    
-    // this method is used to upload image to firebase storage.
-    const uploadImage = async () => {
-        const photos = [];
-        const storage = getStorage();
-        const metadata = {
-            contentType: 'image/jpeg'
-          };
-  
-        if (selectedImage != null) {
-          console.log("Image :", selectedImage[0]);
-          const response = await fetch(selectedImage[0]);
-          const blob = await response.blob();
-          const childPath = 'posts/'+user+'/'+Math.random().toString(36)+'.jpeg'
-          const storageRef = ref(storage, childPath);
-          const task = uploadBytesResumable(storageRef, blob, metadata);
-          await task;
-          photos.push(childPath);
-        }
-        else if (selectedImage == null){
-          for (let i = 0; i < selectedImages.length; i++){
-            console.log("Image :", selectedImages[i]);
-            const response = await fetch(selectedImages[i]);
-            const blob = await response.blob();
-            const childPath = 'posts/'+user+'/'+Math.random().toString(36)+'.jpeg'
-            const storageRef = ref(storage, childPath);
-            const task = uploadBytesResumable(storageRef, blob, metadata);
-            await task;
-            photos.push(childPath);
-          }
-        }
-        
-        console.log("Add details to Firestore")
-        savePostData(photos);
-        showMessage("Posted!", "Your picture has been posted.");
-    };
-
-    const savePostData = async (photos) => {
-      const userName = await getUserName();
-      addDoc(collection(db, "Posts"), {
+    function navigateToChoseLocation() {
+      if (selectedImages == null){
+        navigationn.navigate('ChoseLocation', {
           Caption,
-          //Collected,
-          //Comments,
-          //Likes,
           Title,
-          UserName: userName,
-          author: auth.currentUser.uid,
-          createdAt: Date.now(),
-          //location,
-          photos
-      }).then((function () {
-          console.log("Picture posted!")
-      })).catch((error) => {
-        console.error("Error posting picture: ", error);
-      });
+          selectedImage
+        });
+      }
+      else {
+        navigationn.navigate('ChoseLocation', {
+          Caption,
+          Title,
+          selectedImages
+        });
+      }
     }
 
     return (
@@ -152,15 +111,28 @@ export default function Save(props, {navigation}) {
             </View>
           </View>}
             <TextInput style={styles.title}
-              placeholder="Enter Title"
+              placeholder="Enter Scrapbook Name"
               onChangeText={(Title) => setTitle(Title)}
             />
             <View style={{ width: '100%', height: 1, backgroundColor: '#ccc', marginHorizontal: 10, flexDirection: 'row' }} />
-            <TextInput autoFocus={true} multiline={true} numberOfLines={4} style={styles.input}
+            <TextInput autoFocus={true} multiline={true} numberOfLines={3} style={styles.input}
                 placeholder="Want to share something?"
                 onChangeText={(Caption) => setCaption(Caption)}
             />
-            <Button title='Post' style={styles.button} onPress={() => uploadImage()}/>
+            {/* <MenuProvider style={styles.button}>
+              <Menu>
+                <MenuTrigger
+                  text="Select Scrapbook"
+                />
+                <MenuOptions>
+                  <MenuOption onSelect={navigateToExistingScrapbook} text="Existing Scrapbook"/>
+                  <MenuOption onSelect={navigateToNewScrapbook} text="New Scrapbook" />
+                </MenuOptions>
+              </Menu>
+            </MenuProvider> */}
+            <TouchableOpacity style = {styles.button} onPress={navigateToChoseLocation}>
+              <Text style={{fontWeight: 'bold'}}>Chose Location</Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -180,14 +152,11 @@ const styles = StyleSheet.create({
       color: "#FFF",
     },
     button: {
-      //marginTop: 100,
-      //alignItems: 'center',
-      //justifyContent: 'center',
-      //paddingVertical: 12,
-      //paddingHorizontal: 32,
-      borderRadius: 50,
-      //elevation: 3,
-      //backgroundColor: 'black',
+      //marginTop: '1%', 
+      alignSelf: 'center', 
+      backgroundColor: '#EC6319', 
+      borderRadius: 30, 
+      padding: 20
     },
     title: {
       marginTop: 10,
@@ -221,5 +190,5 @@ const styles = StyleSheet.create({
     dot: {
       margin: 3,
       color: '#FFF'
-    }
+    },
   });
