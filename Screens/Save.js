@@ -29,6 +29,7 @@ import {
 import Modal from "react-native-modal";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -42,7 +43,7 @@ export default function Save(props, {navigation}) {
     const selectedImage = props.route.params.pic;
 
     const [imgActive, setimgActive] = useState(0);
-    onchange = (nativeEvent) => {
+    const onchange = (nativeEvent) => {
       if (nativeEvent) {
         const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width);
         if (slide != imgActive) {
@@ -69,8 +70,11 @@ export default function Save(props, {navigation}) {
     }
 
     return (
+      <View style={styles.view2}>
+      <SafeAreaView style={{backgroundColor: '#000'}}>
+      <ScrollView>
         <View style={styles.view}>
-            <Text style={{marginTop: 50, fontWeight: 'bold', padding: 10, fontSize: 20, marginLeft: 15}}>New Post</Text>
+            <Text style={{marginTop: '3%',marginBottom: '3%', fontWeight: 'bold', padding: 10, fontSize: 20, marginLeft: 15}}>New Post</Text>
             {selectedImages == null ? <Image style={styles.wrap} source={{uri : selectedImage[0]}}/> : 
             <View style={styles.wrap}>
             <ScrollView 
@@ -113,21 +117,13 @@ export default function Save(props, {navigation}) {
                 placeholder="Want to share something?"
                 onChangeText={(Caption) => setCaption(Caption)}
             />
-            {/* <MenuProvider style={styles.button}>
-              <Menu>
-                <MenuTrigger
-                  text="Select Scrapbook"
-                />
-                <MenuOptions>
-                  <MenuOption onSelect={navigateToExistingScrapbook} text="Existing Scrapbook"/>
-                  <MenuOption onSelect={navigateToNewScrapbook} text="New Scrapbook" />
-                </MenuOptions>
-              </Menu>
-            </MenuProvider> */}
             <TouchableOpacity style = {styles.button} onPress={navigateToChoseLocation}>
               <Text style={{fontWeight: 'bold'}}>Chose Location</Text>
             </TouchableOpacity>
         </View>
+      </ScrollView>
+      </SafeAreaView>
+      </View>
     )
 }
 
@@ -135,6 +131,12 @@ const styles = StyleSheet.create({
     view: {
       flex: 1,
       backgroundColor: "#000",
+    },
+    view2: {
+      flex: 1,
+      backgroundColor: "#000",
+      width: WIDTH,
+      height: HEIGHT
     },
     input: {
       marginTop: 10,
@@ -146,7 +148,7 @@ const styles = StyleSheet.create({
       color: "#FFF",
     },
     button: {
-      //marginTop: '1%', 
+      marginTop: '2%', 
       alignSelf: 'center', 
       backgroundColor: '#EC6319', 
       borderRadius: 30, 
