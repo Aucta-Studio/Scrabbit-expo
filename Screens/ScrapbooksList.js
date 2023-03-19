@@ -36,7 +36,7 @@ export default ({ uid }) => {
     const qp = query(
       PostStore,
       where("author", "==", id),
-      orderBy("createdAt", "asc")
+      orderBy("createdAt", "desc")
     );
     const array = [];
     const temp = await getDocs(qp);

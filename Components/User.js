@@ -115,11 +115,6 @@ export default function User({ id }) {
                   </Text>
                 </TouchableOpacity>
               )}
-              {/* <TouchableOpacity style={styles.flexend} onPress={handleFollow}>
-                <Text style={followed? styles.fbutton:styles.unfollow}>
-                  {followed ? "Following" : "Follow"}
-                </Text>
-              </TouchableOpacity> */}
             </View>
           </>
         )}

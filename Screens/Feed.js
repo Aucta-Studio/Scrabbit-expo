@@ -52,13 +52,15 @@ const Feed = () => {
     array.push(`${auth.currentUser.uid}`);
     // console.log(array);
     setList(array);
+    return array;
   };
 
   const getPosts = async () => {
+    const idList = await getList();
     const qp = query(
           PostStore,
           where("author", "in", idList),
-          orderBy("createdAt", "asc")
+          orderBy("createdAt", "desc")
         )
       
     const array = [];
@@ -72,13 +74,13 @@ const Feed = () => {
   };
 
   useEffect(() => {
-    getList();
-    // getPosts();
+    // getList();
+    getPosts();
   }, []);
 
-  {
-    idList && !posts && getPosts();
-  }
+  // {
+  //   idList && !posts && getPosts();
+  // }
   // getPosts();
 
   return (

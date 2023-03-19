@@ -93,7 +93,7 @@ export default function Comments({ route }) {
   const q = query(postsCommentsRef, orderBy("createdAt", "asc"));
   const me = {
     _id: auth.currentUser.uid,
-    name: account.username,
+    name: account.firstname,
   };
 
   const onSend = useCallback((messages = []) => {
@@ -192,7 +192,7 @@ export default function Comments({ route }) {
     const temp = onSnapshot(q, (querySnapshot) => {
       setComments(
         querySnapshot.docs.map((doc) => ({
-          _id: doc.data()._id,
+          _id: doc.id,
           createdAt: doc.data().createdAt.toDate(),
           text: doc.data().text,
           user: doc.data().user,
