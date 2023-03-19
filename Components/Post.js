@@ -52,11 +52,11 @@ export default ({
   const [value, loading, error] = useDocument(doc(db, "Profiles", `${uid}`));
   const auth = getAuth(myFireBase);
   // console.log(value.data())
-  const [liked, setLiked] = useState(likes.includes(auth.currentUser.uid));
+  const [liked, setLiked] = useState(likes?.includes(auth.currentUser.uid));
   const [bookmarked, setBookmarked] = useState(false);
   // console.log(collected);
   // setLiked();
-  const acquired = collected.includes(auth.currentUser.uid);
+  const acquired = collected?.includes(auth.currentUser.uid);
   // console.log(docID);
 
   // initialising constants and variables for time calculations
