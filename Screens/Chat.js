@@ -11,8 +11,11 @@ import {
   onSnapshot,
   arrayUnion,
   getDocs,
+  doc,
+  deleteDoc
 } from "firebase/firestore";
 import { useSelector } from "react-redux";
+import { onLog } from "firebase/app";
 export default function Chat({ route }) {
   const { user } = route.params;
   const [chatID, setChatID] = useState([]);
@@ -21,7 +24,7 @@ export default function Chat({ route }) {
   const me = {
     _id: auth.currentUser.uid,
     name: account.firstname,
-  }
+  };
   const qc = query(
     collection(db, "Chats"),
     where("users", "==", [auth.currentUser.uid, user])
@@ -50,7 +53,10 @@ export default function Chat({ route }) {
 
   async function getMessages() {
     const chat = await getChatID();
-    const messageRef = query(collection(db, "Chats", chat, "Messages"),orderBy("createdAt", "desc"));
+    const messageRef = query(
+      collection(db, "Chats", chat, "Messages"),
+      orderBy("createdAt", "desc")
+    );
     const temp = onSnapshot(messageRef, (querySnapshot) => {
       setMessages(
         querySnapshot.docs.map((doc) => ({
@@ -67,29 +73,69 @@ export default function Chat({ route }) {
     getMessages();
   }, []);
 
+  async function onDelete(messageId) {
+    const ref = doc(db, "Chats", chatID, "Messages", messageId);
+    await deleteDoc(ref);
+  }
+
+  function onLongPress(context, message) {
+    console.log(context, message);
+    const ownership = message.user._id == me._id;
+    const options1 = ["Copy Text", "Delete", "Cancel"];
+    const options2 = ["Copy Text", "Cancel"];
+    var options = ownership ? options1 : options2;
+    const cancelButtonIndex = options.length - 1;
+    context.actionSheet().showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+      },
+      (buttonIndex) => {
+        if (ownership) {
+          switch (buttonIndex) {
+            case 0:
+              Clipboard.setString(message.text);
+              break;
+            case 1:
+              // this.onDelete(messageIdToDelete) //pass the function here
+              onDelete(message._id);
+              break;
+          }
+        } else {
+          switch (buttonIndex) {
+            case 0:
+              Clipboard.setString(message.text);
+              break;
+          }
+        }
+      }
+    );
+  }
   // {chatID && !messages && getMessages()}
 
-  const handleSend = useCallback(async (newMessages = []) => {
-    try {
-      const messagesRef = collection(db, 'Chats', chatID, 'Messages');
-      const newMessage = newMessages[0];
-      const { text } = newMessage;
-  
-      const docRef = await addDoc(messagesRef, {
-        text,
-        createdAt: new Date(),
-        user: {
-          _id: auth.currentUser.uid,
-          name: account.firstname,
-        },
-      });
-  
-      console.log('Message added:', docRef.id);
-  
-    } catch (error) {
-      console.error(error);
-    }
-  }, [account.firstname, chatID]);
+  const handleSend = useCallback(
+    async (newMessages = []) => {
+      try {
+        const messagesRef = collection(db, "Chats", chatID, "Messages");
+        const newMessage = newMessages[0];
+        const { text } = newMessage;
+
+        const docRef = await addDoc(messagesRef, {
+          text,
+          createdAt: new Date(),
+          user: {
+            _id: auth.currentUser.uid,
+            name: account.firstname,
+          },
+        });
+
+        console.log("Message added:", docRef.id);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [account.firstname, chatID]
+  );
 
   console.log("chatID: ", chatID);
   console.log("messages: ", messages);
@@ -98,6 +144,7 @@ export default function Chat({ route }) {
     <GiftedChat
       messages={messages}
       inverted={true}
+      onLongPress={onLongPress}
       onSend={(newMessage) => handleSend(newMessage)}
       user={me}
     />

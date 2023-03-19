@@ -110,8 +110,8 @@ export default function Comments({ route }) {
   }, []);
 
   const onDelete = async (messageId) => {
-    setComments(comments.filter((message) => message._id !== messageId));
-    const q = query(postsCommentsRef, where("_id", "==", messageId));
+    // setComments(comments.filter((message) => message._id !== messageId));
+    const q = query(postsCommentsRef, messageId);
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach(async (doc) => {
       await deleteDoc(doc.ref);
