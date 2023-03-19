@@ -55,13 +55,12 @@ const Feed = () => {
   };
 
   const getPosts = async () => {
-    const qp = idList
-      ? query(
+    const qp = query(
           PostStore,
           where("author", "in", idList),
           orderBy("createdAt", "asc")
         )
-      : query();
+      
     const array = [];
     const temp = await getDocs(qp);
     temp.forEach((doc) => {
