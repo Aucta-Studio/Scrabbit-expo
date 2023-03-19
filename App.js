@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View, LogBox } from "react-native";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
@@ -35,6 +35,8 @@ import Comments from "./Screens/Comments";
 import Scrabbit from "./Screens/Scrabbit";
 import { useEffect } from "react";
 import ChatList from "./Screens/ChatList";
+
+LogBox.ignoreLogs(['AsyncStorage has been extracted from react-native core and will be removed in a future release. It can now be installed and imported from \'@react-native-async-storage/async-storage\' instead of \'react-native\'. See https://github.com/react-native-async-storage/async-storage']);
 
 // a Followers following and mutual friends grouped in a material top tab
 function FFM({ route }) {
