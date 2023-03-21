@@ -24,6 +24,7 @@ import {
   ref,
   getDownloadURL,
   uploadBytesResumable,
+  deleteObject
 } from "firebase/storage";
 import { myFireBase } from "../fireBaseConfig";
 import {
@@ -119,14 +120,16 @@ export default () => {
     if (!asset.canceled) {
       const response = await fetch(asset.uri);
       const blob = await response.blob();
-
-      const storageRef = ref(storage, `Pfps/${auth.currentUser.uid}.jpg`);
+      const currPath = ref(storage, account.pfp);
+      const photoID = Math.random().toString(36);
+      const storageRef = ref(storage, `Pfps/${photoID}.jpg`);
       const uploadTask = uploadBytesResumable(storageRef, blob);
 
       try {
+        if(account.pfp != "Pfps/default.jpg") { await deleteObject(currPath);}
         await uploadTask;
         // const downloadURL = await getDownloadURL(storageRef);
-        dispatch(setPfp(`Pfps/${auth.currentUser.uid}.jpg`));
+        dispatch(setPfp(`Pfps/${photoID}.jpg`));
       } catch (error) {
         console.error(error);
         Alert.alert("Error", "Failed to upload avatar");
@@ -134,7 +137,7 @@ export default () => {
 
       const userRef = doc(db, "Profiles", auth.currentUser.uid);
       const data = {};
-      data.Pfp = `Pfps/${auth.currentUser.uid}.jpg`;
+      data.Pfp = `Pfps/${photoID}.jpg`;
       updateDoc(userRef, data)
         .then(() => {
           console.log("Success, avatar changed");

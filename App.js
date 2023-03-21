@@ -37,6 +37,7 @@ import { useEffect } from "react";
 import ChatList from "./Screens/ChatList";
 
 LogBox.ignoreLogs(['AsyncStorage has been extracted from react-native core and will be removed in a future release. It can now be installed and imported from \'@react-native-async-storage/async-storage\' instead of \'react-native\'. See https://github.com/react-native-async-storage/async-storage']);
+LogBox.ignoreLogs(['Key "uri" in the image picker result is deprecated and will be removed in SDK 48, you can access selected assets through the "assets" array instead']); 
 
 // a Followers following and mutual friends grouped in a material top tab
 function FFM({ route }) {
