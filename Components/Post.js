@@ -12,6 +12,7 @@ import {
   Alert,
 } from "react-native";
 import { color } from "react-native-reanimated";
+import Dialog from "react-native-dialog";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons";
 import Firemage from "./Firemage";
@@ -49,6 +50,11 @@ export default ({
 }) => {
   const db = getFirestore(myFireBase);
   const navigation = useNavigation();
+  const [Title, setTitle] = useState("");
+  const [DOCID, setDOCID] = useState("");
+  const [Caption, setCaption] = useState("");
+  const [Photos, setPhotos] = useState([]);
+  const [reason, setReason] = useState("");
   const [value, loading, error] = useDocument(doc(db, "Profiles", `${uid}`));
   const auth = getAuth(myFireBase);
   // console.log(value.data())
@@ -97,6 +103,53 @@ export default ({
 
   // initialising url
   const url = `https://www.google.com/maps/search/?api=1&query=${location.latitude},${location.longitude}`;
+  const storeReport = async () => {
+    addDoc(collection(db, "Reports"), {
+          Title: Title,
+          // UserName: Username,
+          ReporterUser: auth.currentUser.uid,
+          Reason: reason,
+          Type: "Scrapbook",
+          flagged_enabled: "N",
+          Caption: Caption,
+          docID: DOCID,
+          photos: Photos
+      }).then((function () {
+          console.log("Report posted!")
+      })).catch((error) => {
+          console.error("Error posting report: ", error);
+          //showMessage("Error!", "There was an error posting the picture. Please try again!")
+      });
+  }
+  
+  const changePostReported = async() => {
+    const postRef = doc(db, "Posts", docID);
+    updateDoc(postRef, {
+      report_flag: "Y"
+    })
+  }
+
+  const handleConfirm = async() => {
+    setVisible(false);
+    Alert.alert(`Scrapbook Reported!`);
+    changePostReported();
+    storeReport();
+  }
+
+  const [visible, setVisible] = useState(false);
+
+  const showDialog = () => {
+    setVisible(true);
+    setTitle(title);
+    setCaption(caption);
+    setDOCID(docID);
+    setPhotos(photos);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
 
   // handle like function
   const handleLike = async () => {
@@ -137,51 +190,25 @@ export default ({
             {value?.data()?.UserName} at {title}
           </Text>
         </View>
-        {/* <View style={styles.reportButtonContainer}>
+        <View style={styles.reportButtonContainer}>
           <TouchableOpacity
             style={styles.reportButton}
-            onPress={() => {
-              let reason = "";
-              if (Platform.OS === "ios") {
-                Alert.prompt(
-                  "Report Image",
-                  "Please tell us the reason for the report:",
-                  (text) => {
-                    reason = text;
-                    Alert.alert(`Image Reported for ${reason}`);
-                  }
-                );
-              } else {
-                Alert.alert(
-                  "Report Image",
-                  "Please tell us the reason for the report:",
-                  [
-                    {
-                      text: "Cancel",
-                      style: "cancel",
-                    },
-                    {
-                      text: "OK",
-                      onPress: () => {
-                        Alert.alert(`Image Reported for ${reason}`);
-                      },
-                    },
-                  ],
-                  {
-                    editable: true,
-                    onDismiss: (text) => {
-                      reason = text;
-                    },
-                    style: { backgroundColor: "black" },
-                    placeholder: "Enter reason here",
-                  }
-                );
-              }
-            }}
           >
-            <Icon name="flag-outline" size={19} />
+            <Icon name="flag-outline" size={19} onPress={showDialog}/>
+            <Dialog.Container visible={visible} style={styles.container2}>
+              <Dialog.Title>Report Scrapbook</Dialog.Title>
+              <Dialog.Description>
+                Please tell us the reason for the report:
+              </Dialog.Description>
+              <Dialog.Input
+              onChangeText={(reason) => setReason(reason)}
+              // onChange={() => setReason(reason)}
+              />
+              <Dialog.Button label="Cancel" onPress={handleCancel} />
+              <Dialog.Button label="OK" onPress={handleConfirm} />
+            </Dialog.Container>
           </TouchableOpacity>
-        </View> */}
+        </View>
       </TouchableOpacity>
 
       {/* thumbnail photo/location */}
@@ -333,6 +360,12 @@ const styles = StyleSheet.create({
     marginTop: 0,
     fontSize: 14,
     color: "#000",
+  },
+  container2: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   postHeader: {
     alignItems: "center",

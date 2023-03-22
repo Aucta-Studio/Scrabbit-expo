@@ -160,7 +160,7 @@ export default function Comments({ route }) {
         {...props}
         wrapperStyle={{
           left: {
-            backgroundColor: "blue",
+            // backgroundColor: "blue",
             borderRadius: 8,
             padding: "1%",
             marginLeft: 0,
