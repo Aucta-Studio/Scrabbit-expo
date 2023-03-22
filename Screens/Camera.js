@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import Icon from "react-native-vector-icons/Ionicons";
@@ -115,11 +115,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
     //flexDirection: 'row',
   },
   permissionbutton: {
     textAlign: 'center',
-    color: "white",
+    color: "black",
     fontWeight: "bold",
     backgroundColor: "#FFF",
     borderRadius: 50,
