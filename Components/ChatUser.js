@@ -8,12 +8,12 @@ import Firemage from "./Firemage";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 
-export default function ChatUser({ id }) {
+export default function ChatUser({ id, onPress }) {
   const [value, loading, error] = useDocument(doc(db, "Profiles", id));
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate("Chat", { user: id })}>
+    <TouchableOpacity onPress={onPress}>
       <View style={styles.container}>
         {value && (
           <>
@@ -34,12 +34,12 @@ export default function ChatUser({ id }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   usernameText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#000",
     marginRight: 12,
   },
   captionText: {
