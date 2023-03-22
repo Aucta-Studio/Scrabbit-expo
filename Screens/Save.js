@@ -181,7 +181,7 @@ export default function Save(props, { navigation }) {
               style={styles.button}
               onPress={navigateToChoseLocation}
             >
-              <Text style={{ fontWeight: "bold" }}>Chose Location</Text>
+              <Text style={{ fontWeight: "bold" }}>Choose Location</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
