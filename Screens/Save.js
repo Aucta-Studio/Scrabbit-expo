@@ -105,6 +105,7 @@ export default function Save(props, { navigation }) {
             </Text>
             <TextInput
               style={styles.title}
+              maxLength={20}
               placeholder="Enter Scrapbook Title"
               placeholderTextColor={"#000"}
               onChangeText={(Title) => setTitle(Title)}

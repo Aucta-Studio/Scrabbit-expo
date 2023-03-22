@@ -55,17 +55,17 @@ export default function Carrot({
           >
             <View style={styles.stats}>
               <Text style={styles.countn}>{saves}</Text>
-              <Icon name={"eye"} size={34} color={"#000"} />
+              <Icon name={"eye"} size={25} color={"#000"} />
             </View>
             <View style={styles.stats}>
-              <Icon name={"heart"} size={34} color={"#000"} />
+              <Icon name={"heart"} size={25} color={"#000"} />
               <Text style={styles.countn}>{likes}</Text>
             </View>
           </View>
 
           <TouchableOpacity alignItems={"center"}>
             <Text style={styles.mapgo}>
-              <Icon name="map-outline" size={34} color="#000" />
+              <Icon name="map-outline" size={25} color="#000" />
             </Text>
           </TouchableOpacity>
         </View>
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     height: 32,
   },
   title: {
-    fontSize: 25,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#000",
   },
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   callout: {
     width: 250,
     height: 250,
-    padding: "5%",
+    padding: "10%",
   },
   container:{
     width: 200,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     marginBottom: -5,
   },
   countn: {
-    fontSize: 34,
+    fontSize: 25,
   },
   mapgo: {
     fontSize: 34,
