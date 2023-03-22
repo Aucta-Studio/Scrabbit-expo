@@ -105,7 +105,7 @@ export default () => {
             style={styles.input}
             onChangeText={setfirstName}
             placeholder="Enter your first name"
-            placeholderTextColor="#FFF"
+            placeholderTextColor="#000"
           />
           {/* lastname */}
           <Text>Last Name</Text>
@@ -114,7 +114,7 @@ export default () => {
             style={styles.input}
             onChangeText={setlastName}
             placeholder="Enter your last name"
-            placeholderTextColor="#FFF"
+            placeholderTextColor="#000"
           />
           {/* phone number
           <Text>Phone Number</Text>
@@ -131,7 +131,7 @@ export default () => {
             style={styles.input}
             onChangeText={setEmail}
             placeholder="Enter your email address"
-            placeholderTextColor="#FFF"
+            placeholderTextColor="#000"
           />
           {/* DOB
           <Text>Date Of Birth</Text>
@@ -148,7 +148,7 @@ export default () => {
             style={styles.input}
             onChangeText={(text) => setUsername(text)}
             placeholder="Enter your username..."
-            placeholderTextColor="#FFF"
+            placeholderTextColor="#000"
           ></TextInput>
           {/* password */}
           <Text>Password</Text>
@@ -157,7 +157,7 @@ export default () => {
             style={styles.input}
             onChangeText={(text) => setPassword(text)}
             placeholder="Enter your password..."
-            placeholderTextColor="#FFF"
+            placeholderTextColor="#000"
             secureTextEntry={true}
           ></TextInput>
           {/* retype password */}
@@ -167,7 +167,7 @@ export default () => {
             style={styles.input}
             onChangeText={(text) => setRePassword(text)}
             placeholder="Retype your password..."
-            placeholderTextColor="#FFF"
+            placeholderTextColor="#000"
             secureTextEntry={true}
           ></TextInput>
           {/* register button */}
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     // opacity: 0.75,
   },
   input: {
-    backgroundColor: "#000",
+    backgroundColor: "#FFF",
     borderRadius: 50,
     padding: 10,
     marginBottom: 20,

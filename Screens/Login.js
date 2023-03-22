@@ -81,7 +81,7 @@ export default () => {
             style={styles.input}
             onChangeText={(text) => setemail(text)}
             placeholder="Enter your email..."
-            placeholderTextColor="#FFF"
+            placeholderTextColor="#000"
           ></TextInput>
           {/* the password part */}
           <Text>Password</Text>
@@ -90,7 +90,7 @@ export default () => {
             style={styles.input}
             onChangeText={(text) => setPassword(text)}
             placeholder="Enter your password..."
-            placeholderTextColor="#FFF"
+            placeholderTextColor="#000"
             secureTextEntry={true}
           ></TextInput>
           {/* The login button */}
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     // opacity: 0.75,
   },
   input: {
-    backgroundColor: "#000",
+    backgroundColor: "#FFF",
     borderRadius: 50,
     padding: 10,
     marginBottom: 20,
