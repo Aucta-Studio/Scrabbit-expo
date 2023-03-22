@@ -55,11 +55,11 @@ export default function Carrot({
           >
             <View style={styles.stats}>
               <Text style={styles.countn}>{saves}</Text>
-              <Icon name={"eye"} size={25} color={"#000"} />
+              <Icon name={"cloud-download-outline"} size={25} color={"#000"} />
             </View>
             <View style={styles.stats}>
-              <Icon name={"heart"} size={25} color={"#000"} />
               <Text style={styles.countn}>{likes}</Text>
+              <Icon name={"heart"} size={25} color={"#000"} />
             </View>
           </View>
 
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     height: 250,
     padding: "10%",
   },
-  container:{
+  container: {
     width: 200,
     height: 200,
     padding: "5%",
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
     marginTop: "15%",
-    borderRadius: 30
+    borderRadius: 30,
   },
   margins: {
     marginTop: -5,
