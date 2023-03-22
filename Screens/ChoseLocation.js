@@ -211,7 +211,7 @@ export default function ChoseLocation(props, { navigation }) {
       <MapView
         style={styles.map}
         region={region}
-        customMapStyle={darkStyle}
+        // customMapStyle={darkStyle}
         initialRegion={myLocation}
         provider="google"
         draggable={true}

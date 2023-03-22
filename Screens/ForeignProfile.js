@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  ScrollView
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { myFireBase } from "../fireBaseConfig";
@@ -84,6 +85,7 @@ export default function ForeignProfile({ route }) {
   };
 
   const handleFollow = async () => {
+    setFollowed(!followed);
     if (followed) {
       // If already following, unfollow
       const q = query(
@@ -96,7 +98,6 @@ export default function ForeignProfile({ route }) {
           deleteDoc(doc.ref)
             .then(() => {
               console.log("Relation successfully deleted!");
-              setFollowed(false);
             })
             .catch((error) =>
               console.error("Error removing document: ", error)
@@ -111,7 +112,6 @@ export default function ForeignProfile({ route }) {
       })
         .then(() => {
           console.log("Relation successfully added!");
-          setFollowed(true);
         })
         .catch((error) => console.error("Error adding document: ", error));
     }
@@ -135,7 +135,7 @@ export default function ForeignProfile({ route }) {
   useEffect(() => {
     checkFollowing();
   });
-  checkFollowing();
+  // checkFollowing();
   getCounts();
   // if (value) {
   //   navigation.getParent().setParams({fuid: `${id}`,usrn:value.data().UserName});
@@ -143,52 +143,54 @@ export default function ForeignProfile({ route }) {
 
   return (
     <SafeAreaView>
-      {error && <Text>Error: {JSON.stringify(error)}</Text>}
-      {loading && <Text>Document: Loading...</Text>}
-      {value && (
-        <>
-          <View style={styles.profileContainer}>
-            <View style={styles.avatarContainer}>
-              <Firemage path={value.data().Pfp} style={styles.avatar} />
-            </View>
-            <View style={styles.infoContainer}>
-              <Text style={styles.nameText}>
-                {value.data().FirstName} {value.data().LastName}
-              </Text>
-              <Text style={styles.bioText}>{value.data().Bio}</Text>
-              <View style={styles.friendsContainer}>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("FFM", { screen: "Followers" });
-                  }}
-                >
-                  <Text style={styles.friendsText}>
-                    {followerCount} Followers{" "}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("FFM", { screen: "Following" });
-                  }}
-                >
-                  <Text style={styles.friendsText}>
-                    {followingCount} Following
+      <ScrollView>
+        {error && <Text>Error: {JSON.stringify(error)}</Text>}
+        {loading && <Text>Document: Loading...</Text>}
+        {value && (
+          <>
+            <View style={styles.profileContainer}>
+              <View style={styles.avatarContainer}>
+                <Firemage path={value.data().Pfp} style={styles.avatar} />
+              </View>
+              <View style={styles.infoContainer}>
+                <Text style={styles.nameText}>
+                  {value.data().FirstName} {value.data().LastName}
+                </Text>
+                <Text style={styles.bioText}>{value.data().Bio}</Text>
+                <View style={styles.friendsContainer}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("FFM", { screen: "Followers" });
+                    }}
+                  >
+                    <Text style={styles.friendsText}>
+                      {followerCount} Followers{" "}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("FFM", { screen: "Following" });
+                    }}
+                  >
+                    <Text style={styles.friendsText}>
+                      {followingCount} Following
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity onPress={handleFollow}>
+                  <Text style={followed ? styles.fbutton : styles.unfollow}>
+                    {followed ? "Following" : "Follow"}
                   </Text>
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity onPress={handleFollow}>
-                <Text style={followed ? styles.fbutton : styles.unfollow}>
-                  {followed ? "Following" : "Follow"}
-                </Text>
-              </TouchableOpacity>
             </View>
-          </View>
-          {followed && <ScrapbooksList uid={fuid} />}
-          {/* <View style={styles.tav}>
+            {followed && <ScrapbooksList uid={fuid} />}
+            {/* <View style={styles.tav}>
             <Tab />
           </View> */}
-        </>
-      )}
+          </>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -196,7 +198,7 @@ export default function ForeignProfile({ route }) {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   tav: {
     flex: 1,
@@ -219,7 +221,7 @@ const styles = {
   },
   unfollow: {
     // backgroundColor: '#4CAF50',
-    backgroundColor: "#FFF",
+    backgroundColor: "grey",
     color: "#000",
     // borderColor: "#000",
     // borderWidth: 2,
@@ -233,7 +235,7 @@ const styles = {
     flexDirection: "row",
     alignItems: "center",
     padding: 14,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
     // height: "100%"
   },
   avatarContainer: {
@@ -241,7 +243,7 @@ const styles = {
     shadowOpacity: 0.8,
     shadowRadius: 2,
     marginRight: 10,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   avatar: {
     width: 100,
@@ -252,12 +254,12 @@ const styles = {
     flex: 1,
     marginLeft: 16,
     padding: 16,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   nameText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#000",
   },
   usernameText: {
     marginBottom: 16,
@@ -266,22 +268,22 @@ const styles = {
   },
   bioText: {
     fontSize: 16,
-    color: "#fff",
+    color: "#000",
     marginTop: 8,
   },
   friendsContainer: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     marginTop: 10,
   },
   friendsCount: {
     fontSize: 15,
-    color: "#fff",
+    color: "#000",
     marginRight: 8,
   },
   friendsText: {
     fontSize: 16,
-    color: "#fff",
+    color: "#000",
   },
   photosContainer: {
     marginTop: 10,

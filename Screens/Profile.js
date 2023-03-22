@@ -91,42 +91,48 @@ export default () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.profileContainer}>
-        <View style={styles.avatarContainer}>
-          <Firemage style={styles.avatar} path={account.pfp} />
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.nameText}>
-            {account.firstname} {account.lastname}
-          </Text>
-          <Text style={styles.bioText}>{account.bio}</Text>
-          <View style={styles.friendsContainer}>
+      <ScrollView>
+        <View style={styles.profileContainer}>
+          <View style={styles.avatarContainer}>
+            <Firemage style={styles.avatar} path={account.pfp} />
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.nameText}>
+              {account.firstname} {account.lastname}
+            </Text>
+            <Text style={styles.bioText}>{account.bio}</Text>
+            <View style={styles.friendsContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("FFF");
+                }}
+              >
+                <Text style={styles.friendsText}>
+                  {followerCount} Followers
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("FFF", { screen: "Following" });
+                }}
+              >
+                <Text style={styles.friendsText}>
+                  {followingCount} Following
+                </Text>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("FFF");
+                navigation.navigate("Edit Profile");
               }}
             >
-              <Text style={styles.friendsText}>{followerCount} Followers</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("FFF", { screen: "Following" });
-              }}
-            >
-              <Text style={styles.friendsText}>{followingCount} Following</Text>
+              <Text style={styles.editButton}>Edit Profile </Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Edit Profile");
-            }}
-          >
-            <Text style={styles.editButton}>Edit Profile </Text>
-          </TouchableOpacity>
         </View>
-      </View>
-      {/* <Tab /> */}
-      <ScrapbooksList uid={auth.currentUser.uid} />
+        {/* <Tab /> */}
+        <ScrapbooksList uid={auth.currentUser.uid} />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -134,7 +140,7 @@ export default () => {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
 
   editButton: {
@@ -151,14 +157,14 @@ const styles = {
     flexDirection: "row",
     alignItems: "center",
     padding: 14,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   avatarContainer: {
     shadowColor: "#000",
     shadowOpacity: 0.8,
     shadowRadius: 2,
     marginRight: 10,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   avatar: {
     width: 100,
@@ -169,12 +175,12 @@ const styles = {
     flex: 1,
     marginLeft: 16,
     padding: 16,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   nameText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#000",
   },
   usernameText: {
     marginBottom: 16,
@@ -183,7 +189,7 @@ const styles = {
   },
   bioText: {
     fontSize: 16,
-    color: "#fff",
+    color: "#000",
     marginTop: 8,
   },
   friendsContainer: {
@@ -194,12 +200,12 @@ const styles = {
   },
   friendsCount: {
     fontSize: 15,
-    color: "#fff",
+    color: "#000",
     marginRight: 8,
   },
   friendsText: {
     fontSize: 16,
-    color: "#aaa",
+    color: "#000",
     fontWeight: "12",
   },
   photosContainer: {
@@ -210,7 +216,7 @@ const styles = {
   photosText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#000",
     marginBottom: 10,
   },
   photosGrid: {

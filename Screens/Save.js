@@ -88,12 +88,12 @@ export default function Save(props, { navigation }) {
 
   return (
     <View style={styles.view2}>
-      <SafeAreaView style={{ backgroundColor: "#000" }}>
+      <SafeAreaView style={{ backgroundColor: "#fff" }}>
         <ScrollView>
           <View style={styles.view}>
             <Text
               style={{
-                color: "white",
+                color: "black",
                 marginBottom: "3%",
                 fontWeight: "bold",
                 padding: 10,
@@ -106,7 +106,7 @@ export default function Save(props, { navigation }) {
             <TextInput
               style={styles.title}
               placeholder="Enter Scrapbook Title"
-              placeholderTextColor={"#fff"}
+              placeholderTextColor={"#000"}
               onChangeText={(Title) => setTitle(Title)}
             />
             <View
@@ -124,7 +124,7 @@ export default function Save(props, { navigation }) {
               numberOfLines={3}
               style={styles.title}
               placeholder="Enter Scrapbook Caption"
-              placeholderTextColor={"#fff"}
+              placeholderTextColor={"#000"}
               onChangeText={(Caption) => setCaption(Caption)}
             />
             <View
@@ -193,17 +193,17 @@ export default function Save(props, { navigation }) {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   view2: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
     width: WIDTH,
     height: HEIGHT,
   },
   input: {
     marginTop: 10,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
     padding: 20,
     marginBottom: 20,
     marginLeft: 10,
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 10,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
     padding: 10,
     marginBottom: 10,
     marginLeft: 20,
@@ -244,10 +244,10 @@ const styles = StyleSheet.create({
   },
   dotActive: {
     margin: 3,
-    color: "#000",
+    color: "#FFF",
   },
   dot: {
     margin: 3,
-    color: "#FFF",
+    color: "#000",
   },
 });

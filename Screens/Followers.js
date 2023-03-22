@@ -39,8 +39,8 @@ export default function Followers({ route }) {
 
   // console.log(followers);
   return (
-    <SafeAreaView>
-      <ScrollView>
+    <SafeAreaView style={{backgroundColor: "white"}}>
+      <ScrollView style={{backgroundColor: "white"}}>
         {followers?.map((follower, index) => {
           return <User key={index} id={follower} />;
         })}

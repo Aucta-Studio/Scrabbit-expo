@@ -24,13 +24,19 @@ export default function MakeFriends() {
     const searchProfiles = async () => {
       let q;
       if (searchText === "") {
-        q = query(collection(db, "Profiles"), where("UserName", "!=", `${account.username}`));
+        q = query(
+          collection(db, "Profiles"),
+          where("UserName", "!=", `${account.username}`)
+        );
       } else {
-        q = query(collection(db, "Profiles"), where("UserName", "==", searchText));
+        q = query(
+          collection(db, "Profiles"),
+          where("UserName", "==", searchText)
+        );
       }
       // const q = query(
       //   collection(db, "Profiles"),
-        
+
       // );
       // where("UserName", "==", searchText)
       // where("UserName", "array-contains-any", substrings)
@@ -52,9 +58,16 @@ export default function MakeFriends() {
   }, [searchText]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor: "white"}}>
       <SearchBar
         placeholder="Search by username"
+        inputStyle={{ backgroundColor: "white" }}
+        containerStyle={{
+          backgroundColor: "white",
+          borderWidth: 1,
+          borderRadius: 5,
+        }}
+        inputContainerStyle={{ backgroundColor: "white" }}
         value={searchText}
         onChangeText={(text) => {
           setSearchText(text);

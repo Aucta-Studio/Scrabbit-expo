@@ -133,7 +133,7 @@ export default () => {
       <MapView
         style={styles.map}
         region={region}
-        customMapStyle={darkStyle}
+        // customMapStyle={darkStyle}
       >
         <Marker
           coordinate={{

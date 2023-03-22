@@ -56,14 +56,14 @@ export default ({ uid }) => {
     <SafeAreaView style={styles.page}>
       <View style={styles.flexend}>
         <Text style={styles.tex}>
-        <Icon1 name="carrot" size={32} color="white" />
+        <Icon1 name="carrot" size={32} color="#EC6319" />
         {posts?.length}
         </Text>
         {/* <Image source={require("../images/feed_button.png")} style={styles.icon} resizeMode="contain"/> */}
       </View>
       <View
         style={{
-        borderBottomColor: '#fff',
+        borderBottomColor: 'grey',
         borderBottomWidth: 2,
         marginTop: -2,
       }}
@@ -95,10 +95,10 @@ export default ({ uid }) => {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   tex: {
-    color: "#FFF",
+    color: "#EC6319",
     textAlign: "center",
     fontSize: 32,
     fontWeight:"",

@@ -46,8 +46,8 @@ function FFM({ route }) {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: "white",
-        tabBarInactiveTintColor: "white",
+        tabBarActiveTintColor: "black",
+        tabBarInactiveTintColor: "grey",
         tabBarLabelStyle: {
           fontWeight: "bold",
         },
@@ -55,7 +55,7 @@ function FFM({ route }) {
           backgroundColor: "white",
         },
         tabBarStyle: {
-          backgroundColor: "black",
+          backgroundColor: "white",
         },
       }}
     >
@@ -101,8 +101,8 @@ function ForeignProfileStack({ route, navigation }) {
       initialRouteName="ForeignProfile"
       screenOptions={{
         headerShown: true,
-        headerStyle: { backgroundColor: "black" },
-        headerTintColor: "white",
+        headerStyle: { backgroundColor: "white" },
+        headerTintColor: "black",
         headerTitleStyle: { fontWeight: "bold" },
       }}
     >
@@ -129,8 +129,8 @@ function FFF() {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: "white",
-        tabBarInactiveTintColor: "white",
+        tabBarActiveTintColor: "black",
+        tabBarInactiveTintColor: "grey",
         tabBarLabelStyle: {
           fontWeight: "bold",
         },
@@ -138,7 +138,7 @@ function FFF() {
           backgroundColor: "white",
         },
         tabBarStyle: {
-          backgroundColor: "black",
+          backgroundColor: "white",
         },
       }}
     >
@@ -187,8 +187,8 @@ function ProfileStack() {
     <Stack.Navigator
       initialRouteName="Profile Screen"
       screenOptions={{
-        headerStyle: { backgroundColor: "black" },
-        headerTintColor: "white",
+        headerStyle: { backgroundColor: "white" },
+        headerTintColor: "black",
         headerTitleStyle: { fontWeight: "bold" },
       }}
     >
@@ -219,8 +219,8 @@ function FeedStack() {
     <Stack.Navigator
       initialRouteName="Feed"
       screenOptions={{
-        headerStyle: { backgroundColor: "black" },
-        headerTintColor: "white",
+        headerStyle: { backgroundColor: "white" },
+        headerTintColor: "black",
         headerTitleStyle: { fontWeight: "bold" },
       }}
     >
@@ -253,8 +253,8 @@ function ChatStack() {
     <Stack.Navigator
       initialRouteName="ChatList"
       screenOptions={{
-        headerStyle: { backgroundColor: "black" },
-        headerTintColor: "white",
+        headerStyle: { backgroundColor: "white" },
+        headerTintColor: "black",
         headerTitleStyle: { fontWeight: "bold" },
       }}
     >
@@ -271,7 +271,7 @@ function Base() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: { backgroundColor: "#000" },
+        tabBarStyle: { backgroundColor: "#fff" },
         tabBarShowLabel: false,
       }}
       initialRouteName="Main"
@@ -283,8 +283,8 @@ function Base() {
           tabBarIcon: ({ focused, color, size }) => (
             <Icon
               name="earth-outline"
-              size={32}
-              color={focused ? "white" : "#808080"}
+              size={size}
+              color={focused ? "black" : "#808080"}
             />
           ),
         }}
@@ -296,8 +296,8 @@ function Base() {
           tabBarIcon: ({ focused, color, size }) => (
             <Icon
               name="chatbubbles-outline"
-              size={32}
-              color={focused ? "white" : "#808080"}
+              size={size}
+              color={focused ? "black" : "#808080"}
             />
           ),
         }}
@@ -316,7 +316,7 @@ function Base() {
               style={{
                 width: size,
                 height: size,
-                borderRadius: size,
+                // borderRadius: size,
               }}
             />
           ),
@@ -336,7 +336,7 @@ function Base() {
               style={{
                 width: size,
                 height: size,
-                borderRadius: size,
+                // borderRadius: size,
               }}
             />
           ),
@@ -349,8 +349,8 @@ function Base() {
           tabBarIcon: ({ focused, color, size }) => (
             <Icon
               name="person-circle-outline"
-              size={32}
-              color={focused ? "white" : "#808080"}
+              size={size}
+              color={focused ? "black" : "#808080"}
             />
           ),
         }}

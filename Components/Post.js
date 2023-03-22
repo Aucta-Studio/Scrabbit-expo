@@ -137,7 +137,7 @@ export default ({
             {value?.data()?.UserName} at {title}
           </Text>
         </View>
-        <View style={styles.reportButtonContainer}>
+        {/* <View style={styles.reportButtonContainer}>
           <TouchableOpacity
             style={styles.reportButton}
             onPress={() => {
@@ -181,7 +181,7 @@ export default ({
           >
             <Icon name="flag-outline" size={19} />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </TouchableOpacity>
 
       {/* thumbnail photo/location */}
@@ -232,7 +232,7 @@ export default ({
                 Linking.openURL(url);
               }}
             >
-              <Icon name="map-outline" size={24} color="white" />
+              <Icon name="map-outline" size={24} color="black" />
             </TouchableOpacity>
           </Text>
         </View>
@@ -254,7 +254,7 @@ export default ({
             <Icon
               name={liked ? "heart-sharp" : "heart-outline"}
               size={34}
-              color={liked ? "#EC6319" : "white"}
+              color={liked ? "#EC6319" : "grey"}
               style={styles.icon}
             />
           </TouchableOpacity>
@@ -267,7 +267,7 @@ export default ({
             <Icon
               name={"chatbubble-outline"}
               size={32}
-              color={"#FFFFFF"}
+              color={"grey"}
               style={styles.icon}
             />
           </TouchableOpacity>
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     margin: "5%",
   },
   container: {
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   icon: {
     width: 32,
@@ -318,21 +318,21 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   reportButtonText: {
-    color: "#fff",
+    color: "#000",
     fontWeight: "bold",
   },
 
   usernameText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#000",
     marginRight: 12,
   },
   captionText: {
     marginBottom: 0,
     marginTop: 0,
     fontSize: 14,
-    color: "#fff",
+    color: "#000",
   },
   postHeader: {
     alignItems: "center",

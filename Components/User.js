@@ -29,6 +29,7 @@ export default function User({ id }) {
   const [value, loading, error] = useDocument(doc(db, "Profiles", `${id}`));
 
   const handleFollow = async () => {
+    setFollowed(!followed);
     if (followed) {
       // setFollowed(!followed);
       // If already following, unfollow
@@ -42,7 +43,6 @@ export default function User({ id }) {
           deleteDoc(doc.ref)
             .then(() => {
               console.log("Relation successfully deleted!");
-              setFollowed(false);
             })
             .catch((error) =>
               console.error("Error removing document: ", error)
@@ -57,7 +57,6 @@ export default function User({ id }) {
       })
         .then(() => {
           console.log("Relation successfully added!");
-          setFollowed(true);
         })
         .catch((error) => console.error("Error adding document: ", error));
     }
@@ -81,7 +80,7 @@ export default function User({ id }) {
   useEffect(() => {
     checkFollowing();
   });
-  checkFollowing();
+  // checkFollowing();
 
   return (
     <TouchableOpacity
@@ -127,19 +126,19 @@ export default function User({ id }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   usernameText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#000",
     marginRight: 12,
   },
   captionText: {
     marginBottom: 0,
     marginTop: 0,
     fontSize: 14,
-    color: "#fff",
+    color: "#000",
   },
   row: {
     alignItems: "center",
@@ -167,7 +166,7 @@ const styles = StyleSheet.create({
   },
   unfollow: {
     // backgroundColor: '#4CAF50',
-    backgroundColor: "#FFF",
+    backgroundColor: "grey",
     color: "#000",
     // borderColor: "#000",
     // borderWidth: 2,

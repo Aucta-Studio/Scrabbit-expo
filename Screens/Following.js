@@ -38,8 +38,8 @@ export default function Following({ route }) {
 
   // console.log(followed);
   return (
-    <SafeAreaView>
-      <ScrollView>
+    <SafeAreaView style={{backgroundColor: "white"}}>
+      <ScrollView style={{backgroundColor: "white"}}>
         {followed?.map((followed, index) => {
           return <User key={index} id={followed} />;
         })}
