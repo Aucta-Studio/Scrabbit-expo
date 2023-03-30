@@ -66,8 +66,10 @@ const Feed = () => {
     const array = [];
     const temp = await getDocs(qp);
     temp.forEach((doc) => {
-      // console.log(doc.id, "=>", doc.data());
-      array.push({ id: doc.id, ...doc.data() });
+      if (doc.data().flagged_enabled == "N") {
+        // console.log(doc.id, "=>", doc.data());
+        array.push({ id: doc.id, ...doc.data() });
+      }
     });
     console.log(array);
     setPosts(array);

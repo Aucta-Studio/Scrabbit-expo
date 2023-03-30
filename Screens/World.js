@@ -137,6 +137,12 @@ export default () => {
       >
         <Marker
           coordinate={{
+            latitude: region.latitude,
+            longitude: region.longitude,
+          }}
+        />
+        <Marker
+          coordinate={{
             latitude: myLocation.latitude,
             longitude: myLocation.longitude,
           }}

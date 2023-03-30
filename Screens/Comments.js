@@ -5,7 +5,7 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Clipboard,
+  Alert,
 } from "react-native";
 import {
   GiftedChat,
@@ -13,6 +13,7 @@ import {
   InputToolbar,
   Message,
 } from "react-native-gifted-chat";
+import Clipboard from "@react-native-community/clipboard";
 import { myFireBase } from "../fireBaseConfig";
 import { getAuth } from "firebase/auth";
 import {
@@ -35,6 +36,7 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import Dialog from "react-native-dialog";
 
 // const renderMessage = (props) => {
 //   const { currentMessage } = props;
@@ -85,11 +87,13 @@ export default function Comments({ route }) {
   const auth = getAuth(myFireBase);
   const db = getFirestore(myFireBase);
   const account = useSelector((state) => state.account);
+  const [reason, setReason] = useState("");
   const postID = route.params.postID;
   const ownerID = route.params.owner;
   const [comments, setComments] = useState([]);
   const postRef = doc(db, "Posts", postID);
   const postsCommentsRef = collection(postRef, "Comments");
+  const reportRef = collection(db, "Reports");
   const q = query(postsCommentsRef, orderBy("createdAt", "asc"));
   const me = {
     _id: auth.currentUser.uid,
@@ -106,8 +110,67 @@ export default function Comments({ route }) {
       createdAt,
       text,
       user,
+      report_flag: "N",
+      flagged_enabled: "N"
     });
   }, []);
+
+  const [visible, setVisible] = useState(false);
+
+  const onReport = (message) => {
+    return(
+      <Dialog.Container visible={visible} style={styles.container2}>
+        <Dialog.Title>Report Comment</Dialog.Title>
+          <Dialog.Description>
+            Please tell us the reason for the report:
+          </Dialog.Description>
+          <Dialog.Input
+            onChangeText={(reason) => setReason(reason)}
+            // onChange={() => setReason(reason)}
+          />
+          <Dialog.Button label="Cancel" onPress={handleCancel} />
+          <Dialog.Button label="OK" onPress={handleConfirm(message)} />
+      </Dialog.Container>
+    );
+  }
+
+  const handleConfirm = async(message) => {
+    setVisible(false);
+    // Alert.alert(`Comment Reported!`);
+    changeCommentReported(message);
+    addReport();
+  }
+
+  const showDialog = (message) => {
+    setVisible(true);
+    onReport(message);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const changeCommentReported = (message) => {
+    updateDoc(postsCommentsRef, message._id, {
+      report_flag: "Y"
+    })
+  }
+
+  const addReport = async (message) => {
+    const q = query(postsCommentsRef, message._id);
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (doc) => {
+      addDoc(reportRef, {
+        _id : doc._id,
+        createdAt: doc.createdAt,
+        text: doc.text,
+        user: doc.user,
+        Type : "Comment",
+        Reason: reason,
+        flagged_enabled: doc.flagged_enabled
+      });
+    });
+  };
 
   const onDelete = async (messageId) => {
     // setComments(comments.filter((message) => message._id !== messageId));
@@ -123,7 +186,7 @@ export default function Comments({ route }) {
     const supporter = message.user._id == me._id;
     const ownership = ownerID == me._id;
     const options1 = ["Copy Text", "Delete", "Cancel"];
-    const options2 = ["Copy Text", "Cancel"];
+    const options2 = ["Copy Text", "Report", "Cancel"];
     var options = supporter ? options1 : options2;
     if (ownership) options = options1;
     const cancelButtonIndex = options.length - 1;
@@ -147,6 +210,9 @@ export default function Comments({ route }) {
           switch (buttonIndex) {
             case 0:
               Clipboard.setString(message.text);
+              break;
+            case 1:
+              showDialog(message);
               break;
           }
         }

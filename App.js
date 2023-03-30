@@ -11,6 +11,21 @@ import { Provider } from "react-redux";
 import Login from "./Screens/Login";
 import Register from "./Screens/Register";
 import Camera from "./Screens/Camera";
+import ViewReportScrapbooks from "./Screens/ViewReportScrapbooks";
+import ViewReportAccounts from "./Screens/ViewReportAccounts";
+import ViewReportComment from "./Screens/ViewReportComment";
+import ViewFlaggedScrapbooks from "./Screens/ViewFlaggedScrapbooks";
+import ViewFlaggedAccounts from "./Screens/ViewFlaggedAccounts";
+import ViewFlaggedComments from "./Screens/ViewFlaggedComments";
+import AdminReports from "./Screens/AdminReports";
+import PromoteUsers from "./Screens/PromoteUsers";
+// import RScrapbook from "./Screens/RScrapbook";
+import RAccount from "./Screens/RAccount";
+import RComment from "./Screens/RComment";
+import Settings from './Screens/Settings';
+import Pns from './Screens/Pns';
+import About from './Screens/About';
+import Support from './Screens/Support';
 import World from "./Screens/World";
 import Chat from "./Screens/Chat";
 import Feed from "./Screens/Feed";
@@ -33,7 +48,7 @@ import Notifications from "./Screens/Notifications";
 import FeedScrapbook from "./Screens/FeedScrapbook";
 import Comments from "./Screens/Comments";
 import Scrabbit from "./Screens/Scrabbit";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ChatList from "./Screens/ChatList";
 
 LogBox.ignoreLogs(['AsyncStorage has been extracted from react-native core and will be removed in a future release. It can now be installed and imported from \'@react-native-async-storage/async-storage\' instead of \'react-native\'. See https://github.com/react-native-async-storage/async-storage']);
@@ -175,6 +190,25 @@ function ProfileDrawer() {
         component={ProfileStack}
         options={{ headerShown: false, title: `${account.username}` }}
       />
+      <Drawer.Screen name="Settings" component={Settings} options={{ headerShown: false, title: `${account.username}` }}/>
+      <Drawer.Screen name="About" component={About} options={{ headerShown: true, title: `${account.username}` }}/>
+      <Drawer.Screen name="Pns" component={Pns} options={{ headerShown: true, title: `${account.username}` }}/>
+      <Drawer.Screen name="Support" component={Support} options={{ headerShown: true, title: `${account.username}` }}/>
+      
+      {/* Moderator */}
+      <Drawer.Screen name="ViewReportScrapbooks" component={ViewReportScrapbooks} />
+      <Drawer.Screen name="ViewReportAccounts" component={ViewReportAccounts} />
+      <Drawer.Screen name="ViewReportComment" component={ViewReportComment} />
+
+      {/* Admin */}
+      <Drawer.Screen name="ViewFlaggedScrapbooks" component={ViewFlaggedScrapbooks} />
+      <Drawer.Screen name="ViewFlaggedAccounts" component={ViewFlaggedAccounts} />
+      <Drawer.Screen name="ViewFlaggedComments" component={ViewFlaggedComments} />
+
+      <Drawer.Screen name="AdminReports" component={AdminReports} />
+
+      <Drawer.Screen name="PromoteUsers" component={PromoteUsers} />
+
     </Drawer.Navigator>
   );
 }

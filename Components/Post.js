@@ -34,6 +34,7 @@ import {
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useDocument } from "react-firebase-hooks/firestore";
+import { useSelector } from "react-redux";
 
 // Frontend & Styling of the post completed
 export default ({
@@ -50,6 +51,7 @@ export default ({
 }) => {
   const db = getFirestore(myFireBase);
   const navigation = useNavigation();
+  const account = useSelector((state) => state.account);
   const [Title, setTitle] = useState("");
   const [DOCID, setDOCID] = useState("");
   const [Caption, setCaption] = useState("");
@@ -107,7 +109,7 @@ export default ({
     addDoc(collection(db, "Reports"), {
           Title: Title,
           // UserName: Username,
-          ReporterUser: auth.currentUser.uid,
+          ReporterUser: account.UserName,
           Reason: reason,
           Type: "Scrapbook",
           flagged_enabled: "N",
@@ -162,17 +164,17 @@ export default ({
       await updateDoc(postRef, {
         Likes: arrayRemove(auth.currentUser.uid),
       })
-        .then(console.log("Post UnLiked"))
+        .then(console.log("Scrapbook UnLiked"))
         .catch((error) => {
-          console.log("error unliking post");
+          console.log("error unliking scrapbook");
         });
     } else {
       await updateDoc(postRef, {
         Likes: arrayUnion(auth.currentUser.uid),
       })
-        .then(console.log("Post Liked"))
+        .then(console.log("Scrapbook Liked"))
         .catch((error) => {
-          console.log("error liking post");
+          console.log("error liking scrapbook");
         });
     }
   };
