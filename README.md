@@ -58,6 +58,8 @@ necessary information about the users and their scrapbooks. The application will
 <img src="https://github.com/Aucta-Studio/Scrabbit-expo/assets/90821062/1052b9f3-249b-4349-bb8f-b894003a475a" alt="" height="500">
 <img src="https://github.com/Aucta-Studio/Scrabbit-expo/assets/90821062/13a9ce43-ea08-47ec-a9d9-caa37ead5a90" alt="" height="500">
 <img src="https://github.com/Aucta-Studio/Scrabbit-expo/assets/90821062/9d6a6ea7-97b6-4db1-b40d-ac04a5322081" alt="" height="500">
+<img src="https://github.com/Aucta-Studio/Scrabbit-expo/assets/90821062/1b383363-cf83-4c9f-a7fa-bf4cb6565097" alt="" height="500">
+
 
 ###### 4.6. Chat 
 <img src="https://github.com/Aucta-Studio/Scrabbit-expo/assets/90821062/37986701-b5e6-46e8-b8f6-56b3f7d70ff3" alt="" height="500">
@@ -81,4 +83,7 @@ necessary information about the users and their scrapbooks. The application will
 
 ###### 4.9. Admin Panel
 <img src="https://github.com/Aucta-Studio/Scrabbit-expo/assets/90821062/6c661104-6861-4f8d-af2a-e88c377c775d" alt="" height="500">
+
+###### 4.10. AR stadalone 
+<img src="https://github.com/Aucta-Studio/Scrabbit-expo/assets/90821062/18a7e98b-5667-4cc0-9cc0-bd1cf4a70f3b" alt="" height="500">
 
